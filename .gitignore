@@ -22,3 +22,7 @@ frontend/*.ntvs*
 frontend/*.njsproj
 frontend/*.sln
 frontend/*.sw?
+node_modules
+
+#忽略backend下的.env文件
+backend/.env

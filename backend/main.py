@@ -1,0 +1,25 @@
+from fastapi import FastAPI
+import uvicorn
+from routers import users
+from starlette.middleware.cors import CORSMiddleware#解决跨域问题
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
+app.include_router(users.router)#将users.py中的路由添加到app中
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
