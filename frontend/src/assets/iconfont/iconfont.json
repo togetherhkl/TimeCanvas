@@ -1,0 +1,177 @@
+{
+  "id": "4429889",
+  "name": "no name",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2166",
+      "name": "水瓶座",
+      "font_class": "shuipingzuo",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "2167",
+      "name": "双鱼座",
+      "font_class": "shuangyuzuo",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "2168",
+      "name": "摩羯座",
+      "font_class": "mojiezuo",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "2169",
+      "name": "处女座",
+      "font_class": "chunvzuo",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "2170",
+      "name": "狮子座",
+      "font_class": "shizizuo",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "2171",
+      "name": "巨蟹座",
+      "font_class": "juxiezuo",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "2172",
+      "name": "天蝎座",
+      "font_class": "tianhezuo",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "2173",
+      "name": "射手座",
+      "font_class": "sheshouzuo",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "2174",
+      "name": "天秤座",
+      "font_class": "tianchengzuo",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "2175",
+      "name": "双子座",
+      "font_class": "shuangzizuo",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "2176",
+      "name": "金牛座",
+      "font_class": "jinniuzuo",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "2177",
+      "name": "牡羊座",
+      "font_class": "muyangzuo",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "12465696",
+      "name": "004留言寄语",
+      "font_class": "liuyanjiyu",
+      "unicode": "e732",
+      "unicode_decimal": 59186
+    },
+    {
+      "icon_id": "77156",
+      "name": "微信",
+      "font_class": "weixin",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "315421",
+      "name": "梦想",
+      "font_class": "mengxiang",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "666888",
+      "name": "手机",
+      "font_class": "shouji",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "1418217",
+      "name": "昵称",
+      "font_class": "nicheng",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "4552970",
+      "name": "邮箱",
+      "font_class": "youxiang",
+      "unicode": "e908",
+      "unicode_decimal": 59656
+    },
+    {
+      "icon_id": "4936984",
+      "name": "QQ",
+      "font_class": "QQ",
+      "unicode": "e882",
+      "unicode_decimal": 59522
+    },
+    {
+      "icon_id": "8006190",
+      "name": "姓名",
+      "font_class": "xingming",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "9000596",
+      "name": "家乡",
+      "font_class": "jiaxiang",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "12437188",
+      "name": "生日",
+      "font_class": "shengrix",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "12616282",
+      "name": "星座",
+      "font_class": "xingzuo",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "21649092",
+      "name": "爱好",
+      "font_class": "ziyuan25",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    }
+  ]
+}
