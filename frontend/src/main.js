@@ -8,7 +8,9 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 //引入axios
 import axios from 'axios'
 //引入router
-import router from './router'
+import router from './router';
+//引入图标
+import './assets/iconfont/iconfont.css'
 
 const app=createApp(App)
 
