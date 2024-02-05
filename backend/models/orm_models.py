@@ -11,9 +11,10 @@ class User(Base):
     __tablename__ = "user"
     id = Column(Integer, index=True, autoincrement=True)
     baidu_uk = Column(String(15), nullable=False, index=True,primary_key=True)#百度网盘用户uk，用户ID
-    baidu_name = Column(String(50), unique=True, nullable=False, unique=True)
+    baidu_name = Column(String(50), unique=True, nullable=False)
     avatar_url = Column(String(200), nullable=False)
     access_token = Column(String(500), nullable=False)
+    refresh_token = Column(String(500), nullable=False)
     baidu_vip_type = Column(Integer, nullable=False)#百度网盘用户会员类型
     nickname = Column(String(50), nullable=True)
 #同学录

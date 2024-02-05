@@ -1,3 +1,12 @@
+/*
+ * @Author: HKini 1778267485@qq.com
+ * @Date: 2024-01-09 21:33:16
+ * @LastEditTime: 2024-01-29 19:16:09
+ * @LastEditors: HKini 1778267485@qq.com
+ * @Description: 
+ * @FilePath: \TimeCanvas\frontend\src\main.js
+ * 
+ */
 import { createApp } from 'vue'
 import App from './App.vue'
 // 引入element-plus
@@ -19,7 +28,7 @@ app.use(ElementPlus)//注册element-plus
 app.use(router)//注册router
 app.mount('#app')
 //修改axios的默认配置http://192.168.43.162:5173/
-axios.defaults.baseURL="http://192.168.43.162:8000"
+axios.defaults.baseURL="http://localhost:8000"
 //配置请求拦截器
 // axios.interceptors.request.use(
 //     config=>{
