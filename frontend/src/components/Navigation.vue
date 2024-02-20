@@ -33,7 +33,7 @@
 
 <script>
 import axios from 'axios';
-import avatar_url from '../assets/user.png';
+import avatar_url from '../assets/user.png';//引入默认头像
 export default {
   // 状态
   data() {
@@ -56,24 +56,36 @@ export default {
     getTaken() {
       axios.get("/auth").then(
         response => {
-          // console.log(response)
           if (response.status == 200) {
             //加载后端传送过来的授权url地址
-            // console.log(response.data.auth_url)
             window.location.href = response.data.auth_url;
           }
         },
       )
     },
   },
+  //重新加载页面时，获取url中的参数
   created() {
-    if (this.$route.query.baidu_name != undefined) {
-      this.baidu_name = this.$route.query.baidu_name
+    //使用js代码获取url中的参数
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('baidu_name') != null) {
+      this.baidu_name = urlParams.get('baidu_name')
     }
-    if (this.$route.query.avatar_url != undefined) {
-      this.avatar_url = this.$route.query.avatar_url
+    if (urlParams.get('avatar_url') != null) {
+      this.avatar_url = urlParams.get('avatar_url')
     }
-    this.access_token = this.$route.query.access_token
+    if (urlParams.get('access_token') != null) {
+      localStorage.setItem('timecanvas_token', urlParams.get('access_token'))
+    }
+    // if (this.$route.query.baidu_name != undefined) {
+    //   this.baidu_name = this.$route.query.baidu_name
+    // }
+    // if (this.$route.query.avatar_url != undefined) {
+    //   this.avatar_url = this.$route.query.avatar_url
+    // }
+    // if (this.$route.query.access_token != undefined) {
+    //   localStorage.setItem('timecanvas_taken', this.$route.query.access_token)
+    // }
   },
 }
 </script>

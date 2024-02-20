@@ -9,8 +9,7 @@
 # '''
 from pydantic import BaseModel
 
-class User(BaseModel):
-    id: int
+class User(BaseModel):  
     baidu_name: str
     avatar_url: str
     access_token: str
@@ -22,7 +21,6 @@ class User(BaseModel):
         orm_mode = True
 
 class Classmates(BaseModel):
-    id: int
     name: str
     nickname: str | None
     birthday: str | None
@@ -36,7 +34,6 @@ class Classmates(BaseModel):
     dream: str | None
     graduation_message: str | None
     classmates_album_name: str 
-    classmates_avatar_name: str
-    baidu_uk: str
+    classmates_avatar_name: str | None
     class Config:
         orm_mode = True

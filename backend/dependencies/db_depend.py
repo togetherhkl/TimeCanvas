@@ -13,7 +13,7 @@ from models import orm_models
 
 orm_models.Base.metadata.create_all(bind=engine)
 
-def get_db():
+async def get_db():
     try:
         db = SessionLocal()
         yield db

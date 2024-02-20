@@ -43,7 +43,7 @@ def get_auth_token(code):
     return response
 #刷新百度网盘的访问令牌
 
-#获取用户信息
+#获取百度网盘用户信息
 def get_user_info(taken):
     url=(
         "https://pan.baidu.com/rest/2.0/xpan/nas?"
@@ -68,3 +68,12 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+#验证jwt令牌，返回用户信息
+def verify_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(payload)
+        return payload
+    except JWTError:
+        return None

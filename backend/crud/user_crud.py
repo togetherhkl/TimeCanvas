@@ -8,26 +8,28 @@
 
 # '''
 from sqlalchemy.orm import Session
-from schemas.orm_schema import User,Classmates
-#获取用户信息
+from models.orm_models import User,Classmates
+from schemas import orm_schema
+#查询用户信息
 def get_user(db: Session, baidu_uk: str):
     return db.query(User).filter(User.baidu_uk == baidu_uk).first()
+    
 #创建用户信息
-def user_create(db: Session, user: User):
-    db_user = User(**user.model_dump())
+def user_create(db: Session, user: dict):
+    db_user = User(**user)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)#刷新数据库
     return db_user
 #修改用户信息
-def user_update(db: Session, user: User):
-    db_user = db.query(User).filter(User.baidu_uk == user.baidu_uk).first()
-    db_user.baidu_name = user.baidu_name
-    db_user.avatar_url = user.avatar_url
-    db_user.access_token = user.access_token
-    db_user.refresh_token = user.refresh_token
-    db_user.baidu_vip_type = user.baidu_vip_type
-    db_user.nickname = user.nickname
+def user_update(db: Session, user: dict):
+    db_user = db.query(User).filter(User.baidu_uk == user['baidu_uk']).first()
+    db_user.baidu_name = user['baidu_name']
+    db_user.avatar_url = user['avatar_url']
+    db_user.access_token = user['access_token']
+    db_user.refresh_token = user['refresh_token']
+    db_user.baidu_vip_type = user['baidu_vip_type']
+    db_user.nickname = user['nickname']
     db.commit()
     db.refresh(db_user)
     return db_user

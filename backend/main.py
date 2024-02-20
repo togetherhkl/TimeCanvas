@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Depends
 import uvicorn
-from routers import users
+from routers import users,classmate, baidufile
 from starlette.middleware.cors import CORSMiddleware#解决跨域问题
+#引入全局token验证依赖
+from dependencies import auth_depend
 
 app = FastAPI()
 
@@ -13,6 +15,8 @@ app.add_middleware(
     allow_headers=['*'],
 )
 app.include_router(users.router)#将users.py中的路由添加到app中
+app.include_router(classmate.router)#将classmate.py中的路由添加到app中
+app.include_router(baidufile.router)#将users.py中的路由添加到app中
 
 @app.get("/")
 def read_root():

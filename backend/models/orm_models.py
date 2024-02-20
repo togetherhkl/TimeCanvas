@@ -17,6 +17,9 @@ class User(Base):
     refresh_token = Column(String(500), nullable=False)
     baidu_vip_type = Column(Integer, nullable=False)#百度网盘用户会员类型
     nickname = Column(String(50), nullable=True)
+    classmates = relationship("Classmates", back_populates="user")
+    interesting_event = relationship("InterestingEvent", back_populates="user")
+    travel = relationship("Travel", back_populates="user")
 #同学录
 class Classmates(Base):
     __tablename__ = "classmates"
@@ -34,7 +37,7 @@ class Classmates(Base):
     dream = Column(String(200), nullable=True)#梦想
     graduation_message = Column(Text, nullable=True)#毕业寄语
     classmates_album_name = Column(String(50), nullable=True)#同学录相册名称
-    classmates_avatar_name = Column(String(50), nullable=True)#同学录头像名称
+    classmates_avatar_name = Column(String(50), nullable=True)#同学录头像路劲
 
     baidu_uk = Column(String(15), ForeignKey("user.baidu_uk"))#外键，关联百度网盘用户
     user = relationship("User", back_populates="classmates")
