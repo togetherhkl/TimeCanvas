@@ -73,7 +73,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print(payload)
+        # print(payload)
         return payload
     except JWTError:
         return None
