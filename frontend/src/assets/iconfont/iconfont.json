@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7984909",
+      "name": "机器人",
+      "font_class": "roboticon",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
       "icon_id": "2166",
       "name": "水瓶座",
       "font_class": "shuipingzuo",

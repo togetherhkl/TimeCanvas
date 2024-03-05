@@ -9,10 +9,10 @@
         <div class="type">
           <el-form-item label="同学录相册名称" prop="classmates_album_name">
             <el-radio-group v-model="ruleForm.classmates_album_name">
-              <el-radio label="小学" />
-              <el-radio label="初中" />
-              <el-radio label="高中" />
-              <el-radio label="大学" />
+              <el-radio label="primary" >小学</el-radio>
+              <el-radio label="junior" >初中</el-radio>
+              <el-radio label="senior" >高中</el-radio>
+              <el-radio label="university">大学</el-radio>
             </el-radio-group>
           </el-form-item>
         </div>
@@ -29,14 +29,27 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="同学头像" prop="">
-              <!--   <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+              <el-form-item label="同学头像" prop="classmates_avatar_name">
+                <el-input v-model="ruleForm.classmates_avatar_name" />
+                
+               <!--  <el-upload
+    class="avatar-uploader"
+   action="url"
+    :show-file-list="false"
+    :on-success="handleAvatarSuccess"
+    :before-upload="beforeAvatarUpload"
+  >
+    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+  </el-upload> -->
+                <!-- <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :show-file-list="false" :on-success="handleAvatarSuccess" :befor-upload="beforeAvatarUpload">
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon">
               <Plus />
             </el-icon>
           </el-upload> -->
+
               </el-form-item>
             </el-col>
           </el-row>
@@ -46,7 +59,8 @@
             <el-col :span="8">
               <el-form-item label="生日" required>
                   <el-form-item prop="birthday">
-                    <el-date-picker v-model="ruleForm.birthday" type="date" label="Pick a date" style="width: 100%" />
+                    <el-date-picker v-model="ruleForm.birthday" type="date" label="Pick a date" format="YYYY/MM/DD"
+        value-format="YYYY-MM-DD" style="width: 100%" />
                   </el-form-item>
               </el-form-item>
             </el-col>
@@ -60,6 +74,7 @@
         <div class="hobby">
           <el-row :span="24">
           <el-form-item label="爱好" prop="hobby">
+            <!-- <el-input v-model="ruleForm.hobby" /> -->
             <el-checkbox-group v-model="ruleForm.hobby">
               <el-checkbox label="篮球" name="type">篮球</el-checkbox>
               <el-checkbox label="羽毛球" name="type">羽毛球</el-checkbox>
@@ -145,10 +160,10 @@
         </div>
         <div class="message">
           <el-form-item label="梦想" prop="dream">
-            <el-input v-model="ruleForm.dream" />
+            <el-input v-model="ruleForm.dream"/>
           </el-form-item>
-          <el-form-item label="毕业寄语" prop="gradutaion_message">
-            <el-input v-model="ruleForm.gradutaion_message" type="textarea" />
+          <el-form-item label="毕业寄语" prop="graduation_message">
+            <el-input v-model="ruleForm.graduation_message" type="textarea" />
           </el-form-item>
         </div>
         <div class="bottom">
@@ -164,10 +179,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import { reactive, ref } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus';
 import { ElForm, ElFormItem, ElCheckboxGroup, ElCheckbox, ElInput, ElButton } from 'element-plus';
-
+import axios from 'axios';
 const form = ref({
   hobby: [] as string[]
 });
@@ -181,10 +196,32 @@ const addnewHobby = () => {
   console.log(ruleForm.hobby);
 };
 
+import { ElMessage } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
+
+import type { UploadProps } from 'element-plus'
+
+const imageUrl = ref('')
+
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
+  response,
+  uploadFile
+) => {
+  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+}
+
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  /* if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('Avatar picture must be JPG format!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!')
+    return false
+  } */
+  return true
+}
 
 interface RuleForm {
-  classmates_album_name: string,
-  classmates_avatar_name: string,
   name: string,
   nickname: string,
   birthday: string,
@@ -196,7 +233,9 @@ interface RuleForm {
   email: string,
   constellation: string,/* 星座 */
   dream: string,
-  gradutaion_message: string,
+  graduation_message: string,
+  classmates_album_name: string,
+  classmates_avatar_name: string,
 }
 
 const formSize = ref('default')
@@ -215,7 +254,7 @@ const ruleForm = reactive<RuleForm>({
   email: '',
   constellation: '',/* 星座 */
   dream: '',
-  gradutaion_message: '',
+  graduation_message: '',
 })
 //规则
 const rules = reactive<FormRules<RuleForm>>({
@@ -243,17 +282,34 @@ const rules = reactive<FormRules<RuleForm>>({
   phone_number:[
   {min:11,max:11,message:'手机号输入有误',trigger:'blur'}
   ],
-  gradutaion_message: [
+  graduation_message: [
     { required: true, message: '请输入毕业寄语', trigger: 'blur' },
   ],
 })
+// 定义一个函数，用于将数据发送至数据库
+const sendDataToDatabase = async (formData) => {
+  try {
+    console.log("数据")
+    console.log(typeof formData);
+    console.log(formData.birthday);
+    console.log(formData);
+    axios.post('/classmate/',formData).then(function (response) {
+    console.log(response.data);
+  })
+  } catch (error) {
+    console.error('发送数据至数据库时出错:', error);
+  }
+};
 //提交表单
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log('submit!');
+      // console.log('submit!');
       console.log(ruleForm);
+      console.log(ruleForm.classmates_album_name);
+
+      // sendDataToDatabase(ruleForm);
     } else {
       console.log('error submit!', fields)
     }
