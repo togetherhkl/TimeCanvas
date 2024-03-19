@@ -13,3 +13,5 @@ from services import auth_service
 async def verify_jwt_token(timecanvas_token: str = Header(...)):
     result = auth_service.verify_token(timecanvas_token)
     return result['uk']
+#获取cookie中的timecanvas_token来进行验证
+

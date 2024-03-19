@@ -1,14 +1,12 @@
 <template>
   <div class="container">
     <Navigation />
-    <Main></Main>
   </div>
 </template>
 
 <script>
 //从components中导入Navigation组件
 import Navigation from '../components/Navigation.vue'
-import Main from '../components/Main.vue'
 export default {
   // 状态
   data() {
@@ -18,7 +16,6 @@ export default {
   },
   components: {
     Navigation,
-    Main,
   },
   // 动作
 }

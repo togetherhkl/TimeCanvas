@@ -29,7 +29,7 @@ def create_project_folder(access_token: str, folder_name: str):
 def is_folder_exist(access_token: str, folder_name: str):
     url = ("https://pan.baidu.com/rest/2.0/xpan/file?method=list&access_token=" + access_token)
     payload = {
-        "dir": "/",
+        "dir": "/apps",
         "web": 0
     }
     response = requests.request("GET", url, data=payload)

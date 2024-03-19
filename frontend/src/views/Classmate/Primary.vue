@@ -1,6 +1,5 @@
 <template>
     <div class="parent-container">
-        <Header></Header>
         <div class="primary-layout">
             <div class="left">
                 <div class="left-on">
@@ -46,6 +45,7 @@ export default {
         Video,
     },
     // 动作
+
 }
 </script>
 <style scoped>

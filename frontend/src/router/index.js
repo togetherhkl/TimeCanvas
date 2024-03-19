@@ -8,65 +8,95 @@ import AddInformation from '../views/AddInformation.vue';
 import AddInterestingEvent from "../views/AddInterestingEvent.vue";
 import AddTravel from "../views/AddTravel.vue";
 import NotFound from '../views/404.vue'
+import Test from '../views/Test.vue'
+import About from '../views/About.vue'
+import MainLayout from '../views/MainLayout.vue'
+import Album from '../views/Album.vue'
+import AlbumType from '../views/AlbumType.vue'
+import InformShow from "../views/InformShow.vue";
+import AddInformation1 from "../views/AddInformation1.vue";
 import axios from 'axios'
 import { isProxy } from "vue";
+
 //创建路由
 const routes = [
     {
         path: "/",
-        name: "Home",
-        component: Home,
-    },
-    {
-        path: "/home",
-        redirect:"/",
-        children:[
+        component: MainLayout,
+        children: [
             {
-                path:"primary",
-                name:"Primary",
-                component:Primary
+                path: "/about",
+                name: "About",
+                component: About,
             },
             {
-                path:"junior",
-                name:"Junior",
-                component:Junior
+                path: "/album",
+                name: "Album",
+                component: Album,
             },
             {
-                path:"senior",
-                name:"Senior",
-                component:Senior
+                path:"albumtype",
+                name:"AlbumType",
+                component:AlbumType,
             },
             {
-                path:"university",
-                name:"Universtiy",
-                component:University
+                path: "/test",
+                name: "Test",
+                component: Test,
             },
             {
-                path:"addinformation",
-                name:"AddInformation",
-                component:AddInformation
+                path: "/classmates",
+                children:[
+                    {
+                        path:"informshow",
+                        name:"InformShow",
+                        component:InformShow
+                    },
+                    {
+                        path:"小学",
+                        name:"Primary",
+                        component:Primary
+                    },
+                    {
+                        path:"初中",
+                        name:"Junior",
+                        component:Junior
+                    },
+                    {
+                        path:"高中",
+                        name:"Senior",
+                        component:Senior
+                    },
+                    {
+                        path:"大学",
+                        name:"Universtiy",
+                        component:University
+                    },
+                    {
+                        path:"addinformation",
+                        name:"AddInformation1",
+                        component:AddInformation1
+                    },
+                    {
+                        path:"addinterestingevent",
+                        name:"AddInterestingEvent",
+                        component:AddInterestingEvent
+                    },
+                    {
+                        path:"addtravel",
+                        name:"AddTravel",
+                        component:AddTravel
+                    },
+                ],
             },
-            {
-                path:"addinterestingevent",
-                name:"AddInterestingEvent",
-                component:AddInterestingEvent
-            },
-            {
-                path:"addtravel",
-                name:"AddTravel",
-                component:AddTravel
-            },
+            
         ],
     },
+    
     { 
         path: '/:pathMatch(.*)*', 
         name: 'NotFound', 
         component: NotFound 
-    },
-    {
-        path:"/test",
-        name:"Main",
-        component:()=>import('../views/Test.vue')
     },
 ]
 //创建路由实例
