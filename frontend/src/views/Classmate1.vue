@@ -129,7 +129,7 @@ export default {
             let card = this.cards.find(card => card.id === id);//
             let url = `/home/classmate/${card.alt}`;
             this.$router.push(url);
-        }
+        },
     }
 };
 </script>

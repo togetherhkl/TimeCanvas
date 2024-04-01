@@ -164,7 +164,8 @@
   body {
     margin: 0;
     padding: 0;
-    height: 100%;
+    /* height: 100%; */
+    height: calc(100% - 80px );
     overflow: hidden;
   }
   
@@ -259,10 +260,8 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     justify-content: space-around;
-    align-items: center;
     flex-wrap: wrap;
     width: 100%;
-    max-width: 900px;
     margin: 0 auto;
   }
   .xijie-card {
