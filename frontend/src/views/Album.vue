@@ -1,175 +1,40 @@
 <template>
   <div class="main" v-loading="loading">
-    <div v-for="item in albuminfo" class="main-off">
-      <div class="on-space">
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <div class="grid-content ep-bg-purple" style="text-align: center;">
-              <img :src="item.albumtype_cover" style="width: 180px;height: 250px;">
-              <p style="font-size: larger; align-items: center;">{{ item.albumtype_name }}</p>
-            </div>
-          </el-col>
-          <el-col :span="20">
-            <ul class="card-list">
-              <li class="card" v-for="tmp in item.album_list">
-                <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
-                    @click="$router.push({path:'/classmates/informshow', query:{stage:tmp.album_name}})" :crossorigin="null" />
-                <a class="card-description" @click="$router.push('/classmates/informshow')">
-                  <h2>{{ tmp.album_name }}</h2>
-                </a>
-              </li>
-            </ul>
-          </el-col>
-        </el-row>
-      </div>
+    <div class="title">
+      <h1 class="title">{{ albumtype.albumtype_name }}</h1>
     </div>
-
-    <!-- <div class="main-on" v-loading="loading">
-      <div class="on-space">
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <div class="grid-content ep-bg-purple" style="text-align: center;">
-              <img src="../assets/1.png" style="width: 180px;height: 250px;" alt="同学录">
-              <p style="font-size: larger; align-items: center;">同学录{{ albuminfo }}</p>
-            </div>
-          </el-col>
-          <el-col :span="20">
-            <ul class="card-list">
-
-              <li class="card">
-                
-              </li>
-
-              <li class="card">
-                <a class="card-image" @click="$router.push('/classmates/junior')">
-                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/310408/lets-go-500.jpg" alt="junior" />
-                </a>
-                <a class="card-description" @click="$router.push('/classmates/junior')">
-                  <h2>初中</h2>
-                </a>
-              </li>
-
-              <li class="card">
-                <a class="card-image" target="_blank" @click="$router.push('/classmates/senior')">
-                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/310408/beautiful-game-500.jpg" alt="senior" />
-                </a>
-                <a class="card-description"  @click="$router.push('/classmates/senior')">
-                  <h2>高中</h2>
-                </a>
-              </li>
-
-              <li class="card">
-                <a class="card-image" target="_blank" @click="$router.push('/classmates/university')">
-                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/310408/jane-doe-500.jpg" alt="university" />
-                </a>
-                <a class="card-description"  @click="$router.push('/classmates/university')">
-                  <h2>大学</h2>
-                </a>
-              </li>
-
-            </ul>
-          </el-col>
-        </el-row>
-
-      </div>
-    </div>
-    <div class="main-off">
-      <div class="on-space">
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <div class="grid-content ep-bg-purple" style="text-align: center;">
-              <img src="../assets/1.png" style="width: 180px;height: 250px;" alt="趣事录">
-              <p style="font-size: larger; align-items: center;">趣事录</p>
-            </div>
-          </el-col>
-          <el-col :span="20">
-            <ul class="card-list">
-
-
-              <li class="card">
-                <a class="card-image" @click="$router.push('/classmates/junior')">
-                  <img src="../assets/vue.svg" alt="junior" />
-                </a>
-                <a class="card-description" @click="$router.push('/classmates/junior')">
-                  <h2>篮球</h2>
-                </a>
-              </li>
-
-              <li class="card">
-                <a class="card-image" @click="$router.push('/classmates/junior')">
-                  <img src="../assets/vue.svg" alt="junior" />
-                </a>
-                <a class="card-description" @click="$router.push('/classmates/junior')">
-                  <h2>足球</h2>
-                </a>
-              </li>
-
-              <li class="card">
-                <a class="card-image" @click="$router.push('/classmates/junior')">
-                  <img src="../assets/vue.svg" alt="junior" />
-                </a>
-                <a class="card-description" @click="$router.push('/classmates/junior')">
-                  <h2>羽毛球</h2>
-                </a>
-              </li>
-
-              <li class="card">
-                <a class="card-image" @click="$router.push('/classmates/junior')">
-                  <img src="../assets/vue.svg" alt="junior" />
-                </a>
-                <a class="card-description" @click="$router.push('/classmates/junior')">
-                  <h2>拔河</h2>
-                </a>
-              </li>
-
-            </ul>
-          </el-col>
-        </el-row>
-
-      </div>
-    </div> -->
-
+    <el-row :gutter="24">
+      <el-col :span="24">
+        <ul class="card-list">
+          <li class="card" v-for="tmp in album">
+            <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
+              @click="$router.push({ path: `/${albumtype.albumtype_name}/informshow`, query: { stage: tmp.album_name } })"
+              :crossorigin="null" />
+            <a class="card-description" @click="$router.push({ path: `/${albumtype.albumtype_name}/informshow`, query: { stage: tmp.album_name } })">
+              <h2>{{ tmp.album_name }}</h2>
+            </a>
+          </li>
+        </ul>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-/* 图片js */
-
-//图片懒加载实现
-// 等待整个页面加载完成
-/* window.addEventListener('load', function () {
-  // 使用setTimeout来模拟真实页面加载的延迟
-  setTimeout(lazyLoad, 1000);
-});
-
-function lazyLoad() {
-  var card_images = document.querySelectorAll('.card-image');
-  // 遍历每个card image
-  card_images.forEach(function (card_image) {
-    var image_url = card_image.getAttribute('data-image-full');
-    var content_image = card_image.querySelector('img');
-    // 更改内容图片的src以加载新的高清图片
-    content_image.src = image_url;
-    // 当新图片加载完成时监听load事件
-    content_image.addEventListener('load', function () {
-      // 使用新下载的图片替换可见背景图片
-      card_image.style.backgroundImage = 'url(' + image_url + ')';
-      // 添加一个类以移除模糊滤镜，实现平滑过渡图片更改效果
-      card_image.className = card_image.className + ' is-loaded';
-    });
-  });
-} */
-import { ElMessage } from 'element-plus'
-
+import { ElMessage } from 'element-plus';
 import axios from 'axios';
-// import { id } from 'element-plus/es/locale';
-// const src = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
 export default {
   data() {
     return {
-      albuminfo: [],//相册信息
+      album: [],//相册类型内信息
+      albumtype: [],//相册类型
+      id: null,
       loading: true,
     }
+  },
+  //在页面加载时获取数据
+  async created() {
+    this.id = this.$route.query.id;
   },
   mounted() {
     //判断用户是否登录
@@ -177,65 +42,44 @@ export default {
       ElMessage.error('请先登录');
     }
     else {
+      //检测浏览器本地会话中是否有image_url
+      // if(localStorage.getItem('image_url') != null){
+      //   /* 删除本地会话 */
+      //   localStorage.removeItem('image_url');
+      //   this.image_url = JSON.parse(sessionStorage.getItem('image_url'));
+      //   for (let i = 0; i < this.image_url.length; i++) {
+      //     this.album.push({albumtype_cover:this.image_url[i]});
+      //   }
+      //   //this.albuminfo = this.image_url;
+      //   console.log('if里的albu',this.album);
+      //   this.loading = false;
+      // }else{
       //从后端获取相册信息
       axios.get('/albuminfo').then(
         response => {
           if (response.status == 200) {
-            this.albuminfo = response.data;
+            let temp=[];//定义一个列表
+            temp = response.data;
+            console.log('album里返回的数据temp', temp);
             // console.log(this.albuminfo);
-            // console.log(this.albuminfo[0].album_list);
+            // console.log(this.albuminfo[0]);
+            // console.log(this.albuminfo[0].albumtype_cover);
+            // for (let i = 0; i < this.albuminfo.length; i++) {
+            //   this.image_url.push(this.albuminfo[i].albumtype_cover);
+            // }
+            // console.log(this.image_url);
+            /* 将image_url放在浏览器本地会话中 */
+            // localStorage.setItem('image_url', JSON.stringify(this.image_url));
+            this.albumtype = response.data[this.id - 1];//获取相册类型
+
+            this.album = temp[this.id - 1].album_list;
+            console.log('album里的album', this.album);
             this.loading = false;
           }
         }
       )
+      // }
     }
-    // id = this.$route.query.id;
-    // console.log(id);
-    //axios..get,获取相册信息输入ID，获取相册data信息，data格式
-    /*data = {
-      albuminfo: [
-        {
-          albumtype_name: '同学录',
-          albumtype_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          album_list: [
-            {
-              album_name: 'junior',
-              album_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            },
-            {
-              album_name: 'senior',
-              album_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            },
-            {
-              album_name: 'university',
-              album_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            }
-          ]
-        },
-        {
-          albumtype_name: '趣事录',
-          albumtype_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          album_list: [
-            {
-              album_name: '篮球',
-              album_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            },
-            {
-              album_name: '足球',
-              album_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            },
-            {
-              album_name: '羽毛球',
-              album_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            },
-            {
-              album_name: '拔河',
-              album_cover: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-            }
-          ]
-        }
-      ]
-    }*/
   },
 }
 
@@ -245,36 +89,13 @@ export default {
 .main {
   width: 100vw;
   height: 100vh;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-
-  /* 设置主轴方向为垂直方向 */
-  .main-on {
-    flex: 1;
-    /* 让子项填充剩余空间 */
-    width: 100%;
-    margin: 0 auto;
-    /* 控制边缘边距 */
-  }
-
-  .main-off {
-    flex: 1;
-    /* 让子项填充剩余空间 */
-    width: 100%;
-    margin: 0 auto;
-    /* 控制边缘边距 */
-  }
 }
-
-.on-space {
-  height: 300px;
-  width: auto;
-  margin: 40px 50px auto;
+.title {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 40px;
+  text-align: center;
 }
-
-/* 同学录相册样式 */
-/* 懒加载样式 */
 .card-image {
   display: block;
   min-height: 230px;
@@ -282,7 +103,6 @@ export default {
   background-size: cover;
   width: 100%;
 }
-
 .card-image>img {
   display: block;
   width: 100%;
@@ -290,17 +110,14 @@ export default {
   opacity: 1;
   object-fit: cover;
 }
-
 .card-list {
   display: flex;
-
   margin: 0 auto;
   padding: 0;
   font-size: 0;
   text-align: center;
   list-style: none;
 }
-
 .card {
   display: flex;
   flex-direction: column;
@@ -314,19 +131,16 @@ export default {
   box-shadow: 0 0 3rem -1rem rgba(0, 0, 0, 0.5);
   transition: transform 0.1s ease-in-out, box-shadow 0.1s;
 }
-
 .card:hover {
   transform: translateY(-0.5rem) scale(1.0125);
   box-shadow: 0 0.5em 3rem -1rem rgba(0, 0, 0, 0.5);
 }
-
 .card-description {
   display: block;
   padding: 1em 0.5em;
   color: #515151;
   text-decoration: none;
 }
-
 .card-description>h2 {
   margin: 0 0 0.5em;
 }

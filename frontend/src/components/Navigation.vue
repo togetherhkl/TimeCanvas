@@ -6,37 +6,12 @@
         <img class="logo" src="../assets/vue.svg" alt="project logo" />
       </el-menu-item>
       <el-menu-item index="1" @click="$router.push('/about')">首页</el-menu-item>
-      <el-menu-item index="3" @click="$router.push('/albumtype')">相册</el-menu-item>
+      <el-menu-item index="2" @click="$router.push('/albumtype')">相册</el-menu-item>
       <div class="flex-grow" />
-      <el-sub-menu index="2">
-        <template #title>创建</template>
-        <el-menu-item index="2-1" @click="drawer = true">趣事录</el-menu-item>
-        <el-menu-item index="2-2">旅游志</el-menu-item>
-      </el-sub-menu>
       <el-sub-menu index="3">
-
-        <template #title>管理</template>
-        <el-sub-menu index="2-1">
-
-          <template #title>同学录</template>
-          <el-menu-item index="2-1-1" @click="AddCPage">添加</el-menu-item>
-          <el-menu-item index="2-1-2">修改</el-menu-item>
-          <el-menu-item index="2-1-3">删除</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="2-2">
-
-          <template #title>趣事录</template>
-          <el-menu-item index="2-2-1" @click="AddIPage">添加</el-menu-item>
-          <el-menu-item index="2-2-2">修改</el-menu-item>
-          <el-menu-item index="2-2-3">删除</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="2-3">
-
-          <template #title>旅游志</template>
-          <el-menu-item index="2-3-1" @click="AddTPage">添加</el-menu-item>
-          <el-menu-item index="2-3-2">修改</el-menu-item>
-          <el-menu-item index="2-3-3">删除</el-menu-item>
-        </el-sub-menu>
+        <template #title>创建</template>
+        <el-menu-item index="3-1" @click="openDrawer('趣事录')">趣事录</el-menu-item>
+        <el-menu-item index="3-2" @click="openDrawer('旅游志')">旅游志</el-menu-item>
       </el-sub-menu>
       <el-menu-item index="4">
         <el-icon>
@@ -44,7 +19,6 @@
         </el-icon>
       </el-menu-item>
       <el-sub-menu index="5" @click="getTaken">
-
         <template #title>
           <el-avatar :src="avatar_url" :size="40" />
           {{ baidu_name }}
@@ -54,8 +28,8 @@
       </el-sub-menu>
     </el-menu>
   </div>
-  <el-drawer v-model="drawer" title="创建趣事录" :with-header="true" >
-    <CreateInterestingEvent />
+  <el-drawer v-model="drawer" :title=drawerTitle :with-header="false" >
+    <CreateEvent :title="drawerTitle" />
   </el-drawer>
 </template>
 
@@ -63,10 +37,11 @@
 import axios from 'axios';
 import avatar_url from '../assets/user.png';//引入默认头像
 import { routerKey } from 'vue-router';
-import CreateInterestingEvent from './CreateIntersetingEvent.vue';
+import CreateEvent from './CreateEvent.vue';
 //从common中引入公共方法
-import { GetCookie } from '../assets/common/utils.js'
-import { ElMessage } from 'element-plus'
+import { GetCookie } from '../assets/common/utils.js';
+import { ElMessage } from 'element-plus';
+import Album from '../views/Album.vue';
 export default {
   // 状态
   data() {
@@ -77,11 +52,12 @@ export default {
       avatar_url: avatar_url,
       access_token: '',
       drawer: false,
+      drawerTitle: '',
     }
   },
   //引入组件
   components: {
-    CreateInterestingEvent,
+    CreateEvent,
   },
   // 动作
   methods: {
@@ -113,19 +89,10 @@ export default {
         sessionStorage.clear();/* 清除缓存与会话记录，但失败 */
       this.$router.push('/');
     },
-    //跳转到添加同学录页面
-    AddCPage() {
-      this.$router.push('/classmates/addinformation');
+    openDrawer(title) {
+      this.drawerTitle = title;
+      this.drawer = true;
     },
-    //跳转到添加趣事录页面
-    AddIPage() {
-      this.$router.push('/classmates/addinterestingevent');
-    },
-    //跳转到添加旅游志页面
-    AddTPage() {
-      this.$router.push('/classmates/addtravel');
-    },
-    //退出功能，删除cookie和localStorage中的token
   },
   mounted() {
     //从cookie中获取token
@@ -167,4 +134,5 @@ export default {
   width: 60px;
   height: 60px;
 }
+
 </style>
