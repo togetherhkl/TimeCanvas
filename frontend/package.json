@@ -12,12 +12,15 @@
     "@vue/shared": "^3.4.13",
     "axios": "^1.6.5",
     "crypto-js": "^4.2.0",
+    "echarts": "^5.5.0",
+    "echarts-wordcloud": "^2.1.0",
     "element-plus": "^2.5.1",
     "vue": "^3.3.11",
+    "vue-echarts": "^6.6.9",
     "vue-router": "4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
-    "vite": "^5.0.8"
+    "vite": "^5.2.7"
   }
 }

@@ -1,94 +1,108 @@
 <template>
-    <div class="home">
-      <div class="bookshelf">
-        <div class="book">
-          <h1>同学录</h1>
-          <p>记录美好校园时光</p>
-         <!--  <img src="../assets/1.png" alt="同学录封面"> -->
-          <button @click="readBook('同学录')">阅读</button>
-        </div>
-        <div class="book">
-          <h1>趣事录</h1>
-          <p>留下生活中的点点滴滴</p>
-         <!--  <img src="../assets/1.png" alt="趣事录封面"> -->
-          <button @click="readBook('趣事录')">阅读</button>
-        </div>
+  <div class="home">
+    <div class="bookshelf" v-loading="loading">
+      <div class="book" v-for="item in albuminfo">
+        <el-image @click="readBook(item.albumtype_name)" :src="item.albumtype_cover" style="width: 100%;height: 100%;"
+          fit='cover' :crossorigin="null"/>
+        <h1 class="albumtype_name">{{ item.albumtype_name }}</h1>
+        <p class="albumtype_description">{{ item.albumtype_description }}</p>
+        <el-button class="button" @click="readBook(item.albumtype_name)" type="primary">阅读</el-button>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import Navigation from '../components/Navigation.vue';
-  import Classmate from './Classmate1.vue';
+  </div>
+</template>
 
-  export default {
-    components: {
-      Navigation
-    },
-    methods: {
-      readBook(title) {
-        /*
-        data: {
-          album_type: [
-            { id:'1' ,albumtype_name: '同学录', albumtype_description: '1.png' },
-            { id:'2' ,albumtype_name: '趣事录', albumtype_description: '2.png' }
-          ]
-        }
-
-
-        */
-        alert('打开' + title);
-        // 这里可以添加跳转逻辑，打开书籍详情页面等
-        //跳转到addinformation页面
-        if(title == '同学录')
-          this.$router.push({path:'/album',query:{id:1}});
-        if(title == '趣事录')
-          this.$router.push('/home/interestingevent');
-      }
+<script>
+//import { Loading } from 'element-plus/es/components/loading/src/service';
+import axios from 'axios';
+export default {
+  data() {
+    return {
+      albuminfo: [],//相册信息
+      loading: true,//加载动画
     }
-  }
-  </script>
-  
-  <style scoped>
-  .bookshelf {
-    display: flex;
-    justify-content: center;
-    height: 100vh;
-    padding-top: 100px ;
-  }
-  
-  .book {
-    width: 400px;
-    height: 500px;
-    background-color: #f2f2f2;
-    background-image: url('../assets/1.png');
-    background-size: cover;
-    background-position: center;
-    backdrop-filter: blur(10px);
-    text-align: center;
-    margin: 0 50px;
-    padding: 40px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  
-  .book h1 {
-    font-size: 30px;
-    margin: 20px 0;
-  }
-  .book p {
-    font-size: 20px;
-    margin: 20px 0;
-  }
-  .book button {
-    width: 100px;
-    height: 40px;
-    position: relative;
-    top: 320px;
-    font-size: larger;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  </style>
+  },
+  methods: {
+    readBook(title) {
+      if (title == '同学录')
+        this.$router.push({ path: '/album', query: { id: 1 } });
+      if (title == '趣事录')
+        this.$router.push({ path: '/album', query: { id: 2 } });
+      if (title == '旅游志')
+        this.$router.push({ path: '/album', query: { id: 3 } });
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('timecanvas_token') == null) {
+      this.$message.error('请先登录');
+    } else {
+      axios.get('/albuminfo').then(
+        response => {
+          if (response.status == 200) {
+            this.albuminfo = response.data;
+            console.log("akbumtype里的albuminfo", this.albuminfo);
+            this.loading = false;//关闭加载动画
+          }
+        },
+      );
+    }
+  },
+}
+</script>
+
+<style scoped>
+.bookshelf {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  padding-top: 50px;
+  position: relative;
+}
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.book {
+  position: relative;
+  width: 400px;
+  height: 600px;
+  margin: 0 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.book:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);/* 鼠标悬浮时的阴影效果 */
+}
+.albumtype_name {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.albumtype_description {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  text-align: center;
+}
+
+.button {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+</style>

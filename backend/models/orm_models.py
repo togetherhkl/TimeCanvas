@@ -67,7 +67,7 @@ class Travel(Base):
     travel_date = Column(DateTime, nullable=False)#旅游日期
     travel_description = Column(Text, nullable=True)#旅游描述
     travel_participant = Column(Text, nullable=True)#旅游参与者
-    travel_place = Column(String(300), nullable=False)#旅游地点
+    travel_place = Column(String(30), nullable=False)#旅游地点
     travel_album_image = Column(String(50), nullable=True)#旅游相册封面
 
     baidu_uk = Column(String(15), ForeignKey("user.baidu_uk"))#外键，关联百度网盘用户
