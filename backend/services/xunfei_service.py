@@ -10,6 +10,7 @@ from datetime import datetime
 from time import mktime
 from urllib.parse import urlencode
 from wsgiref.handlers import format_date_time
+import uuid
 
 import websocket  # 使用websocket_client
 answer = ""
@@ -104,7 +105,7 @@ def gen_params(appid, domain,question):
     data = {
         "header": {
             "app_id": appid,
-            "uid": "1234"#用户的唯一标识应该不一样
+            "uid": str(uuid.uuid4()).replace("-", ""),
         },
         "parameter": {
             "chat": {

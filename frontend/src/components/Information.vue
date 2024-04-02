@@ -206,55 +206,23 @@ export default {
                 style="width: 170px; height: 200px;border-radius: 50%;text-align: center;" alt="同学录头像">
         </div>
         <div class="information">
-            <div class="label">
-                <i class="iconfont icon-xingming"></i>
-                姓名
-            </div>
+            <div class="label"><i class="iconfont icon-xingming"></i>姓名</div>
             <div class="box">{{ name }}</div>
-            <div class="label">
-                <i class="iconfont icon-nicheng"></i>
-                昵称
-            </div>
+            <div class="label"><i class="iconfont icon-nicheng"></i>昵称</div>
             <div class="box">{{ nickname }}</div>
-            <div class="label">
-                <i class="iconfont icon-shengrix"></i>
-                生日
-            </div>
+            <div class="label"><i class="iconfont icon-shengrix"></i>生日</div>
             <div class="box">{{ birthday }}</div>
-            <div class="label">
-                <i class="iconfont icon-jiaxiang"></i>
-                家乡
-            </div>
+            <div class="label"><i class="iconfont icon-jiaxiang"></i>家乡</div>
             <div class="box">{{ hometown }}</div>
-            <!-- <div class="label">
-                <i class="iconfont icon-ziyuan25"></i>
-                爱好
-            </div>
-            <div class="box">{{ hobby }}</div> -->
-            <div class="label">
-                <i class="iconfont icon-QQ"></i>
-                QQ
-            </div>
+            <div class="label"><i class="iconfont icon-QQ"></i>QQ</div>
             <div class="box">{{ qq_number }}</div>
-            <div class="label">
-                <i class="iconfont icon-weixin"></i>
-                微信
-            </div>
+            <div class="label"><i class="iconfont icon-weixin"></i>微信</div>
             <div class="box">{{ wx_number }}</div>
-            <div class="label">
-                <i class="iconfont icon-shouji"></i>
-                手机
-            </div>
+            <div class="label"><i class="iconfont icon-shouji"></i>手机</div>
             <div class="box">{{ phone_number }}</div>
-            <div class="label">
-                <i class="iconfont icon-youxiang"></i>
-                邮箱
-            </div>
+            <div class="label"><i class="iconfont icon-youxiang"></i>邮箱</div>
             <div class="box">{{ email }}</div>
-            <div class="label">
-                <i class="iconfont icon-xingzuo"></i>
-                星座
-            </div>
+            <div class="label"><i class="iconfont icon-xingzuo"></i>星座</div>
             <div class="box">{{ constellation }}</div>
         </div>
         <div class="left-off">
@@ -297,6 +265,8 @@ export default {
         const constellation = ref('');
         const dream = ref('');
         const classmates_avatar_name = ref('');
+        const id = ref('');
+        //监听selectedClassmate的变化
         watch(() => props.selectedClassmate, (newVal) => {
             if (newVal) {
                 name.value = newVal.name;
@@ -315,6 +285,8 @@ export default {
                 constellation.value = newVal.constellation;
                 dream.value = newVal.dream;
                 classmates_avatar_name.value = newVal.classmates_avatar_name;
+                id.value = newVal.id;
+                console.log('id:',id.value);
             }else{
                 console.log('没有匹配到同学信息！');
             }
