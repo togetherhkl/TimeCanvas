@@ -40,7 +40,7 @@ async def callback(code: str = Query(...),db: Session = Depends(get_db)):
     #对令牌进行加密
     token = response["access_token"]
     #判断百度网盘是否有项目的总文件夹，如果没有就创建
-    if baidufile_service.is_folder_exist(token, "/apps/TimeGallery")==True:
+    if baidufile_service.is_folder_exist(token, "TimeGallery")==True:
         pass
     else:
         baidufile_service.create_project_folder(token, "/apps/TimeGallery")
@@ -72,7 +72,10 @@ async def callback(code: str = Query(...),db: Session = Depends(get_db)):
     avatar_url = userinfo["avatar_url"]
     baidu_name = userinfo["baidu_name"]
     url = frontend_url + "?avatar_url=" + avatar_url + "&baidu_name=" + baidu_name + "&access_token=" + access_token
-    return RedirectResponse(url=url)
+    response = RedirectResponse(url=frontend_url)
+    response.set_cookie(key="timecanvas_token", value=access_token)
+    # return RedirectResponse(url=url)
+    return response
 #获取百度access_token以及用户的vip_type
 @router.get("/userinfo",tags=["users"])
 async def userinfo(db: Session = Depends(get_db),baidu_uk: str = Depends(auth_depend.verify_jwt_token)):

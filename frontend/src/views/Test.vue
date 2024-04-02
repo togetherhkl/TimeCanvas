@@ -1,172 +1,98 @@
-<!-- <template>
-  <el-button text @click="centerDialogVisible = true">
-    Click to open the Dialog
-  </el-button>
-
-  <el-dialog
-    v-model="centerDialogVisible"
-    title="Warning"
-    width="30%"
-    align-center
-  >
-    <span>Open the dialog from the center from the screen</span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false">
-          Confirm
-        </el-button>
-      </span>
-    </template>
-  </el-dialog>
-</template>
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const centerDialogVisible = ref(false)
-</script>
-<style scoped>
-.dialog-footer button:first-child {
-  margin-right: 10px;
-}
-</style> -->
-<!-- <template> <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/310408/psychopomp-500.jpg"
-  @click="$router.push('/home/primary')" alt="primary" />
-  <i class="iconfont icon-muyangzuo">白羊座</i>
-
-  </template> -->
-
-<!--   <template>
-    <div>
-      <el-form :model="form" label-width="100px">
-        <el-form-item label="请选择爱好：">
-          <el-checkbox-group v-model="form.hobbies">
-            <el-checkbox label="篮球"></el-checkbox>
-            <el-checkbox label="足球"></el-checkbox>
-            <el-checkbox label="游泳"></el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-        <el-form-item label="输入新爱好：">
-          <el-input v-model="newHobby"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="addNewHobby">添加</el-button>
-        </el-form-item>
-      </el-form>
-      <p>已选爱好: {{ form.hobbies }}</p>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  import { ElForm, ElFormItem, ElCheckboxGroup, ElCheckbox, ElInput, ElButton } from 'element-plus';
-  
-  const form = ref({
-    hobbies: [] as string[]
-  });
-  const newHobby = ref('');
-  
-  const addNewHobby = () => {
-    if (newHobby.value) {
-      form.value.hobbies.push(newHobby.value);
-      newHobby.value = '';
-    }
-  };
-  </script>
-   -->
-   <template>
-    <div>
-        <el-dialog title="创建趣事录" :visible.sync="dialogVisible" :close-on-click-modal="false">
-            <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="趣事录名称">
-                    <el-input v-model="form.eventName" placeholder="请输入趣事录名称"></el-input>
-                </el-form-item>
-                <el-form-item label="趣事录封面图">
-                    <el-upload
-                        class="upload-demo"
-                        action="/api/create-interesting-event"
-                        :on-success="handleUploadSuccess"
-                        :on-error="handleUploadError"
-                        :before-upload="beforeUpload"
-                        :auto-upload="false"
-                        :file-list="fileList"
-                        :limit="1"
-                        :show-file-list="false"
-                    >
-                        <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
-                        <el-tooltip class="item" effect="dark" content="上传封面图" placement="top">
-                            <i class="el-icon-picture-outline"></i>
-                        </el-tooltip>
-                    </el-upload>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm">提 交</el-button>
-            </div>
-        </el-dialog>
-    </div>
+<template>
+  <el-upload :action="uploadAction" :file-list="fileList" :on-change="handleChange" :auto-upload="false"
+    :multiple="true" :before-upload="handleChange" :on-remove="handleRemove" :http-request="handleFileUpload"
+    ref="uploadMutiple" list-type="picture-card">
+    <el-icon>
+      <Plus />
+    </el-icon>
+  </el-upload>
+  <el-button type="primary" @click="submitUpload">上传</el-button>
 </template>
 
 <script>
+import axios from 'axios';
+import { Plus } from '@element-plus/icons-vue'
+import { getUserInfo, calculateMD5 } from '../assets/common/utils.js'
+
 export default {
-    data() {
-        return {
-            dialogVisible: false,
-            form: {
-                eventName: '',
-                photo: null
-            },
-            fileList: []
-        };
+  data() {
+    return {
+      uploadAction: '',
+      fileList: [],
+      md5: ''
+    };
+  },
+  methods: {
+    test() {
+      const userinfo = getUserInfo();
+      userinfo.then(res => {
+        console.log(res[0]);
+      });
     },
-    methods: {
-        handleUploadSuccess(response, file, fileList) {
-            // Handle success response
-            console.log(response);
-        },
-        handleUploadError(error, file, fileList) {
-            // Handle error response
-            console.error(error);
-        },
-        beforeUpload(file) {
-            // Validate file type and size
-            const isJPG = file.type === 'image/jpeg';
-            const isPNG = file.type === 'image/png';
-            const isLt2M = file.size / 1024 / 1024 < 2;
+    // 上传文件改变时的状态，打印选择的文件的文件信息
+    /**
+  * 文件上传change
+  */
+    handleChange(file, fileList) {
+      // console.log("文件改变了")
+      // console.log(file);
+      // console.log(fileList);
+      this.fileList = fileList;
+    },
+    handleRemove(file, fileList) {
+      console.log("文件移除")
+      console.log(file, fileList);
+    },
+    handleBeforeUpload(file) {
+      console.log("打印文件大小")
+      console.log(file.size); // 打印文件大小
+      return false; // 阻止文件自动上传
+    },
+    beforeUpload(file) {
+      // console.log(file);
+    },
+    handleFileUpload(data) {
+      console.log("文件上传")
+      console.log(data);
+      //百度网盘预上传
+      //获取文件大小
+      const file = data.file;
+      calculateMD5(file).then(res => {
+        let md5 = res;
 
-            if (!isJPG && !isPNG) {
-                this.$message.error('只能上传 JPG/PNG 格式的图片');
+
+
+        console.log('list');
+        const list = []
+        list.push(md5);
+        console.log(list);
+        const path = "/apps/TimeGallery/test" + data.file.name;
+        const encodedPath = encodeURIComponent(path);
+
+
+        //获取文件的md5值
+        const url = "http://pan.baidu.com/rest/2.0/xpan/file?method=precreate&access_token=121.2b64b0b989618096f6418245851698cd.Y_xqR97cR1gf86XMBm8KQjCwk5Hq7zsLphJUfAO.u3sOAw"
+        axios.post(url, {
+          filename: data.file.name,
+          size: data.file.size,
+          isdir: 0,
+          block_list: list,
+          path: encodedPath
+        },
+          {
+            headers: {
+              'User-Agent': 'pan.baidu.com'
             }
-            if (!isLt2M) {
-                this.$message.error('上传图片大小不能超过 2MB');
-            }
-
-            return (isJPG || isPNG) && isLt2M;
-        },
-        submitForm() {
-            this.$refs.form.validate(valid => {
-                if (valid) {
-                    // Perform API call to send eventName and photo to the backend
-                    // Example using axios:
-                    const formData = new FormData();
-                    formData.append('eventName', this.form.eventName);
-                    formData.append('photo', this.form.photo);
-
-                    axios.post('/api/create-interesting-event', formData)
-                        .then(response => {
-                            // Handle success response
-                            console.log(response.data);
-                        })
-                        .catch(error => {
-                            // Handle error response
-                            console.error(error);
-                        });
-                } else {
-                    return false;
-                }
-            });
-        }
+          }).then(res => {
+            console.log(res);
+          }).catch(err => {
+            console.log(err);
+          });
+      });
+    },
+    submitUpload() {
+      this.$refs.uploadMutiple.submit();
     }
-};
+  }
+}
 </script>

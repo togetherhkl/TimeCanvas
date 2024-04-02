@@ -7,7 +7,11 @@
 # FilePath: \TimeCanvas\backend\schemas\user_schema.py
 
 # '''
-from pydantic import BaseModel
+from pydantic import BaseModel,validator
+from datetime import date
+from sqlalchemy.orm import Session
+from models.orm_models import AlbumType as AlbumTypeModel
+from dependencies import db_depend
 
 class User(BaseModel):  
     baidu_name: str
@@ -35,5 +39,35 @@ class Classmates(BaseModel):
     graduation_message: str | None
     classmates_album_name: str 
     classmates_avatar_name: str | None
+    class Config:
+        orm_mode = True
+#相册类型
+class AlbumType(BaseModel):
+    albumtype_name: str
+    albumtype_description: str | None
+    class Config:
+        orm_mode = True
+class AlbumTypeUpdate(BaseModel):
+    albumtype_name: str
+    albumtype_description: str | None
+    class Config:
+        orm_mode = True
+#相册
+class Album(BaseModel):
+    album_name: str
+    album_description: str | None
+    album_data: date | None
+    album_type: int | None
+    class Config:
+        orm_mode = True
+class AlbumCreate(BaseModel):
+    album_name: str
+    album_description: str | None
+    album_type: int | None
+    class Config:
+        orm_mode = True
+class AlbumUpdate(BaseModel):
+    album_name: str
+    album_description: str | None
     class Config:
         orm_mode = True

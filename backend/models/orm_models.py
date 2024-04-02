@@ -1,8 +1,10 @@
 # from core.settings import Base
+import uuid
 from sqlalchemy.orm import Mapped, mapped_column,relationship
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Text, UUID
 from typing import Optional, List
 from sqlalchemy.ext.declarative import declarative_base
+from datetime import datetime
 
 Base = declarative_base()
 
@@ -20,6 +22,8 @@ class User(Base):
     classmates = relationship("Classmates", back_populates="user")
     interesting_event = relationship("InterestingEvent", back_populates="user")
     travel = relationship("Travel", back_populates="user")
+    album_type = relationship("AlbumType", back_populates="user")
+    album = relationship("Album", back_populates="user")
 #同学录
 class Classmates(Base):
     __tablename__ = "classmates"
@@ -68,3 +72,27 @@ class Travel(Base):
 
     baidu_uk = Column(String(15), ForeignKey("user.baidu_uk"))#外键，关联百度网盘用户
     user = relationship("User", back_populates="travel")
+
+#相册类型
+class AlbumType(Base):
+    __tablename__ = "album_type"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    albumtype_name = Column(String(50), nullable=False,unique=True)#相册类型名称
+    albumtype_description = Column(Text, nullable=True)#相册类型描述
+    albumtype_data = Column(DateTime, nullable=False,default=datetime.now)#相册类型创建日期
+    albumtype_owner = Column(String(15), ForeignKey("user.baidu_uk"))#相册类型所有者
+
+    user = relationship("User", back_populates="album_type")
+    album = relationship("Album", back_populates="albumtype")
+#相册
+class Album(Base):
+    __tablename__ = "album"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    album_name = Column(String(50), nullable=False,unique=True)#相册名称
+    album_description = Column(Text, nullable=True)#相册描述
+    album_date = Column(DateTime, nullable=False, default=datetime.now)#相册创建日期
+    album_type = Column(Integer, ForeignKey("album_type.id"))#相册类型
+    album_owner = Column(String(15), ForeignKey("user.baidu_uk"))#相册所有者
+
+    user = relationship("User", back_populates="album")
+    albumtype = relationship("AlbumType", back_populates="album")

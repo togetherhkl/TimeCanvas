@@ -1,6 +1,6 @@
 <template>
     <div class="parent-container">
-        <Header></Header>
+
         <div class="junior-layout">
             <div class="left">
                 <div class="left-on">

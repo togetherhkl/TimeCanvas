@@ -1,6 +1,5 @@
 <template>
     <div class="parent-container">
-        <Header></Header>
         <div class="university-layout">
             <div class="left">
                 <div class="left-on">
