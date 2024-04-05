@@ -268,6 +268,7 @@ export default {
         const id = ref('');
         //监听selectedClassmate的变化
         watch(() => props.selectedClassmate, (newVal) => {
+            // console.log('newVal:',newVal);
             if (newVal) {
                 name.value = newVal.name;
                 nickname.value = newVal.nickname;
@@ -286,7 +287,14 @@ export default {
                 dream.value = newVal.dream;
                 classmates_avatar_name.value = newVal.classmates_avatar_name;
                 id.value = newVal.id;
-                console.log('id:',id.value);
+                // console.log('id:',id.value);
+                //使用异步获取头像
+                axios.get('/albumfiles',{params:{folder_name:newVal.classmates_album_path+'/'+newVal.name}})
+                .then(response=>{
+                    // console.log('response:',response);
+                    classmates_avatar_name.value=response.data[0];
+                })
+
             }else{
                 console.log('没有匹配到同学信息！');
             }

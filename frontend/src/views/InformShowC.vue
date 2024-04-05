@@ -18,7 +18,7 @@
                             </template>
                         </el-input>
                         <el-menu-item :index="`1-${index + 1}`" v-for="(item, index) in nameList" :key="index"
-                            @click="selectedClassmate = classmatesData.find(classmate => classmate.name === item.name)">
+                            @click="selectStudent(item)">
                             {{ item.name }}
                             <el-tooltip content="编辑" palcement="top">
                                 <el-icon class="update-icon" @click.stop="update(item)">
@@ -172,6 +172,11 @@ export default {
                 console.error('搜索失败：', error);
             }
         };
+        const selectStudent = (item) => {
+            const stage=router.currentRoute.value.query.stage;
+            selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === item.name);
+            selectedClassmate.value.classmates_album_path="同学录/"+stage;     
+        };
         return {
             selectedClassmate,
             classmatesData,
@@ -181,6 +186,7 @@ export default {
             keyword,
             handleClose,
             handleOpen,
+            selectStudent,
         };
     },
 }

@@ -2,11 +2,11 @@
   <div class="home">
     <div class="bookshelf" v-loading="loading">
       <div class="book" v-for="item in albuminfo">
-        <el-image @click="readBook(item.albumtype_name)" :src="item.albumtype_cover" style="width: 100%;height: 100%;"
+        <el-image @click="openInNewTab(item.albumtype_id,item.albumtype_name)" :src="item.albumtype_cover" style="width: 100%;height: 100%;"
           fit='cover' :crossorigin="null"/>
         <h1 class="albumtype_name">{{ item.albumtype_name }}</h1>
         <p class="albumtype_description">{{ item.albumtype_description }}</p>
-        <el-button class="button" @click="readBook(item.albumtype_name)" type="primary">阅读</el-button>
+        <el-button class="button" @click="openInNewTab(item.albumtype_id,item.albumtype_name)" type="primary">阅读</el-button>
       </div>
     </div>
   </div>
@@ -23,13 +23,17 @@ export default {
     }
   },
   methods: {
-    readBook(title) {
-      if (title == '同学录')
-        this.$router.push({ path: '/album', query: { id: 1 } });
-      if (title == '趣事录')
-        this.$router.push({ path: '/album', query: { id: 2 } });
-      if (title == '旅游志')
-        this.$router.push({ path: '/album', query: { id: 3 } });
+    // readBook(title) {
+    //   if (title == '同学录')
+    //     this.$router.push({ path: '/album', query: { id: 1 } });
+    //   if (title == '趣事录')
+    //     this.$router.push({ path: '/album', query: { id: 2 } });
+    //   if (title == '旅游志')
+    //     this.$router.push({ path: '/album', query: { id: 3 } });
+    // }
+    openInNewTab(id,album) {
+      const url = this.$router.resolve({ path: 'album', query: { id: id, album: album } }).href;
+      window.open(url, '_blank');
     }
   },
   mounted() {
