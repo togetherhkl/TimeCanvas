@@ -10,7 +10,7 @@
             <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
               @click="$router.push({ path: `/${albumtype.albumtype_name}/informshow`, query: { stage: tmp.album_name } })"
               :crossorigin="null" />
-            <a class="card-description" @click="$router.push({ path: `/${albumtype.albumtype_name}/informshow`, query: { stage: tmp.album_name } })">
+            <a class="card-description" @click="openInNewTab(albumtype.albumtype_name,tmp.album_name)">
               <h2>{{ tmp.album_name }}</h2>
             </a>
           </li>
@@ -79,6 +79,13 @@ export default {
         }
       )
       // }
+    }
+  },
+  methods: {
+    //打开新标签页
+    openInNewTab(albumtype_name,album_name) {
+      const url = this.$router.resolve({ path: `/${albumtype_name}/informshow`, query: { stage: album_name} }).href;
+      window.open(url, '_blank');
     }
   },
 }

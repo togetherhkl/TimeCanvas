@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from models import orm_models
 from schemas import orm_schema
 from crud import album_crud, user_crud
+from services import baidufile_service
 router = APIRouter()
 #获取相册类型
 @router.get("/albumtype",tags=["albumtype"])
@@ -96,3 +97,14 @@ async def get_albuminfo(
     #获取用户的百度access_token
     access_token = user_crud.get_user(db, baidu_uk).access_token
     return album_crud.get_album_with_cover(db, baidu_uk,access_token)
+
+#获取某个目录下的所有图片
+@router.get("/albumfiles",tags=["albuminfo"])
+async def get_album_files(
+    folder_name: str,
+    db: Session = Depends(db_depend.get_db),
+    baidu_uk: str = Depends(auth_depend.verify_jwt_token),
+):
+    access_token = user_crud.get_user(db, baidu_uk).access_token
+    folder_name="apps/TimeGallery/"+folder_name
+    return baidufile_service.get_image(access_token, folder_name)
