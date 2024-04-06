@@ -21,6 +21,8 @@ from dependencies import auth_depend
 #加载环境变量
 from dotenv import load_dotenv
 import os
+#加载加密工具
+from utils import aes
 load_dotenv('.env')
 frontend_url = os.getenv("FRONTEND_URL")
 
@@ -50,8 +52,8 @@ async def callback(code: str = Query(...),db: Session = Depends(get_db)):
     user_data = {
             "baidu_name": userinfo["baidu_name"],
             "avatar_url": userinfo["avatar_url"],
-            "access_token": response["access_token"],
-            "refresh_token": response["refresh_token"],
+            "access_token": aes.encrypt(response["access_token"]),#对access_token进行加密
+            "refresh_token": aes.encrypt(response["refresh_token"]),#对refresh_token进行加密
             "baidu_vip_type": userinfo["vip_type"],
             "baidu_uk": userinfo["uk"],
             "nickname": ""
@@ -73,13 +75,14 @@ async def callback(code: str = Query(...),db: Session = Depends(get_db)):
     baidu_name = userinfo["baidu_name"]
     url = frontend_url + "?avatar_url=" + avatar_url + "&baidu_name=" + baidu_name + "&access_token=" + access_token
     response = RedirectResponse(url=frontend_url)
-    response.set_cookie(key="timecanvas_token", value=access_token)
+    response.set_cookie(key="timecanvas_token", value=access_token)#设置cookie
     # return RedirectResponse(url=url)
     return response
 #获取百度access_token以及用户的vip_type
 @router.get("/userinfo",tags=["users"])
 async def userinfo(db: Session = Depends(get_db),baidu_uk: str = Depends(auth_depend.verify_jwt_token)):
     access_token = db.query(orm_models.User).filter(orm_models.User.baidu_uk == baidu_uk).first().access_token
+    access_token = aes.decrypt(access_token)#对access_token进行解密
     userinfo = auth_service.get_user_info(access_token)
     userinfo["access_token"] = access_token
     #会员类型，0普通用户、1普通会员、2超级会员
