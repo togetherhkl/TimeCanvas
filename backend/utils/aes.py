@@ -1,4 +1,3 @@
-
 #AES加密算法
 import random #生成随机数
 import base64 #base64编码
@@ -186,7 +185,6 @@ def pkcs7_padding(data, block_size=16):
 #定义去除pkcs#7填充
 def pkcs7_unpadding(data):
     pad_len = data[-1]#获取最后一个字节的值
-    print("pad_len:",pad_len)
     if pad_len < 1 or pad_len > 16:
         raise ValueError("超出有效范围")
     return data[:-pad_len]#去除填充
@@ -225,21 +223,29 @@ def bytes_to_string(byte_list):
 #定义字节列表转字符串,为base64编码
 def bytes_to_string_base64(byte_list):
     return base64.b64encode(bytes(byte_list)).decode('utf-8')
-#AES加密函数,外部调用
-def Aes_Encrypt(text):
-    plain_text = pkcs7_padding(string_to_bytes(text))
+#定义加密
+def encrypt(access_token):
+    plain_text = pkcs7_padding(string_to_bytes(access_token))
     cipher_text = cbc_encrypt(plain_text, key, iv)
-    return bytes_to_string_base64(cipher_text)
-#AES解密函数，外部调用
-def Aes_Decrypt(text):
-    cipher_text = base64.b64decode(text)
-    plain_text1 = cbc_decrypt(cipher_text, key, iv)
-    plain_text2 = pkcs7_unpadding(plain_text1)
-    return bytes_to_string(plain_text2)
+    cipher_text=bytes_to_string_base64(cipher_text)
+    return cipher_text
+#定义解密
+def decrypt(cipher_text):
+    cipher_text=base64.b64decode(cipher_text)
+    cipher_text=list(cipher_text)
+    plain_text = cbc_decrypt(cipher_text, key, iv)
+    plain_text = pkcs7_unpadding(plain_text)
+    plain_text = bytes_to_string(plain_text)
+    return plain_text
 #测试
 if __name__ == '__main__':
-    # key=[85, 101, 226, 207, 83, 220, 52, 95, 244, 17, 18, 65, 40, 128, 148, 181]
-    # iv= [49, 253, 107, 129, 93, 227, 250, 144, 222, 98, 243, 171, 50, 197, 46, 206]
+    key=[85, 101, 226, 207, 83, 220, 52, 95, 244, 17, 18, 65, 40, 128, 148, 181]
+    iv= [49, 253, 107, 129, 93, 227, 250, 144, 222, 98, 243, 171, 50, 197, 46, 206]
+    plain_text = input("请输入明文:")
+    cipher_text = encrypt(plain_text)
+    print("密文(base64):",cipher_text)
+    plain_text = decrypt(cipher_text)
+    print("解密后明文:",plain_text)
     # access_token='hello.WGHTofHyalfhnvdjdkljskdjssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'
     # plain_text = pkcs7_padding(string_to_bytes(access_token))
     # print("明文:",access_token)
@@ -250,12 +256,3 @@ if __name__ == '__main__':
     # plain_text1=cbc_decrypt(cipher_text,key,iv)
     # plain_text2=pkcs7_unpadding(plain_text1)
     # print("解密后明文:",bytes_to_string(plain_text2))
-
-    #从屏幕中输入明文
-    plain_text = input("请输入明文:")
-    #加密
-    cipher_text = Aes_Encrypt(plain_text)
-    print("密文:",cipher_text)
-    #解密
-    plain_text1 = Aes_Decrypt(cipher_text)
-    print("解密后明文:",plain_text1)

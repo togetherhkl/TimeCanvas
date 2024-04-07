@@ -10,9 +10,13 @@
 from sqlalchemy.orm import Session
 from models.orm_models import User,Classmates
 from schemas import orm_schema
+from utils import aes
 #查询用户信息
 def get_user(db: Session, baidu_uk: str):
-    return db.query(User).filter(User.baidu_uk == baidu_uk).first()
+    userinfo = db.query(User).filter(User.baidu_uk == baidu_uk).first()
+    #对access_token解密
+    userinfo.access_token = aes.decrypt(userinfo.access_token)
+    return userinfo
     
 #创建用户信息
 def user_create(db: Session, user: dict):
