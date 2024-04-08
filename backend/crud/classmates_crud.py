@@ -25,7 +25,7 @@ def create_classmates(db: Session, classmates: dict):
     return db_classmate
 def create_classmate(db: Session, classmates: orm_schema.Classmates, baidu_uk: str):
     db_classmate = Classmates(**classmates.model_dump(),baidu_uk=baidu_uk)
-    print(db_classmate)
+    # print(db_classmate)
     db.add(db_classmate)
     db.commit()
     db.refresh(db_classmate)

@@ -71,3 +71,24 @@ class AlbumUpdate(BaseModel):
     album_description: str | None
     class Config:
         orm_mode = True
+
+#旅游
+class TravelCreate(BaseModel):
+    travel_album_name: str
+    travel_theme: str
+    travel_date: date
+    travel_province: str
+    travel_place: str
+    travel_description: str | None
+    travel_participant: str | None
+    class Config:
+        orm_mode = True
+class TravelUpdate(BaseModel):
+    travel_theme: str
+    travel_date: date
+    travel_province: str
+    travel_place: str
+    travel_description: str | None
+    travel_participant: str | None
+    class Config:
+        orm_mode = True

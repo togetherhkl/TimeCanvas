@@ -62,12 +62,13 @@ class InterestingEvent(Base):
 class Travel(Base):
     __tablename__ = "travel"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    travel_album_name = Column(String(50), nullable=True,unique=True)#旅游相册名称
+    travel_album_name = Column(String(50), nullable=True)#旅游相册名称
     travel_theme = Column(String(50), nullable=False)#旅游主题
     travel_date = Column(DateTime, nullable=False)#旅游日期
     travel_description = Column(Text, nullable=True)#旅游描述
     travel_participant = Column(Text, nullable=True)#旅游参与者
     travel_place = Column(String(30), nullable=False)#旅游地点
+    travel_province = Column(String(30), nullable=False)#旅游省份
     travel_album_image = Column(String(50), nullable=True)#旅游相册封面
 
     baidu_uk = Column(String(15), ForeignKey("user.baidu_uk"))#外键，关联百度网盘用户
@@ -77,7 +78,7 @@ class Travel(Base):
 class AlbumType(Base):
     __tablename__ = "album_type"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    albumtype_name = Column(String(50), nullable=False,unique=True)#相册类型名称
+    albumtype_name = Column(String(50), nullable=False)#相册类型名称
     albumtype_description = Column(Text, nullable=True)#相册类型描述
     albumtype_data = Column(DateTime, nullable=False,default=datetime.now)#相册类型创建日期
     albumtype_owner = Column(String(15), ForeignKey("user.baidu_uk"))#相册类型所有者
