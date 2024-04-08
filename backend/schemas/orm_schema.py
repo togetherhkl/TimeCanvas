@@ -92,3 +92,13 @@ class TravelUpdate(BaseModel):
     travel_participant: str | None
     class Config:
         orm_mode = True
+#有趣的事件
+class Interesting(BaseModel):
+    event_name: str
+    event_date: date
+    event_description: str | None
+    event_participant: str | None
+    event_album_image: str | None
+    event_album_name: str | None
+    class Config:
+        orm_mode = True
