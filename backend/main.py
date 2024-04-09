@@ -21,6 +21,7 @@ app.include_router(xunfei.router)#将xunfei.py中的路由添加到app中
 app.include_router(album.router)#将album.py中的路由添加到app中
 app.include_router(statistics.router)#将statistics.py中的路由添加到app中
 app.include_router(travel.router)#将travel.py中的路由添加到app中
+app.include_router(interestingevent.router)#将interestingevent.py中的路由添加到app中
 
 @app.get("/")
 def read_root():

@@ -14,6 +14,7 @@ from models import orm_models
 from schemas import orm_schema
 from crud import album_crud, user_crud
 from services import baidufile_service
+from utils import aes
 router = APIRouter()
 #获取相册类型
 @router.get("/albumtype",tags=["albumtype"])
@@ -29,6 +30,13 @@ async def album_type_create(
     db: Session = Depends(db_depend.get_db),
     baidu_uk: str = Depends(auth_depend.verify_jwt_token),
 ):
+    userinfo = user_crud.get_user(db, baidu_uk)
+    access_token = aes.decrypt(userinfo.access_token)
+    #判断百度网盘是否有项目的总文件夹，如果没有就创建
+    if baidufile_service.is_folder_exist(access_token, "TimeGallery/"+album_type.albumtype_name)==True:
+        pass
+    else:
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/"+album_type.albumtype_name)
     return album_crud.album_type_create(db, album_type, baidu_uk)
 #删除相册类型
 @router.delete("/albumtype",tags=["albumtype"])
@@ -68,8 +76,15 @@ async def album_create(
         orm_models.AlbumType.id == album.album_type, 
         orm_models.AlbumType.albumtype_owner==baidu_uk
     ).first()
+    userinfo = user_crud.get_user(db, baidu_uk)
+    access_token = aes.decrypt(userinfo.access_token)
     if not album_type:
         return HTTPException(status_code=404, detail="相册类型不存在")
+    #判断百度网盘是存在对应的文件夹，如果没有就创建
+    if baidufile_service.is_folder_exist(access_token, "TimeGallery/"+album_type.albumtype_name+"/"+album.album_name)==True:
+        pass
+    else:
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/"+album_type.albumtype_name+"/"+album.album_name)
     return album_crud.album_create(db, album, baidu_uk)
 #删除相册
 @router.delete("/album",tags=["album"])
@@ -96,15 +111,17 @@ async def get_albuminfo(
 ):
     #获取用户的百度access_token
     access_token = user_crud.get_user(db, baidu_uk).access_token
+    access_token = aes.decrypt(access_token)
     return album_crud.get_album_with_cover(db, baidu_uk,access_token)
 
 #获取某个目录下的所有图片
-@router.get("/albumfiles",tags=["albuminfo"])
+@router.get("/albumfiles",tags=["albuminfo"],description="获取某个目录下的所有图片")
 async def get_album_files(
     folder_name: str,
     db: Session = Depends(db_depend.get_db),
     baidu_uk: str = Depends(auth_depend.verify_jwt_token),
 ):
     access_token = user_crud.get_user(db, baidu_uk).access_token
+    access_token = aes.decrypt(access_token)
     folder_name="apps/TimeGallery/"+folder_name
     return baidufile_service.get_image(access_token, folder_name)

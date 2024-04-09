@@ -16,7 +16,9 @@ from dependencies import auth_depend
 from schemas import orm_schema
 from models import orm_models
 #加载数据库操作
-from crud import classmates_crud
+from crud import classmates_crud,user_crud
+from services import baidufile_service
+from utils import aes
 
 router = APIRouter()
 #获取同学录信息
@@ -40,6 +42,19 @@ async def create_classmate(
     db: Session = Depends(get_db),
     baidu_uk: str = Depends(auth_depend.verify_jwt_token),
 ):
+    #从数据库user中提取用户的百度网盘access_token
+    userinfo = user_crud.get_user(db, baidu_uk)
+    access_token = aes.decrypt(userinfo.access_token)
+    #判断百度网盘是否有项目的总文件夹，如果没有就创建
+    if baidufile_service.is_folder_exist(access_token, "TimeGallery/同学录/"+classmates.name)==True:
+        pass
+    else:
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/同学录/"
+                                                +classmates.classmates_album_name+'/'+classmates.name)
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/同学录/"
+                                                +classmates.classmates_album_name+'/'+classmates.name+"/pictures")
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/同学录/"
+                                                +classmates.classmates_album_name+'/'+classmates.name+"/videos")
     #创建同学录信息
     return classmates_crud.create_classmate(db, classmates, baidu_uk)
 #修改同学录信息
