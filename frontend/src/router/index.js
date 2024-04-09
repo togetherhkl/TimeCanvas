@@ -62,10 +62,6 @@ const routes = [
                 component: Test,
             },
             {
-                path:'/t',
-                component:()=>import('../views/test1.vue'),
-            },
-            {
                 path: "/同学录",
                 children:[
                     {
@@ -138,6 +134,11 @@ const routes = [
                         name:"CreateInterestingEvent",
                         component:CreateInterestingEvent,
                     },
+                    {
+                        path:"updateinterestingevent",
+                        name:"UpdateInterestingEvent",
+                        component:()=>import("../views/UpdateEvent.vue")
+                    },
                 ],
             },
             {
@@ -152,6 +153,11 @@ const routes = [
                         name:"CreateTravel",
                         component:CreateTravel,
                     },
+                    {
+                        path:"updatetravel",
+                        name:"UpdateTravel",
+                        component:()=>import("../views/UpdateTravel.vue")
+                    }
                 ],
             },
         ],

@@ -14,13 +14,11 @@
                             <input type="text" id="nickname" v-model="formData.nickname" required>
                         </div>
                         <div class="avatar">
-                            <label for="classmates_avatar_name">头像</label>
-                            <!-- <input id="classmates_avatar_name" v-model="formData.classmates_avatar_name" required> -->
-
+                            <!-- <label for="classmates_avatar_name">头像</label>
                             <input type="file" id="classmates_avatar_name" accept="image/*"
                                 @change="handleAvatarChange">
                             <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar Preview"
-                                style="max-width: 200px; max-height: 200px;">
+                                style="max-width: 200px; max-height: 200px;"> -->
                         </div>
                         <div class="birthday">
                             <label for="birthday">生日:</label>
@@ -66,7 +64,6 @@
                         <el-cascader v-model="selectedOptions" :options="options" @change="handleAreaChange"
                             placeholder="请选择省份和市区"> </el-cascader>
                         <el-input v-model="formData.hometown" placeholder="请手动填写详细地址" required></el-input>
-                        <!-- <input type="text" id="hometown" v-model="formData.hometown" required> -->
                     </div>
                     <div class="layout-off">
                         <div class="hobby">
@@ -100,7 +97,7 @@
 
 <script>
 import { ElCascader,ElMessageBox } from 'element-plus';
-import { regionData, codeToText } from 'element-china-area-data'
+import { regionData, codeToText } from 'element-china-area-data';
 import axios from 'axios';
 import GMDialog from './GMDialog.vue';
 import { marked, options } from 'marked';//markdown解析器
@@ -246,7 +243,6 @@ export default {
                 })
                 .catch(_ => { });
         },
-        //
         updateVditorText(newText) {
             this.formData.graduation_message = newText;//更新毕业寄语
         },

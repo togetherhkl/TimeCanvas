@@ -34,7 +34,7 @@ export default defineComponent({
   },
   computed: {
     markdownToHtml() {
-      return marked(this.graduation_message, options);
+      return marked(this.graduation_message);
     }
   },
   setup(props) {

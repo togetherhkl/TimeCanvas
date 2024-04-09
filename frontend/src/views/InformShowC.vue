@@ -107,7 +107,6 @@ export default {
                 type: 'warning'
             }).then(() => {
                 // Handle deletion logic here
-                console.log('id:', item.id);
                 axios.delete('/classmate/', { params: { id: item.id } }).then(
                     response => {
                         if (response.status == 200) {

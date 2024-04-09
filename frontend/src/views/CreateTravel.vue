@@ -5,15 +5,18 @@
 import EditT from '../components/EditT.vue';
 import axios from 'axios';
 import { ElMessageBox } from 'element-plus';
+import { useRouter } from 'vue-router';
 export default {
   data() {
     return {
       formData: {
         travel_theme: '',//旅游主题
-                travel_date: '',//旅游日期
-                travel_description: '',//旅游描述
-                travel_participant: '',//旅游参与者
-                travel_place: '',//旅游地点
+        travel_date: '',//旅游日期
+        travel_description: '',//旅游描述
+        travel_participant: '',//旅游参与者
+        travel_place: '',//旅游具体地点
+        travel_province:'',//旅游省份
+        travel_album_name:'',
       },
     };
   },
@@ -23,6 +26,8 @@ export default {
   methods: {
     handleFormSubmit(newData) {
       this.formData = newData;
+      const type = this.$router.currentRoute.value.query.type;
+      this.formData.travel_album_name=type;
       console.log('添加旅游里formdata:', this.formData);
       /* 如果表单不完整，则返回；否则，则将数据发送给数据库 */
       if (Object.values(this.formData).some(value => !value))
@@ -32,6 +37,23 @@ export default {
         });
       else {
         console.log("成功提交");
+        axios.post('/travel',this.formData)
+        .then(response => {
+            // 处理成功响应
+            console.log("旅游志创建回应：", response.data);
+            this.formData = {};//清空表单,但失败???
+            console.log('旅游志创建里formdata:', this.formData);
+            ElMessageBox.alert('添加成功', '提示', {
+              confirmButtonText: '确定',
+              type: 'success'
+            }).then(() => {
+              // const type = this.$router.currentRoute.value.query.type;
+              // this.$router.push({ path: '/趣事录/informshow', query: { stage: type } });
+            });
+          }).catch(error => {
+            // 处理错误响应
+            console.log(error);
+          });
       }
     },
     handleFormReset() {

@@ -8,7 +8,7 @@
                             <el-icon><HomeFilled /></el-icon>
                             <span>旅游主题</span>
                         </template>
-                        <el-input v-model="keyword" placeholder="请输入姓名">
+                        <el-input v-model="keyword" placeholder="请输入旅游主题">
                             <template #suffix>
                                 <el-icon style="cursor: pointer;" @click="search">
                                     <Search />
@@ -100,7 +100,7 @@ export default {
         }).then(() => {
             // Handle deletion logic here
             console.log('id:',item.id);
-            axios.delete('/Travel/',{params:{id:item.id}}).then(
+            axios.delete('/travel/',{params:{id:item.id}}).then(
                 response=>{
                     if(response.status==200){
                         console.log(`删除 ${item.name}成功`);
@@ -119,8 +119,8 @@ export default {
     // 编辑同学
     update(item){
         this.$router.push({ 
-            path: '/旅游志/updateTravel',
-            query: { id:item.id,name:item.name,type:item.Travels_album_name }
+            path: '/旅游志/updatetravel',
+            query: { id:item.id,name:item.name,type:item.travel_album_name }
          });
         console.log('update:',item);
     }
@@ -134,23 +134,26 @@ export default {
         const keyword = ref('');// 搜索关键字
         onMounted(async () => {
             try {
-                TravelsData.value = [
-                    {travel_theme: '旅游主题1', travel_date: '2021-07-01', travel_place: '地点1', travel_participant: '参与者1', travel_description: '描述1'},
-                    {travel_theme: '旅游主题2', travel_date: '2021-07-02', travel_place: '地点2', travel_participant: '参与者2', travel_description: '描述2'},
-                ];
-                nameList.value = TravelsData.value.map(travel => ({name:travel.travel_theme,id:travel.id}));
-                console.log('旅游志数据:', TravelsData.value);
-                console.log('旅游志名称列表:', nameList.value);
+                axios.get('/travel',{params:{travel_album_name:router.currentRoute.value.query.stage}}).then(response => {
+                    TravelsData.value = response.data;
+                    nameList.value = TravelsData.value.map(travel => ({name:travel.travel_theme,id:travel.id,travel_album_name:travel.travel_album_name}));
+                    if(nameList.value.length>0){
+                        selectedTravel.value = TravelsData.value[0];
+                    }
+                });
             } catch (error) {
                 console.error('匹配失败:', error);
             }
         });
         const search = async () => {
             try {
-                ElMessageBox.alert('搜索功能开发中ing...', '提示', {
-                    confirmButtonText: '确定',
-                    type: 'warning'
+                const response = await axios.get('/travel',{params:{travel_album_name:router.currentRoute.value.query.stage}}); // 替换为实际用于搜索事件名称的端点
+                TravelsData.value = response.data;// 获取旅游列表数据
+                searchnamelist.value = response.data.map(travel => ({ name: travel.travel_theme, id: travel.id }));// 获取旅游名称列表
+                const searchResults = searchnamelist.value.filter(travel => {
+                    return travel.name.includes(keyword.value);
                 });
+                nameList.value = searchResults; // 假设这里是更新左侧列表的变量名
             } catch (error) {
                 console.error('搜索失败：', error);
             }

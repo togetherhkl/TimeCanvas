@@ -7,7 +7,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
-import china from '../../node_modules/echarts/map/china.json';
+import china from '../assets/map/china.json';
 echarts.registerMap('china', china);
 import { useRouter } from 'vue-router';
 export default {
