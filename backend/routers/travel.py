@@ -16,7 +16,9 @@ from dependencies import auth_depend
 from schemas import orm_schema
 from models import orm_models
 #加载数据库操作
-from crud import travel_crud
+from crud import travel_crud,user_crud
+from services import baidufile_service
+from utils import aes
 
 router = APIRouter()
 #获取旅游信息
@@ -36,6 +38,16 @@ async def create_travel(
     db: Session = Depends(get_db),
     baidu_uk: str = Depends(auth_depend.verify_jwt_token),
 ):
+    userinfo = user_crud.get_user(db, baidu_uk)
+    access_token = aes.decrypt(userinfo.access_token)
+    #判断百度网盘是否存在对应文件夹，如果没有就创建
+    if baidufile_service.is_folder_exist(access_token, "TimeGallery/旅游/"+travel.travel_album_name)==True:
+        pass
+    else:
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name)
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name+"/pictures")
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name+"/videos")
+
     #创建旅游信息
     return travel_crud.travel_create(db, travel, baidu_uk)
 

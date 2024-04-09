@@ -19,7 +19,7 @@ import mimetypes
 def create_project_folder(access_token: str, folder_name: str):
     url = ("https://pan.baidu.com/rest/2.0/xpan/file?method=create&access_token=" + access_token)
     payload = {
-        "path": quote(folder_name),
+        "path": folder_name,
         "isdir": 1
     }
     response = requests.request("POST", url, data=payload)
