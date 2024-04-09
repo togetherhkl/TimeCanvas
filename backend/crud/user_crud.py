@@ -15,7 +15,8 @@ from utils import aes
 def get_user(db: Session, baidu_uk: str):
     userinfo = db.query(User).filter(User.baidu_uk == baidu_uk).first()
     #对access_token解密
-    userinfo.access_token = aes.decrypt(userinfo.access_token)
+    if userinfo != None:
+        userinfo.access_token = aes.decrypt(userinfo.access_token)
     return userinfo
     
 #创建用户信息

@@ -53,7 +53,6 @@
     </div>
     <el-dialog v-model="dialogVisible" width="70%">
         <DataVisual />
-        <!-- <div id="myChart" style="width: 100%;height:500px;"></div> -->
     </el-dialog>
 </template>
 
@@ -99,10 +98,6 @@ export default {
         },
         getData() {
             this.dialogVisible = true;
-            // ElMessageBox.alert('数据可视化功能暂未开放', '提示', {
-            //     confirmButtonText: '确定',
-            //     type: 'warning'
-            // });
         },
         // 删除同学
         confirmDelete(item) {
@@ -154,6 +149,9 @@ export default {
                 console.log('后端返回的同学列表:', classmatesData.value);
                 nameList.value = response.data.classmates.map(classmate => ({ name: classmate.name, id: classmate.id, classmates_album_name: classmate.classmates_album_name }));//得到姓名列表
                 console.log('同学列表:', nameList.value);
+                if (nameList.value.length > 0) {
+                    selectedClassmate.value = classmatesData.value[0];// 默认选中第一个同学
+                }
             } catch (error) {
                 console.error('匹配失败:', error);
             }
@@ -174,6 +172,9 @@ export default {
         };
         const selectStudent = (item) => {
             const stage=router.currentRoute.value.query.stage;
+            if(nameList.value.length>0){
+                selectStudent.value =classmatesData.value[0];
+            }
             selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === item.name);
             selectedClassmate.value.classmates_album_path="同学录/"+stage;     
         };

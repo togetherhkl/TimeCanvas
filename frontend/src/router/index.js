@@ -27,6 +27,7 @@ import { isProxy } from "vue";
 const routes = [
     {
         path: "/",
+        redirect: "/about",
         component: MainLayout,
         children: [
             {

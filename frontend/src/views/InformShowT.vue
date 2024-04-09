@@ -48,16 +48,12 @@
             </el-col>
         </el-row>
     </div>
+    <el-dialog v-model="dialogVisible" width="70%">
+        <Map />
+    </el-dialog>
 </template>
 
 <script>
-import {
-    Document,
-    Menu as IconMenu,
-    Plus,
-    User,
-    Setting,
-} from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus';
 const handleOpen = (key, keyPath) => {
     console.log(key, keyPath)
@@ -72,16 +68,18 @@ import Picture from '../components/Carousel/Picture.vue';
 import Video from '../components/Carousel/Video.vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import Information from '../components/Information.vue';
+import Map from '../components/Map.vue';
 export default {
     data() {
         return {
+            dialogVisible:false,
         }
     },
     components: {
         InformationT,
         Picture,
         Video,
+        Map,
     },
     methods: {
         // 添加信息
@@ -91,10 +89,7 @@ export default {
             this.$router.push({ path: '/旅游志/createtravel',query: { type:lastRoute } });
         },
         getData() {
-            ElMessageBox.alert('数据可视化功能暂未开放', '提示', {
-                confirmButtonText: '确定',
-                type: 'warning'
-            });
+            this.dialogVisible=true;
         },
         // 删除同学
         confirmDelete(item) {
