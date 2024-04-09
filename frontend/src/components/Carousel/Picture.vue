@@ -30,7 +30,9 @@ export default {
                     // console.log('pictures',response);
                     pictures.value=response.data;
                     console.log('pictures2',pictures.value);
-                })
+                }).catch(error=>{
+                    console.error('响应失败！',error);
+                });
                 // console.log('pictures',pictures.value); 
 
             }else{

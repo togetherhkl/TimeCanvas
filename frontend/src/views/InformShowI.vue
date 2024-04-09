@@ -98,7 +98,7 @@ export default {
         }).then(() => {
             // Handle deletion logic here
             console.log('id:',item.id);
-            axios.delete('/event/',{params:{id:item.id}}).then(
+            axios.delete('/interestingevent/',{params:{id:item.id}}).then(
                 response=>{
                     if(response.status==200){
                         console.log(`删除 ${item.name}成功`);
@@ -117,8 +117,8 @@ export default {
     // 编辑事件
     update(item){
         this.$router.push({ 
-            path: '/趣事录/updateevent',
-            query: { id:item.id,name:item.name,type:item.events_album_name }
+            path: '/趣事录/updateinterestingevent',
+            query: { id:item.id,name:item.name,type:item.event_album_name }
          });
         console.log('update:',item);
     }
@@ -132,22 +132,28 @@ export default {
         const keyword = ref('');// 搜索关键字
         onMounted(async () => {
             try {
-                /* 后端传来得数据格式 */
-                EventsData.value=[
-                    {event_name:'第1届篮球比赛',event_date:'2022-12-12',event_participant:'参与者1',event_description:'描述1'},
-                    {event_name:'第2届篮球比赛',event_date:'2022-12-12',event_participant:'参与者2',event_description:'描述2'},
-                ];
-                nameList.value = EventsData.value.map(event => ({name:event.event_name,id:event.id}));
+                axios.get('/interestingevent',{params:{event_album_name:router.currentRoute.value.query.stage}}).then(response => {
+                    console.log('获取事件数据：', response.data);
+                    EventsData.value = response.data;
+                    nameList.value = EventsData.value.map(event => ({name:event.event_name,id:event.id,event_album_name:event.event_album_name}));
+                    console.log('趣事录nameList:',nameList.value);
+                    if(nameList.value.length>0){
+                        selectedEvent.value = EventsData.value[0];
+                    }
+                });
             } catch (error) {
                 console.error('匹配失败:', error);
             }
         });
         const search = async () => {
             try {
-                ElMessageBox.alert('搜索功能开发中ing...', '提示', {
-                    confirmButtonText: '确定',
-                    type: 'warning'
+                const response = await axios.get('/interestingevent',{params:{event_album_name:router.currentRoute.value.query.stage}}); // 替换为实际用于搜索事件名称的端点
+                EventsData.value = response.data;// 获取事件列表数据
+                searchnamelist.value = response.data.map(event => ({ name: event.event_name, id: event.id }));
+                const searchResults = searchnamelist.value.filter(event => {
+                    return event.name.includes(keyword.value);
                 });
+                nameList.value = searchResults; // 假设这里是更新左侧列表的变量名
             } catch (error) {
                 console.error('搜索失败：', error);
             }

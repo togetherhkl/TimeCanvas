@@ -9,7 +9,7 @@
         <span style="writing-mode: vertical-rl;">语</span>
       </div>
       <div class="gm-box">
-        {{ graduation_message }}
+        <div class="gm-text" v-html="markdownToHtml"></div>
         <div class="bigdata">
           <el-button @click="openMessageBox">
             <i class="iconfont icon-roboticon">AI总结</i>
@@ -24,11 +24,17 @@
 import { ElMessage, ElMessageBox } from 'element-plus';
 import axios from 'axios';
 import { defineComponent, ref, PropType, watch } from 'vue';
+import { marked, options } from 'marked';//markdown解析器
 export default defineComponent({
   props: {
     selectedClassmate: {
       type: Object as PropType<any>,
       default: null
+    }
+  },
+  computed: {
+    markdownToHtml() {
+      return marked(this.graduation_message);
     }
   },
   setup(props) {
@@ -100,14 +106,17 @@ export default defineComponent({
   padding: 10px;
   align-items: center;
   justify-content: center;
-  /*  background-color: antiquewhite; */
-  /* position: relative; */
   background: rgba(255, 255, 255, 0.2);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
 }
-
+.gm-text{
+  width: 100%;
+  min-height: 100px;
+  height: auto;
+  font-size: 16px;
+}
 .bigdata {
   /* 将按钮居右下 */
   position: absolute;

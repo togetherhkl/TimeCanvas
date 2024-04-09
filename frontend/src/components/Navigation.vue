@@ -2,11 +2,11 @@
   <div class="header">
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
       @select="handleSelect">
-      <el-menu-item index="0">
+      <el-menu-item >
         <img class="logo" src="../assets/vue.svg" alt="project logo" />
       </el-menu-item>
-      <el-menu-item index="1" @click="$router.push('/about')">首页</el-menu-item>
-      <el-menu-item index="2" @click="$router.push('/albumtype')">相册</el-menu-item>
+      <el-menu-item  @click="$router.push('/about')">首页</el-menu-item>
+      <el-menu-item  @click="$router.push('/albumtype')">相册</el-menu-item>
       <div class="flex-grow" />
       <el-sub-menu index="3">
         <template #title>创建</template>
