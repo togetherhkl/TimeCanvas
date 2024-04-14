@@ -110,12 +110,13 @@ def get_video_m3u8(access_token: str, path: str, vip_type: int):
                    "&path="+quote(path)+"&type=M3U8_AUTO_480&"
                    "adToken="+adTaken)
             response = requests.request("GET", url2, headers=headers)
-            print("m3u8内容：")
+            # print("m3u8内容：",response.text)
+            print("m3u8url",response.url)
             print(type(response))
             # print(type(response.text))
             # print(response.url)
             print(response.headers)
-            return response.content
+            return response.url
             # conn = http.client.HTTPSConnection("pan.baidu.com")
             # payload = ''
             # headers = {

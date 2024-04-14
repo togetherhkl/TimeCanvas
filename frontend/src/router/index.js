@@ -11,6 +11,7 @@ import UpdateClassmate from '../views/UpdateClassmate.vue';
 import NotFound from '../views/404.vue';
 /* 测试 */
 import Test from '../views/Test.vue'
+import m3u8 from "../views/m3u8.vue";
 /* 主要展示页面 */
 import MainLayout from '../views/MainLayout.vue'
 import Album from '../views/Album.vue';
@@ -22,6 +23,8 @@ import InformShowT from "../views/InformShowT.vue";
 
 import axios from 'axios'
 import { isProxy } from "vue";
+import M3u8 from "../views/m3u8.vue";
+import m3 from "../views/m3.vue";
 
 //创建路由
 const routes = [
@@ -58,7 +61,7 @@ const routes = [
             {
                 path: "/test",
                 name: "Test",
-                component: Test,
+                component: M3u8,
             },
             {
                 path:'/t',

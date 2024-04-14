@@ -244,6 +244,7 @@ if __name__ == '__main__':
     plain_text = input("请输入明文:")
     cipher_text = encrypt(plain_text)
     print("密文(base64):",cipher_text)
+    # plain_text = decrypt(plain_text)
     plain_text = decrypt(cipher_text)
     print("解密后明文:",plain_text)
     # access_token='hello.WGHTofHyalfhnvdjdkljskdjssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'

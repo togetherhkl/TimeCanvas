@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "videojs-contrib-hls": "^5.15.0"
+  }
+}

@@ -41,3 +41,11 @@ async def get_interest_wordcloud(
     baidu_uk: str = Depends(auth_depend.verify_jwt_token),
 ):
     return statistics_crud.get_classmate_hobby_wordcloud(db, baidu_uk,stage)
+#同学星座雷达图数据
+@router.get("/classmate_statiscts/constellation_radar",tags=["statistics"])
+async def get_interest_wordcloud(
+    stage:str,
+    db: Session = Depends(get_db),
+    baidu_uk: str = Depends(auth_depend.verify_jwt_token),
+):
+    return statistics_crud.get_classmate_constellation_radar(db, baidu_uk,stage)

@@ -1,7 +1,7 @@
 /*
  * @Author: HKini 1778267485@qq.com
  * @Date: 2024-01-09 21:33:16
- * @LastEditTime: 2024-02-18 08:53:26
+ * @LastEditTime: 2024-04-09 15:19:23
  * @LastEditors: HKini 1778267485@qq.com
  * @Description: 
  * @FilePath: \TimeCanvas\frontend\src\main.js
@@ -21,6 +21,9 @@ import router from './router';
 //引入图标
 import './assets/iconfont/iconfont.css';
 
+// import "video.js/dist/video-js.css"; // 引入video.js的css
+// import hls from "videojs-contrib-hls"; // 播放hls流需要的插件
+
 const app=createApp(App)
 
 for(const[key,component] of Object.entries(ElementPlusIconsVue)){
@@ -28,6 +31,7 @@ for(const[key,component] of Object.entries(ElementPlusIconsVue)){
 }
 app.use(ElementPlus)//注册element-plus
 app.use(router)//注册router
+// app.use(hls)//注册hlsS
 app.mount('#app')
 //修改axios的默认配置http://192.168.43.162:5173/
 axios.defaults.baseURL="http://localhost:8000"//配置默认请求地址

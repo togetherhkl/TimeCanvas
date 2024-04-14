@@ -7,6 +7,13 @@
     </el-icon>
   </el-upload>
   <el-button type="primary" @click="submitUpload">上传</el-button>
+  <div class="video-player">
+    <video ref="videoElement" controls>
+      <!-- 视频源将会被设置为m3u8文件 -->
+      <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" type="application/vnd.apple.mpegurl">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 </template>
 
 <script>
@@ -18,9 +25,13 @@ export default {
   data() {
     return {
       uploadAction: '',
+      videoSrc:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
       fileList: [],
       md5: ''
     };
+  },
+  mounted() {
+    // this.fetchVideoSrc();
   },
   methods: {
     test() {
@@ -92,7 +103,34 @@ export default {
     },
     submitUpload() {
       this.$refs.uploadMutiple.submit();
-    }
-  }
+    },
+    async fetchVideoSrc() {
+      try {
+        // 假设你有一个方法来从FastAPI获取m3u8文件
+        const response = await fetch('/api/get-m3u8', {
+          method: 'GET',
+          headers: {
+            // 根据需要设置请求头
+          },
+        });
+        const data = await response.json();
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        this.videoSrc = data; // 设置视频源
+      } catch (error) {
+        console.error('Error fetching video source:', error);
+      }
+    },
+  },
 }
 </script>
+
+<style>
+.video-player {
+  width: 400px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+</style>
