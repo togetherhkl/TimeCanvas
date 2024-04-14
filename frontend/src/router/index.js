@@ -30,6 +30,7 @@ import m3 from "../views/m3.vue";
 const routes = [
     {
         path: "/",
+        redirect: "/about",
         component: MainLayout,
         children: [
             {
@@ -62,10 +63,6 @@ const routes = [
                 path: "/test",
                 name: "Test",
                 component: M3u8,
-            },
-            {
-                path:'/t',
-                component:()=>import('../views/test1.vue'),
             },
             {
                 path: "/同学录",
@@ -140,6 +137,11 @@ const routes = [
                         name:"CreateInterestingEvent",
                         component:CreateInterestingEvent,
                     },
+                    {
+                        path:"updateinterestingevent",
+                        name:"UpdateInterestingEvent",
+                        component:()=>import("../views/UpdateEvent.vue")
+                    },
                 ],
             },
             {
@@ -154,6 +156,11 @@ const routes = [
                         name:"CreateTravel",
                         component:CreateTravel,
                     },
+                    {
+                        path:"updatetravel",
+                        name:"UpdateTravel",
+                        component:()=>import("../views/UpdateTravel.vue")
+                    }
                 ],
             },
         ],

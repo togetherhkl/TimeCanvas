@@ -50,23 +50,23 @@
               <h1 class="xijie">细节</h1>
               <div class="xijie-card-container">
                 <div class="xijie-card">
-                  <h>大语言模型</h>
+                  <h4>大语言模型</h4>
                   <p>引入先进的大语言模型技术，让您的文字更加生动优美</p>
                 </div>
                 <div class="xijie-card">
-                  <h>AES加密</h>
+                  <h4>AES加密</h4>
                   <p>采用AES加密技术，保障您的数据安全</p>
                 </div>
                 <div class="xijie-card">
-                  <h>百度网盘授权</h>
+                  <h4>百度网盘授权</h4>
                   <p>通过百度网盘授权，轻松实现数据的便捷存储与登录</p>
                 </div>
                 <div class="xijie-card">
-                  <h>数据可视化</h>
+                  <h4>数据可视化</h4>
                   <p>通过数据可视化技术，让您的数据更加直观</p>
                 </div>
                 <div class="xijie-card">
-                  <h>AI分析</h>
+                  <h4>AI分析</h4>
                   <p>通过AI分析技术，让您的数据更加深入</p>
                 </div>
               </div>

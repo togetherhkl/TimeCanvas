@@ -12,18 +12,25 @@
             <div class="label">事件参与者</div>
             <div class="box">{{ event_participant }}</div>
             <div class="label">事件描述</div>
-            <div class="box">{{ event_description }}</div>
+            <div class="box" v-html="markdownToHtml"></div>
+            <!-- <div class="box">{{ event_description }}</div> -->
         </div>
     </div>
 </template>
 <script lang="ts">
 import { PropType, watch, ref } from 'vue';
+import { marked, options } from 'marked';//markdown解析器
 export default {
     props: {
         selectedEvent: {
             type: Object as PropType<any>,
             default: null
         },
+    },
+    computed: {
+        markdownToHtml() {
+            return marked(this.event_description);
+        }
     },
     setup(props) {
         const event_name = ref('');
@@ -33,7 +40,11 @@ export default {
         watch(() => props.selectedEvent, (newVal) => {
             if (newVal) {
                 event_name.value = newVal.event_name;
-                event_date.value = newVal.event_date;
+                const EventDate=new Date(newVal.event_date);//获取事件日期
+                const year= EventDate.getFullYear();//获取年份
+                const month= EventDate.getMonth()+1;
+                const day= EventDate.getDate();
+                event_date.value = ''+year+'年'+month+'月'+day+'日';
                 event_participant.value = newVal.event_participant;
                 event_description.value = newVal.event_description;
             }

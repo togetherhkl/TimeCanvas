@@ -47,10 +47,15 @@ export default{
           // 处理成功响应
           console.log(response.data);
           this.formData={};//清空表单,但失败???
+          console.log('formdata:',this.formData);
           ElMessageBox.alert('添加成功', '提示', {
             confirmButtonText: '确定',
             type: 'success'
           }).then(() => {
+            ElMessageBox.alert('请前往百度网盘上传图片与视频', '提示', {
+              confirmButtonText: '确定',
+              type: 'info'
+            });
             // const type = this.$router.currentRoute.value.query.type;
             // this.$router.push({ path: '/classmates/informshow',query: { stage: type } });
           });

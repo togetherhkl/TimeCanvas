@@ -15,9 +15,10 @@
                     <label for="event_participant">事件参与者</label>
                     <textarea v-model="formData.event_participant" placeholder="请输入事件参与者" />
                 </div>
-                <div class="event_description">
+                <div class="event_description" @mouseup="showPopup">
                     <label for="event_description">事件描述</label>
-                    <textarea v-model="formData.event_description" placeholder="请输入事件描述"></textarea>
+                    <div class="gmtext" v-html="markdownToHtml"></div>
+                    <!-- <textarea v-model="formData.event_description" placeholder="请输入事件描述"></textarea> -->
                 </div>
                 <div class="button">
                     <button type="submit" @click="submitForm">确认</button>
@@ -26,11 +27,18 @@
             </div>
         </div>
     </div>
+    <el-dialog v-model="dialogVisible" title="可AI生成的事件描述" width="90%"
+        style="background-image: linear-gradient(to right top, #4db2d8, #2bbad5, #00c0cd, #02c6c0, #32cbae);"
+        :before-close="handleClose">
+        <GMDialog @update-vditortext="updateVditorText" />
+    </el-dialog>
 </template>
 
 <script>
 import axios from 'axios';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox,ElCascader } from 'element-plus';
+import { marked, options } from 'marked';//markdown解析器
+import GMDialog from './GMDialog.vue';
 export default {
     data() {
         return {
@@ -39,12 +47,25 @@ export default {
                 event_date: '',
                 event_description: '',
                 event_participant: '',
+                event_album_image: '',
+                event_album_name: '',
             },
             name: '',//主题姓名
             type: '',//主题类型
             id: '',//主题id
             editor: null,
+            dialogVisible: false, //弹窗
         };
+    },
+    components: {
+        GMDialog,
+        ElCascader,
+    },
+    emits: ['formSubmit', 'formReset'],
+    computed: {
+        markdownToHtml() {
+            return marked(this.formData.event_description);
+        },
     },
     watch: {
         '$route.query.name': {
@@ -70,6 +91,19 @@ export default {
         },
     },
     methods: {
+        showPopup() {
+            this.dialogVisible = true;
+        },
+        handleClose(done) {
+            this.$confirm('确认完成事件描述吗？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => { });
+        },
+        updateVditorText(newText) {
+            this.formData.event_description = newText;//更新毕业寄语
+        },
         submitForm() {
             this.$emit('formSubmit', this.formData);
         },
@@ -92,14 +126,17 @@ export default {
     },
     mounted() {
         if (this.fetchData) {
-            axios.get(`/classmate/${this.$route.query.type}`)
+            axios.get('/interestingevent', { params: { event_album_name: this.$route.query.type } })
                 .then(response => {
                     // 处理成功响应
+                    const tempdata = response.data;
+                    const matchedData = tempdata.find(item => item.id == this.id);
+                    this.formData = matchedData;
                     console.log('响应成功！', response);
                 }).catch(error => {
                     console.error('响应失败！', error);
                 });
-        }else{
+        } else {
             console.log('不需要获取数据');
         }
     },
@@ -112,6 +149,7 @@ export default {
     width: 100%;
     overflow-y: auto;
 }
+
 .add-card {
     width: 70%;
     height: 90%;
@@ -125,21 +163,27 @@ export default {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .title {
     font-size: 42px;
     margin-bottom: 10px;
     text-align: center;
 }
+
 .form div {
     display: flex;
     align-items: center;
     margin: 40px 150px;
 }
+
 .add-card label {
     display: inline-block;
     width: 100px;
 }
-.add-card input, .add-card textarea {
+
+.add-card input,
+.add-card textarea,
+.add-card .gmtext {
     width: 100%;
     font-size: 16px;
     padding: 5px;
@@ -150,12 +194,15 @@ export default {
     backdrop-filter: blur(8px);
     box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
 }
-.add-card input{
+
+.add-card input {
     width: 200px;
 }
+
 .add-card textarea {
     height: 100px;
 }
+
 .add-card button {
     width: 100px;
     height: 40px;
@@ -167,13 +214,16 @@ export default {
     font-size: 16px;
     cursor: pointer;
 }
+
 .add-card button:hover {
     background: #a6b8fc;
 }
+
 .add-card button:active {
     background: #b3a5fa;
 }
-.button{
+
+.button {
     display: flex;
     justify-content: center;
 }
