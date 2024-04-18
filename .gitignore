@@ -24,5 +24,6 @@ frontend/*.sln
 frontend/*.sw?
 node_modules
 
-#忽略backend下的.env文件
+#忽略backend下的.env文件, media文件夹
 backend/.env
+backend/media

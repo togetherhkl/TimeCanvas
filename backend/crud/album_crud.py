@@ -8,7 +8,7 @@
 
 # '''
 from sqlalchemy.orm import Session
-from models.orm_models import Album, AlbumType
+from models.orm_models import Album, AlbumType,Classmates,Travel,InterestingEvent
 from schemas import orm_schema
 from services.baidufile_service import get_image
 
@@ -139,3 +139,54 @@ def get_album_with_cover(db: Session, baidu_uk: str, access_token: str):
             temp["album_list"].append(temp_album)
         album_list.append(temp)
     return album_list
+#级联选择器的数据
+def get_album_cascade(db: Session, baidu_uk: str):
+    album_type_list = (
+        db.query(AlbumType).filter(AlbumType.albumtype_owner == baidu_uk).all()
+    )
+    album_type_cascade = []
+    for album_type in album_type_list:
+        temp = {}
+        temp["value"] = album_type.id
+        temp["label"] = album_type.albumtype_name
+        temp["children"] = []
+        album_all = (
+            db.query(Album)
+            .filter(Album.album_type == album_type.id, Album.album_owner == baidu_uk)
+            .all()
+        )
+        for album in album_all:
+            temp_album = {}
+            temp_album["value"] = album.id
+            temp_album["label"] = album.album_name
+            temp_album["children"] = []
+            temp["children"].append(temp_album)
+            if temp["label"] == "同学录":
+                classmates = (db.query(Classmates).
+                              filter(Classmates.baidu_uk==baidu_uk,
+                                     Classmates.classmates_album_name==album.album_name).all())
+                for classmate in classmates:
+                    temp_classmate = {}
+                    temp_classmate["value"] = classmate.id
+                    temp_classmate["label"] = classmate.name
+                    temp_album["children"].append(temp_classmate)
+            if temp["label"] == "趣事录":
+                interestingevent = (db.query(InterestingEvent).
+                              filter(InterestingEvent.baidu_uk==baidu_uk,
+                                     InterestingEvent.event_album_name==album.album_name).all())
+                for event in interestingevent:
+                    temp_event = {}
+                    temp_event["value"] = event.id
+                    temp_event["label"] = event.event_name
+                    temp_album["children"].append(temp_event)
+            if temp["label"] == "旅游":
+                travel = (db.query(Travel).
+                              filter(Travel.baidu_uk==baidu_uk,
+                                     Travel.travel_album_name==album.album_name).all())
+                for travel in travel:
+                    temp_travel = {}
+                    temp_travel["value"] = travel.id
+                    temp_travel["label"] = travel.travel_theme
+                    temp_album["children"].append(temp_travel)
+        album_type_cascade.append(temp)
+    return album_type_cascade

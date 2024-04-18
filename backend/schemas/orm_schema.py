@@ -102,3 +102,11 @@ class Interesting(BaseModel):
     event_album_name: str | None
     class Config:
         orm_mode = True
+#视频数据
+class VideoCreate(BaseModel):
+    video_nickname: str 
+    video_specifc_event:int
+    vide_album_type: int
+    video_album:int
+    class Config:
+        orm_mode = True

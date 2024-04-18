@@ -19,11 +19,13 @@ class User(Base):
     refresh_token = Column(String(500), nullable=False)
     baidu_vip_type = Column(Integer, nullable=False)#百度网盘用户会员类型
     nickname = Column(String(50), nullable=True)
+
     classmates = relationship("Classmates", back_populates="user")
     interesting_event = relationship("InterestingEvent", back_populates="user")
     travel = relationship("Travel", back_populates="user")
     album_type = relationship("AlbumType", back_populates="user")
     album = relationship("Album", back_populates="user")
+    video = relationship("Video", back_populates="user")
 #同学录
 class Classmates(Base):
     __tablename__ = "classmates"
@@ -85,6 +87,7 @@ class AlbumType(Base):
 
     user = relationship("User", back_populates="album_type")
     album = relationship("Album", back_populates="albumtype")
+    video = relationship("Video", back_populates="albumtype")
 #相册
 class Album(Base):
     __tablename__ = "album"
@@ -97,3 +100,21 @@ class Album(Base):
 
     user = relationship("User", back_populates="album")
     albumtype = relationship("AlbumType", back_populates="album")
+    video = relationship("Video", back_populates="album")
+#视频数据记录模型
+class Video(Base):
+    __tablename__ = "video"
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    video_name = Column(String(50), nullable=False,unique=True)#视频名称
+    video_date = Column(DateTime, nullable=False, default=datetime.now)#视频创建日期
+    video_size = Column(String(20), nullable=False)#视频大小
+    video_nickname = Column(String(50), nullable=True)#视频昵称
+    video_specifc_event = Column(Integer, nullable=False)#视频所属具体事件
+
+    video_owner = Column(String(15), ForeignKey("user.baidu_uk"))#视频所有者
+    video_album_type = Column(Integer,ForeignKey("album_type.id"))#视频所属相册类型
+    video_album = Column(Integer, ForeignKey("album.id"))#视频所属相册
+    
+    user = relationship("User", back_populates="video")
+    albumtype = relationship("AlbumType", back_populates="video")
+    album = relationship("Album", back_populates="video")

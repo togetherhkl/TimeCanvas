@@ -23,6 +23,7 @@ import InformShowT from "../views/InformShowT.vue";
 
 import axios from 'axios'
 import { isProxy } from "vue";
+import FileList from "../views/FileList.vue";
 import M3u8 from "../views/m3u8.vue";
 import m3 from "../views/m3.vue";
 
@@ -62,7 +63,7 @@ const routes = [
             {
                 path: "/test",
                 name: "Test",
-                component: M3u8,
+                component: FileList,
             },
             {
                 path: "/同学录",

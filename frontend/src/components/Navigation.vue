@@ -2,11 +2,11 @@
   <div class="header">
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
       @select="handleSelect">
-      <el-menu-item >
+      <el-menu-item>
         <img class="logo" src="../assets/vue.svg" alt="project logo" />
       </el-menu-item>
-      <el-menu-item  @click="$router.push('/about')">首页</el-menu-item>
-      <el-menu-item  @click="$router.push('/albumtype')">相册</el-menu-item>
+      <el-menu-item @click="$router.push('/about')">首页</el-menu-item>
+      <el-menu-item @click="$router.push('/albumtype')">相册</el-menu-item>
       <div class="flex-grow" />
       <el-sub-menu index="3">
         <template #title>创建</template>
@@ -28,7 +28,7 @@
       </el-sub-menu>
     </el-menu>
   </div>
-  <el-drawer v-model="drawer" :title=drawerTitle :with-header="false" >
+  <el-drawer v-model="drawer" :title=drawerTitle :with-header="false">
     <CreateEvent :title="drawerTitle" />
   </el-drawer>
 </template>
@@ -105,16 +105,15 @@ export default {
     else {
       if (timecanvas_token != null) {
         localStorage.setItem('timecanvas_token', timecanvas_token)
+        axios.get("/userinfo").then(
+          response => {
+            if (response.status == 200) {
+              this.baidu_name = response.data.baidu_name;
+              this.avatar_url = response.data.avatar_url;
+            }
+          },
+        )
       }
-      const toten = localStorage.getItem('timecanvas_token')
-      axios.get("/userinfo").then(
-        response => {
-          if (response.status == 200) {
-            this.baidu_name = response.data.baidu_name;
-            this.avatar_url = response.data.avatar_url;
-          }
-        },
-      )
     }
   },
 }
@@ -134,5 +133,4 @@ export default {
   width: 60px;
   height: 60px;
 }
-
 </style>

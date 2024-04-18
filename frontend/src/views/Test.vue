@@ -7,14 +7,7 @@
     </el-icon>
   </el-upload>
   <el-button type="primary" @click="submitUpload">上传</el-button>
-  <div class="video-player">
-    <video ref="videoElement" controls>
-      <!-- 视频源将会被设置为m3u8文件 -->
-      <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" type="application/vnd.apple.mpegurl">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</template>
+</template> 
 
 <script>
 import axios from 'axios';
@@ -46,8 +39,8 @@ export default {
   */
     handleChange(file, fileList) {
       // console.log("文件改变了")
-      // console.log(file);
-      // console.log(fileList);
+      console.log(file);
+      console.log(fileList);
       this.fileList = fileList;
     },
     handleRemove(file, fileList) {

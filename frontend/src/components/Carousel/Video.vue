@@ -23,7 +23,7 @@ export default {
                 // const response = await axios.get('/api/videos');
                 // videos.value = response.data;
                 videos.value=[
-                    {id:1,src:"https://upos-sz-mirror08c.bilivideo.com/upgcxcode/50/40/1475574050/1475574050-1-16.mp4?e=ig8euxZM2rNcNbRVhwdVhwdlhWdVhwdVhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1711956202&gen=playurlv2&os=08cbv&oi=0&trid=d7b12fe8b98b4b9693a33d56f4f6dd38T&mid=1700658102&platform=html5&upsig=d97e96d89219693ac90f16dfd32dd782&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform&bvc=vod&nettype=0&bw=57531&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000" },
+                    {id:1,src:"http://localhost:8000/videostream/20240416205503256703_2867615989_sun.mp4" },
                     {id:2,src:"https://www.runoob.com/try/demo_source/movie.mp4"},
                     {id:3,src:"https://www.runoob.com/try/demo_source/movie.mp4"},
                 ]

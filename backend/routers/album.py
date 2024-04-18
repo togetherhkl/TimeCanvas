@@ -125,3 +125,10 @@ async def get_album_files(
     access_token = aes.decrypt(access_token)
     folder_name="apps/TimeGallery/"+folder_name
     return baidufile_service.get_image(access_token, folder_name)
+#级联选择器数据
+@router.get("/albumcascade",tags=["albuminfo"],description="级联选择器数据")
+async def get_album_cascade(
+    db: Session = Depends(db_depend.get_db),
+    baidu_uk: str = Depends(auth_depend.verify_jwt_token),
+):
+    return album_crud.get_album_cascade(db, baidu_uk)
