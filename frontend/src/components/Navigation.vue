@@ -5,14 +5,10 @@
       <el-menu-item>
         <img class="logo" src="../assets/vue.svg" alt="project logo" />
       </el-menu-item>
-<<<<<<< HEAD
-      <el-menu-item @click="$router.push('/about')">首页</el-menu-item>
-      <el-menu-item @click="$router.push('/albumtype')">相册</el-menu-item>
-=======
       <el-menu-item index="0" @click="$router.push('/home')">首页</el-menu-item>
       <el-menu-item index="1" @click="$router.push('/albumtype')">相册</el-menu-item>
->>>>>>> 5bc3ea2292a9d677dbd50f8b81f1dfd363d1c26d
       <div class="flex-grow" />
+      <el-menu-item index="2" @click="$router.push('/videomanage')">视频管理</el-menu-item>
       <el-sub-menu index="3">
         <template #title >创建</template>
         <el-menu-item index="3-1" @click="openDrawer('趣事录')">趣事录</el-menu-item>

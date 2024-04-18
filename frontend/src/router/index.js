@@ -20,10 +20,10 @@ import AlbumType from '../views/AlbumType.vue';
 import InformShowC from "../views/InformShowC.vue";
 import InformShowI from "../views/InformShowI.vue";
 import InformShowT from "../views/InformShowT.vue";
+import VideoManage from "../views/VideoManage.vue";
 
 import axios from 'axios'
 import { isProxy } from "vue";
-import FileList from "../views/FileList.vue";
 import M3u8 from "../views/m3u8.vue";
 import m3 from "../views/m3.vue";
 
@@ -53,7 +53,12 @@ const routes = [
             {
                 path: "/test",
                 name: "Test",
-                component: FileList,
+                component: M3u8,
+            },
+            {
+                path:"/videomanage",
+                name:"VideoManage",
+                component:VideoManage,
             },
             {
                 path: "/classmates",
