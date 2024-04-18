@@ -1,5 +1,5 @@
 <template>
-    <div class="primary">
+    <div class="classmateContainer">
         <el-row class="tac">
             <el-col :span="3">
                 <el-menu class="scroll-container" default-active="2" @open="handleOpen" @close="handleClose">
@@ -75,6 +75,7 @@ import Video from '../components/Carousel/Video.vue';
 import DataVisual from '../components/DataVisual.vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { el } from 'element-plus/es/locale/index.mjs';
 export default {
     data() {
         return {
@@ -94,7 +95,7 @@ export default {
         CreateIPage() {
             /* 获取路由stage的值 */
             const lastRoute = this.$router.currentRoute.value.query.stage;
-            this.$router.push({ path: '/同学录/createclassmate', query: { type: lastRoute } });
+            this.$router.push({ path: '/classmates/createclassmate', query: { type: lastRoute } });
         },
         getData() {
             this.dialogVisible = true;
@@ -111,6 +112,8 @@ export default {
                     response => {
                         if (response.status == 200) {
                             console.log(`删除 ${item.name}成功`);
+                            // 删除成功后，重新获取同学列表
+                            this.$router.go(0);//刷新页面
                         } else {
                             console.log('删除失败');
                         }
@@ -126,7 +129,7 @@ export default {
         // 编辑同学
         update(item) {
             this.$router.push({
-                path: '/同学录/updateclassmate',
+                path: '/classmates/updateclassmate',
                 query: { id: item.id, name: item.name, type: item.classmates_album_name }
             });
             console.log('update:', item);
@@ -145,11 +148,17 @@ export default {
                 const lastRoute = router.currentRoute.value.query.stage;
                 const response = await axios.get(`/classmate/${lastRoute}`); // 替换为实际用于搜索姓名的端点
                 classmatesData.value = response.data.classmates;// 获取同学列表数据
-                console.log('后端返回的同学列表:', classmatesData.value);
                 nameList.value = response.data.classmates.map(classmate => ({ name: classmate.name, id: classmate.id, classmates_album_name: classmate.classmates_album_name }));//得到姓名列表
-                console.log('同学列表:', nameList.value);
                 if (nameList.value.length > 0) {
                     selectedClassmate.value = classmatesData.value[0];// 默认选中第一个同学
+                    const firstname=selectedClassmate.value.name;
+                    selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === firstname);
+                    selectedClassmate.value.classmates_album_path="同学录/"+lastRoute;
+                }else{
+                    ElMessageBox.alert('没有匹配到同学的信息！,请到‘管理-添加信息’处添加同学信息', '提示', {
+                        confirmButtonText: '确定',
+                        type: 'warning'
+                    });
                 }
             } catch (error) {
                 console.error('匹配失败:', error);
@@ -173,9 +182,9 @@ export default {
             const stage=router.currentRoute.value.query.stage;
             if(nameList.value.length>0){
                 selectStudent.value =classmatesData.value[0];
-            }
-            selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === item.name);
-            selectedClassmate.value.classmates_album_path="同学录/"+stage;     
+                selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === item.name);
+                selectedClassmate.value.classmates_album_path="同学录/"+stage;    
+            } 
         };
         return {
             selectedClassmate,
@@ -193,7 +202,7 @@ export default {
 </script>
 
 <style scoped>
-.primary {
+.classmateContainer {
     height: 100vh;
 }
 

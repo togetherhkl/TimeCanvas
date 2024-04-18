@@ -81,21 +81,18 @@ export default {
             immediate: true,
             handler(newVal) {
                 this.name = newVal;
-                console.log('watch里name', this.name);
             },
         },
         '$route.query.type': {
             immediate: true,
             handler(newVal) {
                 this.type = newVal;
-                console.log('watch里type', this.type);
             },
         },
         '$route.query.id': {
             immediate: true,
             handler(newVal) {
                 this.id = newVal;
-                console.log('watch里id', this.id);
             },
         },
     },
@@ -161,7 +158,7 @@ export default {
 
 <style scoped>
 .add-travel {
-    height: 100vh;
+    height: calc(100vh - 70px);
     width: 100%;
     overflow-y: auto;
 }

@@ -5,8 +5,8 @@ import CreateInterestingEvent from "../views/CreateInterestingEvent.vue";
 import CreateTravel from "../views/CreateTravel.vue";
 /* 编辑 */
 import UpdateClassmate from '../views/UpdateClassmate.vue';
-// import UpdateInterestingEvent from "../views/UpdateInterestingEvent.vue";
-
+import UpdateTravel from "../views/UpdateTravel.vue";
+import UpdateEvent from "../views/UpdateEvent.vue";
 /* 404页面 */
 import NotFound from '../views/404.vue';
 /* 测试 */
@@ -14,7 +14,7 @@ import Test from '../views/Test.vue'
 /* 主要展示页面 */
 import MainLayout from '../views/MainLayout.vue'
 import Album from '../views/Album.vue';
-import About from '../views/About.vue'
+import Home from '../views/Home.vue'
 import AlbumType from '../views/AlbumType.vue';
 import InformShowC from "../views/InformShowC.vue";
 import InformShowI from "../views/InformShowI.vue";
@@ -27,13 +27,13 @@ import { isProxy } from "vue";
 const routes = [
     {
         path: "/",
-        redirect: "/about",
+        redirect: "/home",
         component: MainLayout,
         children: [
             {
-                path: "/about",
-                name: "About",
-                component: About,
+                path: "/home",
+                name: "Home",
+                component: Home,
             },
             {
                 path: "/album",
@@ -46,88 +46,38 @@ const routes = [
                 name:"AlbumType",
                 component:AlbumType,
             },
-            // {
-            //     path:'/同学录/informshow',
-            //     component:InformShowC,
-            //     props:(router)=>({stage:router.query.stage}),
-            // },
-            // {
-            //     path:"/同学录/createclassmate",
-            //     component:CreateClassmate,
-            //     props:(router)=>({type:router.query.type}),
-            // },
             {
                 path: "/test",
                 name: "Test",
                 component: Test,
             },
             {
-                path: "/同学录",
+                path: "/classmates",
                 children:[
                     {
                         path:"informshow",
                         name:"InformShowC",
                         component:InformShowC,
-                        // props:(router)=>({stage:router.query.stage}),
                     },
                     {
                         path:"createclassmate",
                         name:"CreateClassmate",
                         component:CreateClassmate,
-                        // props:(router)=>({type:router.query.type}),
                     },
                     {
                         path:"updateclassmate",
                         name:"UpdateClassmate",
                         component:UpdateClassmate,
-                        // props:()=>({type:router.query.type}),
                     },
                 ],
             },
-            
-            // {
-            //     path:'/同学录/informshow',
-            //     name:"InformShowC",
-            //     component:InformShowC,
-            // },
-            // {
-            //     path:"/同学录/createclassmate",
-            //     name:"CreateClassmate",
-            //     component:CreateClassmate,
-            // },
-            // {
-            //     path:"/同学录/updateclassmate",
-            //     name:"UpdateClassmate",
-            //     component:UpdateClassmate,
-            // },
-            // {
-            //     path:"/趣事录/informshow",
-            //     name:"InformShowI",
-            //     component:InformShowI,
-            // },
-            // {
-            //     path:"/趣事录/createinterestingevent",
-            //     name:"CreateInterestingEvent",
-            //     component:CreateInterestingEvent,
-            // },
-            // {
-            //     path:"/旅游志/informshow",
-            //     name:"InformShowT",
-            //     component:InformShowT,
-            // },
-            // {
-            //     path:"/旅游志/createtravel",
-            //     name:"CreateTravel",
-            //     component:CreateTravel,
-            // },
-            
             {
-                path:"/趣事录",
+                path:"/interestingevents",
                 children:[
                     {
                         path:"informshow",
                         name:"InformShowI",
-                        component:InformShowI
+                        component:InformShowI,
                     },
                     {
                         path:"createinterestingevent",
@@ -137,16 +87,17 @@ const routes = [
                     {
                         path:"updateinterestingevent",
                         name:"UpdateInterestingEvent",
-                        component:()=>import("../views/UpdateEvent.vue")
+                        component:UpdateEvent,
                     },
                 ],
             },
             {
-                path:"/旅游志",
+                path:"/travels",
                 children:[
                     {
                         path:"informshow",
-                        component:()=>import("../views/InformShowT.vue")
+                        name:"InformShowT",
+                        component:InformShowT,
                     },
                     {
                         path:"createtravel",
@@ -156,7 +107,7 @@ const routes = [
                     {
                         path:"updatetravel",
                         name:"UpdateTravel",
-                        component:()=>import("../views/UpdateTravel.vue")
+                        component:UpdateTravel,
                     }
                 ],
             },
@@ -173,5 +124,4 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: routes,
 });
-
 export default router;

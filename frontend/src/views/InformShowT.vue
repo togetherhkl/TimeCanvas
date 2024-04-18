@@ -1,5 +1,5 @@
 <template>
-    <div class="primary">
+    <div class="travelContainer">
         <el-row class="tac">
             <el-col :span="4">
                 <el-menu class="scroll-container" default-active="2" @open="handleOpen" @close="handleClose">
@@ -16,7 +16,7 @@
                             </template>
                         </el-input>
                         <el-menu-item :index="`1-${index+1}`" v-for="(item, index) in nameList" :key="index"
-                            @click="selectedTravel = TravelsData.find(travel => travel.travel_theme == item.name)">
+                            @click="selectTravel(item)">
                             {{ item.name }}
                             <el-tooltip content="编辑" palcement="top">
                             <el-icon class="update-icon" @click.stop="update(item)">
@@ -43,7 +43,7 @@
             </el-col>
             <el-col :span="20" class="right-content">
                 <InformationT :selectedTravel="selectedTravel"/>
-                <Picture />
+                <Picture :selectedTravel="selectedTravel" />
                 <Video />
             </el-col>
         </el-row>
@@ -86,7 +86,7 @@ export default {
         CreateIPage(){
             /* 获取路由stage的值 */
             const lastRoute = this.$router.currentRoute.value.query.stage;
-            this.$router.push({ path: '/旅游志/createtravel',query: { type:lastRoute } });
+            this.$router.push({ path: '/travels/createtravel',query: { type:lastRoute } });
         },
         getData() {
             this.dialogVisible=true;
@@ -104,6 +104,7 @@ export default {
                 response=>{
                     if(response.status==200){
                         console.log(`删除 ${item.name}成功`);
+                        this.$router.go(0);//刷新页面
                     }else{
                         console.log('删除失败');
                     }
@@ -119,16 +120,16 @@ export default {
     // 编辑同学
     update(item){
         this.$router.push({ 
-            path: '/旅游志/updatetravel',
+            path: '/travels/updatetravel',
             query: { id:item.id,name:item.name,type:item.travel_album_name }
          });
         console.log('update:',item);
     }
     },
     setup() {
-        const TravelsData = ref(null);// 旅游志数据
-        const selectedTravel = ref(null);// 选中的旅游志
-        const nameList = ref(null);// 旅游志名称列表
+        const TravelsData = ref(null);// travels数据
+        const selectedTravel = ref(null);// 选中的travels
+        const nameList = ref(null);// travels名称列表
         const searchnamelist = ref(null);// 搜索列表
         const router = useRouter(); // 获取路由实例
         const keyword = ref('');// 搜索关键字
@@ -139,6 +140,14 @@ export default {
                     nameList.value = TravelsData.value.map(travel => ({name:travel.travel_theme,id:travel.id,travel_album_name:travel.travel_album_name}));
                     if(nameList.value.length>0){
                         selectedTravel.value = TravelsData.value[0];
+                        const first=selectedTravel.value.travel_theme;
+                        selectTravel.value = TravelsData.value.find(travel => travel.travel_theme === first);
+                        selectTravel.value.travel_album_path="旅游志/"+router.currentRoute.value.query.stage;
+                    }else{
+                        ElMessageBox.alert('没有匹配到旅游的信息！,请到‘管理-添加信息’处添加旅游信息', '提示', {
+                            confirmButtonText: '确定',
+                            type: 'warning'
+                        });
                     }
                 });
             } catch (error) {
@@ -158,6 +167,14 @@ export default {
                 console.error('搜索失败：', error);
             }
         };
+        const selectTravel = (item) => {
+            const stage = router.currentRoute.value.query.stage;
+            if(nameList.value.length>0){
+                selectedTravel.value = TravelsData.value[0];
+                selectedTravel.value = TravelsData.value.find(travel => travel.travel_theme === item.name);
+                selectedTravel.value.travel_album_path="旅游志/"+stage;
+            }
+        };
         return {
             selectedTravel,
             TravelsData,
@@ -167,12 +184,13 @@ export default {
             keyword,
             handleClose,
             handleOpen,
+            selectTravel,
         };
     },
 }
 </script>
 <style scoped>
-.primary {
+.travelContainer {
     height: 100vh;
 }
 .scroll-container {

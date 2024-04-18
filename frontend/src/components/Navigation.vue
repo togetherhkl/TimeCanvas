@@ -2,14 +2,14 @@
   <div class="header">
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
       @select="handleSelect">
-      <el-menu-item >
+      <el-menu-item>
         <img class="logo" src="../assets/vue.svg" alt="project logo" />
       </el-menu-item>
-      <el-menu-item  @click="$router.push('/about')">首页</el-menu-item>
-      <el-menu-item  @click="$router.push('/albumtype')">相册</el-menu-item>
+      <el-menu-item index="0" @click="$router.push('/home')">首页</el-menu-item>
+      <el-menu-item index="1" @click="$router.push('/albumtype')">相册</el-menu-item>
       <div class="flex-grow" />
       <el-sub-menu index="3">
-        <template #title>创建</template>
+        <template #title >创建</template>
         <el-menu-item index="3-1" @click="openDrawer('趣事录')">趣事录</el-menu-item>
         <el-menu-item index="3-2" @click="openDrawer('旅游志')">旅游志</el-menu-item>
       </el-sub-menu>
@@ -28,7 +28,7 @@
       </el-sub-menu>
     </el-menu>
   </div>
-  <el-drawer v-model="drawer" :title=drawerTitle :with-header="false" >
+  <el-drawer v-model="drawer" :title=drawerTitle :with-header="false">
     <CreateEvent :title="drawerTitle" />
   </el-drawer>
 </template>
@@ -41,7 +41,6 @@ import CreateEvent from './CreateEvent.vue';
 //从common中引入公共方法
 import { GetCookie } from '../assets/common/utils.js';
 import { ElMessage } from 'element-plus';
-import Album from '../views/Album.vue';
 export default {
   // 状态
   data() {
@@ -89,9 +88,21 @@ export default {
         sessionStorage.clear();/* 清除缓存与会话记录，但失败 */
       this.$router.push('/');
     },
+    //创建相册
     openDrawer(title) {
-      this.drawerTitle = title;
-      this.drawer = true;
+      if (this.baidu_name === '请登录') {
+        ElMessage.error("你还没有登录，授权登录后才可以使用完整功能");
+      } else {
+        if(this.$router.currentRoute.value.path === '/album' && this.$router.currentRoute.value.query.id === '2'&&title === '趣事录'){ 
+          this.drawerTitle = title;
+          this.drawer = true;
+        }else if(this.$router.currentRoute.value.path === '/album' && this.$router.currentRoute.value.query.id === '3'&&title === '旅游志'){
+          this.drawerTitle = title;
+          this.drawer = true;
+        }else{
+          ElMessage.error("请在对应相册页面创建");
+        }
+      }
     },
   },
   mounted() {
@@ -123,7 +134,6 @@ export default {
 <style>
 .header {
   flex: 0 0 auto;
-  /* 设置头部不随着主体内容而伸缩 */
 }
 
 .flex-grow {
@@ -134,5 +144,4 @@ export default {
   width: 60px;
   height: 60px;
 }
-
 </style>

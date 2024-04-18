@@ -14,12 +14,17 @@ export default {
     setup() {
         const path=ref(useRouter().currentRoute.value.path);
         const parts=path.value.split('/');
-        const stage=parts[parts.length-2];//获取路由倒数第二个
+        let stage=parts[parts.length-2];//获取路由倒数第二个
         //获取路由倒数第二个字段
         const chartData = ref(null);//图表数据
         onMounted(() => {
             fetchChartData().then(data => {
                 console.log("stage:",stage);
+                if(stage=='classmates'){
+                    stage='同学录';
+                }else{
+                    stage='旅游';
+                }
                 const mapChart = echarts.init(document.getElementById('chinamap'));
                 // if(stage)
                 mapChart.setOption({
@@ -84,8 +89,6 @@ export default {
 }
 .centered-and-bold {
     font-weight: bold;
-    /* 加粗文本 */
     text-align: center;
-    /* 居中文本 */
 }
 </style>

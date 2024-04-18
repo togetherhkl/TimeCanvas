@@ -7,9 +7,14 @@
       <el-col :span="24">
         <ul class="card-list">
           <li class="card" v-for="tmp in album">
-            <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
+            <!-- <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
               @click="$router.push({ path: `/${albumtype.albumtype_name}/informshow`, query: { stage: tmp.album_name } })"
+              :crossorigin="null" /> -->
+
+              <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
+              @click="openAlbum(albumtype.albumtype_name,tmp.album_name)"
               :crossorigin="null" />
+
             <a class="card-description" @click="openInNewTab(albumtype.albumtype_name,tmp.album_name)">
               <h2>{{ tmp.album_name }}</h2>
             </a>
@@ -84,8 +89,28 @@ export default {
   methods: {
     //打开新标签页
     openInNewTab(albumtype_name,album_name) {
-      const url = this.$router.resolve({ path: `/${albumtype_name}/informshow`, query: { stage: album_name} }).href;
-      window.open(url, '_blank');
+      if(albumtype_name == '趣事录'){
+        const url = this.$router.resolve({ path: `/interestingevents/informshow`, query: { stage: album_name} }).href;
+        window.open(url, '_blank');
+      }else if(albumtype_name=='旅游志'){
+        const url = this.$router.resolve({ path: `/travels/informshow`, query: { stage: album_name} }).href;
+        window.open(url, '_blank');
+      }else if(albumtype_name=='同学录'){
+        const url = this.$router.resolve({ path: `/classmates/informshow`, query: { stage: album_name} }).href;
+        window.open(url, '_blank');
+      }
+      // const url = this.$router.resolve({ path: `/${albumtype_name}/informshow`, query: { stage: album_name} }).href;
+      // window.open(url, '_blank');
+    },
+    //打开相册
+    openAlbum(albumtype_name,album_name){
+      if(albumtype_name == '趣事录'){
+        this.$router.push({ path: '/interestingevents/informshow', query: { stage:album_name } });
+      }else if(albumtype_name=='旅游志'){
+        this.$router.push({ path: '/travels/informshow', query: { stage:album_name } });
+      }else if(albumtype_name=='同学录'){
+        this.$router.push({ path: '/classmates/informshow', query: { stage:album_name } });
+      }
     }
   },
 }

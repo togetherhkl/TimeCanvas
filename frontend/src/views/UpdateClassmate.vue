@@ -37,8 +37,8 @@ export default {
                         confirmButtonText: '确定',
                         type: 'success'
                     }).then(() => {
-                        // const type = this.$router.currentRoute.value.query.type;
-                        // this.$router.push({ path: '/classmates/informshow',query: { stage: type } });
+                        const type = this.$router.currentRoute.value.query.type;
+                        this.$router.push({ path: '/classmates/informshow',query: { stage: type } });
                     })
                 })
                 .catch(error => {
