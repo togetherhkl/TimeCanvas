@@ -1,9 +1,8 @@
 <template>
     <div class="picture">
         <el-carousel :interval="5000" type="card" arrow="hover">
-            <el-carousel-item v-for="item in pictures" :key="item">
-                <el-image style="width: 100%; height: 100%" :src=item fit="fill" :crossorigin="null"/>
-                <!-- <h3 text="2xl" justify="center"><el-img :src=item.src alt="展示图片"/></h3> -->
+            <el-carousel-item height="auto"  v-for="item in pictures" :key="item">
+                <el-image style="width: 100%; height: 100%;" :src=item fit="fill" :crossorigin="null"/>
             </el-carousel-item>
         </el-carousel>
     </div>
@@ -17,6 +16,14 @@ export default {
             type: Object,
             default: null
         },
+        selectedEvent: {
+            type: Object,
+            default: null
+        },
+        selectedTravel: {
+            type: Object,
+            default: null
+        },
     },
     setup(props) {
         const pictures = ref([]);//图片列表
@@ -24,19 +31,40 @@ export default {
         watch(()=>props.selectedClassmate,(newVal)=>{
             if(newVal){
                 backdata.value={id:newVal.id,name:newVal.name};
-                // console.log(backdata.value);
                 axios.get('/albumfiles',{params:{folder_name:newVal.classmates_album_path+'/'+newVal.name+'/pictures'}})
                 .then(response=>{
-                    // console.log('pictures',response);
                     pictures.value=response.data;
-                    console.log('pictures2',pictures.value);
                 }).catch(error=>{
                     console.error('响应失败！',error);
                 });
-                // console.log('pictures',pictures.value); 
-
             }else{
                 console.log('没有匹配到同学的照片信息！');
+            };
+        });
+        watch(()=>props.selectedEvent,(newVal)=>{
+            if(newVal){
+                backdata.value={id:newVal.id,name:newVal.event_name};
+                axios.get('/albumfiles',{params:{folder_name:newVal.event_album_path+'/'+newVal.event_name+'/pictures'}})
+                .then(response=>{
+                    pictures.value=response.data;
+                }).catch(error=>{
+                    console.error('响应失败！',error);
+                });
+            }else{
+                console.log('没有匹配到活动的照片信息！');
+            };
+        });
+        watch(()=>props.selectedTravel,(newVal)=>{
+            if(newVal){
+                backdata.value={id:newVal.id,name:newVal.travel_theme};
+                axios.get('/albumfiles',{params:{folder_name:newVal.travel_album_path+'/'+newVal.travel_theme+'/pictures'}})
+                .then(response=>{
+                    pictures.value=response.data;
+                }).catch(error=>{
+                    console.error('响应失败！',error);
+                });
+            }else{
+                console.log('没有匹配到旅游的照片信息！');
             };
         });
         onMounted(async () => {
@@ -81,4 +109,5 @@ export default {
 .el-carousel__item:nth-child(2n + 1) {
     background-color: #d3dce6;
 }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="primary">
+    <div class="InterestingeventContainer">
         <el-row class="tac">
             <el-col :span="4">
                 <el-menu class="scroll-container" default-active="2" @open="handleOpen" @close="handleClose">
@@ -16,7 +16,7 @@
                             </template>
                         </el-input>
                         <el-menu-item :index="`1-${index+1}`" v-for="(item, index) in nameList" :key="index"
-                            @click="selectedEvent = EventsData.find(event => event.event_name === item.name)">
+                            @click="selectEvent(item) ">
                             {{ item.name }}
                             <el-tooltip content="编辑" palcement="top">
                             <el-icon class="update-icon" @click.stop="update(item)">
@@ -43,7 +43,7 @@
             </el-col>
             <el-col :span="20" class="right-content">
                 <InformationI :selectedEvent="selectedEvent"/>
-                <Picture />
+                <Picture :selectedEvent="selectedEvent" />
                 <Video />
             </el-col>
         </el-row>
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import {Document,Menu as IconMenu,Plus,User,Setting,} from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus';
 const handleOpen = (key, keyPath) => {
     console.log(key, keyPath)
@@ -81,7 +80,7 @@ export default {
         CreateIPage(){
             /* 获取路由stage的值 */
             const lastRoute = this.$router.currentRoute.value.query.stage;
-            this.$router.push({ path: '/趣事录/createinterestingevent',query: { type:lastRoute } });
+            this.$router.push({ path: '/interestingevents/createinterestingevent',query: { type:lastRoute } });
         },
         getData() {
             ElMessageBox.alert('数据可视化功能暂未开放', '提示', {
@@ -102,6 +101,7 @@ export default {
                 response=>{
                     if(response.status==200){
                         console.log(`删除 ${item.name}成功`);
+                        this.$router.go(0);//刷新页面
                     }else{
                         console.log('删除失败');
                     }
@@ -117,7 +117,7 @@ export default {
     // 编辑事件
     update(item){
         this.$router.push({ 
-            path: '/趣事录/updateinterestingevent',
+            path: '/interestingevents/updateinterestingevent',
             query: { id:item.id,name:item.name,type:item.event_album_name }
          });
         console.log('update:',item);
@@ -133,12 +133,18 @@ export default {
         onMounted(async () => {
             try {
                 axios.get('/interestingevent',{params:{event_album_name:router.currentRoute.value.query.stage}}).then(response => {
-                    console.log('获取事件数据：', response.data);
                     EventsData.value = response.data;
                     nameList.value = EventsData.value.map(event => ({name:event.event_name,id:event.id,event_album_name:event.event_album_name}));
-                    console.log('趣事录nameList:',nameList.value);
                     if(nameList.value.length>0){
                         selectedEvent.value = EventsData.value[0];
+                        const first=selectedEvent.value.event_name;
+                        selectedEvent.value = EventsData.value.find(event => event.event_name === first);
+                        selectedEvent.value.event_album_path="趣事录/"+router.currentRoute.value.query.stage;
+                    }else{
+                        ElMessageBox.alert('没有匹配到事件的信息！,请到‘管理-添加信息’处添加事件信息', '提示', {
+                            confirmButtonText: '确定',
+                            type: 'warning'
+                        });
                     }
                 });
             } catch (error) {
@@ -158,6 +164,14 @@ export default {
                 console.error('搜索失败：', error);
             }
         };
+        const selectEvent = (item) => {
+            const stage = router.currentRoute.value.query.stage;
+            if(nameList.value.length>0){
+                selectedEvent.value = EventsData.value[0];
+                selectedEvent.value = EventsData.value.find(event => event.event_name === item.name);
+                selectedEvent.value.event_album_path="趣事录/"+stage;
+            }
+        };
         return {
             selectedEvent,
             EventsData,
@@ -167,12 +181,13 @@ export default {
             keyword,
             handleClose,
             handleOpen,
+            selectEvent,
         };
     },
 }
 </script>
 <style scoped>
-.primary {
+.InterestingeventContainer {
     height: 100vh;
 }
 .scroll-container {

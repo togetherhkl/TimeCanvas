@@ -1,91 +1,89 @@
 <template>
     <div class="add-classmates">
         <div class="add-card">
-            <el-page-header @back="onBack">
-                <div class="title">{{ name }}@{{ type }}时光卡片</div>
-                <form>
-                    <div class="layout">
-                        <div class="name">
-                            <label for="name">姓名:</label>
-                            <input type="text" id="name" v-model="formData.name" required>
-                        </div>
-                        <div class="nickname">
-                            <label for="nickname">昵称:</label>
-                            <input type="text" id="nickname" v-model="formData.nickname" required>
-                        </div>
-                        <div class="avatar">
-                            <!-- <label for="classmates_avatar_name">头像</label>
+            <div class="title">{{ name }}@{{ type }}时光卡片</div>
+            <form>
+                <div class="layout">
+                    <div class="name">
+                        <label for="name">姓名:</label>
+                        <input type="text" id="name" v-model="formData.name" required>
+                    </div>
+                    <div class="nickname">
+                        <label for="nickname">昵称:</label>
+                        <input type="text" id="nickname" v-model="formData.nickname" required>
+                    </div>
+                    <div class="avatar">
+                        <!-- <label for="classmates_avatar_name">头像</label>
                             <input type="file" id="classmates_avatar_name" accept="image/*"
                                 @change="handleAvatarChange">
                             <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar Preview"
                                 style="max-width: 200px; max-height: 200px;"> -->
-                        </div>
-                        <div class="birthday">
-                            <label for="birthday">生日:</label>
-                            <input type="date" id="birthday" v-model="formData.birthday" required>
-                        </div>
-                        <div class="constellation">
-                            <label for="constellation">星座:</label>
-                            <select style="width: 65%;" id="constellation" v-model="formData.constellation" required>
-                                <option value="白羊座">白羊座</option>
-                                <option value="金牛座">金牛座</option>
-                                <option value="双子座">双子座</option>
-                                <option value="巨蟹座">巨蟹座</option>
-                                <option value="狮子座">狮子座</option>
-                                <option value="处女座">处女座</option>
-                                <option value="天秤座">天秤座</option>
-                                <option value="天蝎座">天蝎座</option>
-                                <option value="射手座">射手座</option>
-                                <option value="摩羯座">摩羯座</option>
-                                <option value="水瓶座">水瓶座</option>
-                                <option value="双鱼座">双鱼座</option>
-                            </select>
-                        </div>
-                        <div class="qq">
-                            <label for="qq">QQ:</label>
-                            <input type="text" id="qq_number" v-model="formData.qq_number" required>
-                        </div>
-                        <div class="wx">
-                            <label for="wx_number">微信:</label>
-                            <input type="text" id="wx_number" v-model="formData.wx_number" required>
-                        </div>
-                        <div class="phone">
-                            <label for="phone">手机号:</label>
-                            <input type="text" id="phone_number" v-model="formData.phone_number" required>
-                        </div>
-                        <div class="email">
-                            <label for="email">邮箱:</label>
-                            <input type="email" id="email" v-model="formData.email" required>
-                        </div>
+                    </div>
+                    <div class="birthday">
+                        <label for="birthday">生日:</label>
+                        <input type="date" id="birthday" v-model="formData.birthday" required>
+                    </div>
+                    <div class="constellation">
+                        <label for="constellation">星座:</label>
+                        <select style="width: 65%;" id="constellation" v-model="formData.constellation" required>
+                            <option value="白羊座">白羊座</option>
+                            <option value="金牛座">金牛座</option>
+                            <option value="双子座">双子座</option>
+                            <option value="巨蟹座">巨蟹座</option>
+                            <option value="狮子座">狮子座</option>
+                            <option value="处女座">处女座</option>
+                            <option value="天秤座">天秤座</option>
+                            <option value="天蝎座">天蝎座</option>
+                            <option value="射手座">射手座</option>
+                            <option value="摩羯座">摩羯座</option>
+                            <option value="水瓶座">水瓶座</option>
+                            <option value="双鱼座">双鱼座</option>
+                        </select>
+                    </div>
+                    <div class="qq">
+                        <label for="qq">QQ:</label>
+                        <input type="text" id="qq_number" v-model="formData.qq_number" required>
+                    </div>
+                    <div class="wx">
+                        <label for="wx_number">微信:</label>
+                        <input type="text" id="wx_number" v-model="formData.wx_number" required>
+                    </div>
+                    <div class="phone">
+                        <label for="phone">手机号:</label>
+                        <input type="text" id="phone_number" v-model="formData.phone_number" required>
+                    </div>
+                    <div class="email">
+                        <label for="email">邮箱:</label>
+                        <input type="email" id="email" v-model="formData.email" required>
+                    </div>
 
+                </div>
+                <div class="hometown">
+                    <label for="hometown">家乡:</label>
+                    <el-cascader v-model="selectedOptions" :options="options" @change="handleAreaChange"
+                        placeholder="请选择省份和市区"> </el-cascader>
+                    <el-input v-model="formData.hometown" placeholder="请手动填写详细地址" required></el-input>
+                </div>
+                <div class="layout-off">
+                    <div class="hobby">
+                        <label for="hobby">爱好:</label>
+                        <textarea type="text" id="hobby" v-model="formData.hobby" required></textarea>
                     </div>
-                    <div class="hometown">
-                        <label for="hometown">家乡:</label>
-                        <el-cascader v-model="selectedOptions" :options="options" @change="handleAreaChange"
-                            placeholder="请选择省份和市区"> </el-cascader>
-                        <el-input v-model="formData.hometown" placeholder="请手动填写详细地址" required></el-input>
+                    <div class="mengxiang">
+                        <label for="dream">梦想:</label>
+                        <textarea id="dream" v-model="formData.dream" required></textarea>
                     </div>
-                    <div class="layout-off">
-                        <div class="hobby">
-                            <label for="hobby">爱好:</label>
-                            <textarea type="text" id="hobby" v-model="formData.hobby" required></textarea>
-                        </div>
-                        <div class="mengxiang">
-                            <label for="dream">梦想:</label>
-                            <textarea id="dream" v-model="formData.dream" required></textarea>
-                        </div>
-                        <div class="biyejiyu" @mouseup="showPopup">
-                            <label for="graduation_message">毕业寄语:</label>
-                            <div class="gmtext" v-html="markdownToHtml"></div>
-                            <!-- <textarea id="graduation_message" v-model="formData.graduation_message" required></textarea> -->
-                        </div>
+                    <div class="biyejiyu" @mouseup="showPopup">
+                        <label for="graduation_message">毕业寄语:</label>
+                        <div class="gmtext" v-html="markdownToHtml"></div>
+                        <!-- <textarea id="graduation_message" v-model="formData.graduation_message" required></textarea> -->
                     </div>
-                    <div class="button">
-                        <button type="submit" @click="submitForm">确认</button>
-                        <button type="reset" @click="resetForm">重置</button>
-                    </div>
-                </form>
-            </el-page-header>
+                </div>
+                <div class="button">
+                    <button type="submit" @click="submitForm">确认</button>
+                    <button type="reset" @click="resetForm">重置</button>
+                </div>
+            </form>
         </div>
     </div>
     <el-dialog v-model="dialogVisible" title="可AI生成的毕业寄语" width="90%"
@@ -96,7 +94,7 @@
 </template>
 
 <script>
-import { ElCascader,ElMessageBox } from 'element-plus';
+import { ElCascader, ElMessageBox } from 'element-plus';
 import { regionData, codeToText } from 'element-china-area-data';
 import axios from 'axios';
 import GMDialog from './GMDialog.vue';
@@ -145,21 +143,18 @@ export default {
             immediate: true,
             handler(newVal) {
                 this.name = newVal;
-                console.log('watch里name', this.name);
             },
         },
         '$route.query.type': {
             immediate: true,
             handler(newVal) {
                 this.type = newVal;
-                console.log('watch里type', this.type);
             },
         },
         '$route.query.id': {
             immediate: true,
             handler(newVal) {
                 this.id = newVal;
-                console.log('watch里id', this.id);
             },
         },
     },
@@ -228,9 +223,6 @@ export default {
                 dream: '',
                 graduation_message: ''
             };
-        },
-        onBack() {
-            this.$router.push({ path: '/同学录/informshow', query: { stage: this.type } });
         },
         //弹窗
         showPopup() {
