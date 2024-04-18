@@ -41,7 +41,7 @@ export default {
                             type: 'success'
                         }).then(() => {
                             const type = this.$router.currentRoute.value.query.type;
-                            this.$router.push({ path: '/classmates/informshow', query: { stage: type } });
+                            this.$router.push({ path: '/travels/informshow', query: { stage: type } });
                         })
                     })
                     .catch(error => {

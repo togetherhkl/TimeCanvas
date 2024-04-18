@@ -6,7 +6,7 @@
         <div class="backai">
             <textarea id="aiinput" style="height: 200px;" v-model="aiinput" placeholder="请输入AI辅助创作的要求"></textarea>
             <el-button class="aibutton" @click="getAI">AI</el-button>
-            <textarea v-loading="loading" placeholder="AI辅助创作的结果">{{ aioutput }}</textarea>
+            <textarea v-loading="loading" element-loading-text="Loading..."  placeholder="AI辅助创作的结果">{{ aioutput }}</textarea>
         </div>
     </div>
 </template>
@@ -59,28 +59,23 @@ export default {
         },
         //获取后端ai返回的数据
         async getAI() {
-            // console.log('编辑器里的aiinput:', this.aiinput);
              this.loading = true;
-            // axios.get('/xunfei/semantic/textcreat', {
-            //     params: {
-            //         text: JSON.stringify(this.aiinput),
-            //     }
-            // }).then(response => {
-            //     // 处理成功响应
-            //     if (response.status == 200) {
-            //         // this.aiinput = response.data;
-            //         console.log('返回的数据：', response.data);
-            //         this.aioutput = response.data;
-            //     } else {
-            //         console.log('AI生成失败!');
-            //     }
-            // }).catch(error => {
-            //     // 处理错误响应
-            //     console.error('哦豁，后端问题:', error);
-            // });
+            axios.get('/xunfei/semantic/textcreat', {
+                params: {
+                    text: JSON.stringify(this.aiinput),
+                }
+            }).then(response => {
+                // 处理成功响应
+                if (response.status == 200) {
+                    this.aioutput = response.data;
+                } else {
+                    console.log('AI生成失败!');
+                }
+            }).catch(error => {
+                // 处理错误响应
+                console.error('哦豁，后端问题:', error);
+            });
             setTimeout(() => {
-                console.log('AI生成成功!');
-                this.aioutput = this.aiinput;
                 this.loading = false;//添加动画没有效果，why？
                 console.log('AI生成的文本:', this.aioutput);
             }, 2000);
@@ -138,19 +133,3 @@ export default {
     background-color: #b3a5fa;
 }
 </style>
-
-<!-- <template>
-    <div class="layout">
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-    </div>
-</template>
-<style scoped>
-.layout {
-    display: grid;
-    grid-template-rows: 2fr 1fr;
-    gap: 10px;
-}
-</style> -->

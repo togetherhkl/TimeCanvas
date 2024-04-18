@@ -17,7 +17,7 @@
                 </div>
                 <div class="event_description" @mouseup="showPopup">
                     <label for="event_description">事件描述</label>
-                    <div class="gmtext" v-html="markdownToHtml"></div>
+                    <div class="edtext" v-html="markdownToHtml"></div>
                     <!-- <textarea v-model="formData.event_description" placeholder="请输入事件描述"></textarea> -->
                 </div>
                 <div class="button">
@@ -72,21 +72,18 @@ export default {
             immediate: true,
             handler(newVal) {
                 this.name = newVal;
-                console.log('watch里name', this.name);
             },
         },
         '$route.query.type': {
             immediate: true,
             handler(newVal) {
                 this.type = newVal;
-                console.log('watch里type', this.type);
             },
         },
         '$route.query.id': {
             immediate: true,
             handler(newVal) {
                 this.id = newVal;
-                console.log('watch里id', this.id);
             },
         },
     },
@@ -145,20 +142,19 @@ export default {
 
 <style scoped>
 .add-interestingevent {
-    height: calc(100vh - 80px);
+    height: calc(100vh - 70px);
     width: 100%;
     overflow-y: auto;
 }
 
 .add-card {
     width: 70%;
-    height: 90%;
     margin: 0 auto;
     padding: 20px;
-    display: grid;
+    /* display: grid;
     grid-template-rows: repeat(4, 1fr);
     gap: 20px;
-    align-items: center;
+    align-items: center; */
     background-image: linear-gradient(to right bottom, #fdf5e6, #ffe7d8, #ffd8d6, #fccbdf, #e4c4ee, #d5bff3, #c0bbf8, #a6b8fc, #abaffc, #b3a5fa, #bd99f5, #c88dee);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -169,8 +165,10 @@ export default {
     margin-bottom: 10px;
     text-align: center;
 }
-
-.form div {
+.form .event_name,
+.form .event_date,
+.form .event_participant,
+.form .event_description {
     display: flex;
     align-items: center;
     margin: 40px 150px;
@@ -183,7 +181,7 @@ export default {
 
 .add-card input,
 .add-card textarea,
-.add-card .gmtext {
+.add-card .edtext {
     width: 100%;
     font-size: 16px;
     padding: 5px;
@@ -198,7 +196,12 @@ export default {
 .add-card input {
     width: 200px;
 }
-
+.add-card textarea, .edtext{
+    width: 100%;
+    height: auto;
+    min-height: 100px;
+    font-size: 16px;
+}
 .add-card textarea {
     height: 100px;
 }

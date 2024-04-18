@@ -28,7 +28,6 @@ export default {
       this.formData = newData;
       const type = this.$router.currentRoute.value.query.type;
       this.formData.travel_album_name=type;
-      console.log('添加旅游里formdata:', this.formData);
       /* 如果表单不完整，则返回；否则，则将数据发送给数据库 */
       if (Object.values(this.formData).some(value => !value))
         ElMessageBox.alert('请填写完整信息', '提示', {
@@ -40,15 +39,13 @@ export default {
         axios.post('/travel',this.formData)
         .then(response => {
             // 处理成功响应
-            console.log("旅游志创建回应：", response.data);
             this.formData = {};//清空表单,但失败???
-            console.log('旅游志创建里formdata:', this.formData);
             ElMessageBox.alert('添加成功', '提示', {
               confirmButtonText: '确定',
               type: 'success'
             }).then(() => {
-              // const type = this.$router.currentRoute.value.query.type;
-              // this.$router.push({ path: '/趣事录/informshow', query: { stage: type } });
+              const type = this.$router.currentRoute.value.query.type;
+              this.$router.push({ path: '/travels/informshow', query: { stage: type } });
             });
           }).catch(error => {
             // 处理错误响应
