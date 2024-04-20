@@ -2,7 +2,7 @@
     <div class="information-container">
         <div class="classmate-image">
             <img :src="classmates_avatar_name"
-                style="width: 170px; height: 200px;border-radius: 50%;text-align: center;" alt="同学录头像">
+                style="width: 170px; height: 200px;border-radius: 50%;text-align: center;background-color: #99a9bf;" >
         </div>
         <div class="information">
             <div class="label"><i class="iconfont icon-xingming"></i>姓名</div>

@@ -49,7 +49,6 @@ export default {
                 const month = TravelDate.getMonth() + 1;
                 const day = TravelDate.getDate();
                 travel_date.value = '' + year + '年' + month + '月' + day + '日';
-                // travel_date.value = newVal.travel_date;
                 travel_province.value = newVal.travel_province;
                 travel_place.value = newVal.travel_place;
                 travel_participant.value = newVal.travel_participant;
@@ -72,7 +71,6 @@ export default {
     height: 100%;
     width: 100%;
     display: grid;
-    /* grid-template-columns: 1fr 1fr; */
 }
 
 .layout-on {

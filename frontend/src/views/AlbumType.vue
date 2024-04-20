@@ -1,19 +1,18 @@
 <template>
   <div class="home">
     <div class="bookshelf" v-loading="loading">
-      <div class="book" v-for="item in albuminfo">
-        <el-image @click="openInNewTab(item.albumtype_id,item.albumtype_name)" :src="item.albumtype_cover" style="width: 100%;height: 100%;"
+      <div class="book" @click="openInNewTab(item.albumtype_id,item.albumtype_name)" v-for="item in albuminfo">
+        <el-image :src="item.albumtype_cover" style="width: 100%;height: 100%;opacity: 0.7;"
           fit='cover' :crossorigin="null"/>
         <h1 class="albumtype_name">{{ item.albumtype_name }}</h1>
         <p class="albumtype_description">{{ item.albumtype_description }}</p>
-        <el-button class="button" @click="openInNewTab(item.albumtype_id,item.albumtype_name)" type="primary">阅读</el-button>
+        <button class="button" @click="openInNewTab(item.albumtype_id,item.albumtype_name)" type="primary">阅读</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-//import { Loading } from 'element-plus/es/components/loading/src/service';
 import axios from 'axios';
 export default {
   data() {
@@ -23,14 +22,6 @@ export default {
     }
   },
   methods: {
-    // readBook(title) {
-    //   if (title == '同学录')
-    //     this.$router.push({ path: '/album', query: { id: 1 } });
-    //   if (title == '趣事录')
-    //     this.$router.push({ path: '/album', query: { id: 2 } });
-    //   if (title == '旅游志')
-    //     this.$router.push({ path: '/album', query: { id: 3 } });
-    // }
     openInNewTab(id,album) {
       const url = this.$router.resolve({ path: 'album', query: { id: id, album: album } }).href;
       window.open(url, '_blank');
@@ -72,7 +63,7 @@ export default {
   position: relative;
   width: 400px;
   height: 600px;
-  margin: 0 30px;
+  margin: 0 50px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   cursor: pointer;
@@ -83,29 +74,36 @@ export default {
 }
 .albumtype_name {
   position: absolute;
-  top: 20%;
+  top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 100px;
   text-align: center;
+  font-family: '华文行楷',cursive;
 }
 
 .albumtype_description {
   position: absolute;
-  top: 40%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 20px;
+  font-size: 40px;
   text-align: center;
+  font-family: '华文行楷',cursive;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .button {
   position: absolute;
-  bottom: 20%;
+  bottom: 0%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 5px;
+  width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    background: #c88dee;
+    font-size: 20px;
   cursor: pointer;
   transition: all 0.3s;
 }

@@ -3,30 +3,32 @@
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
       @select="handleSelect">
       <el-menu-item>
-        <img class="logo" src="../assets/vue.svg" alt="project logo" />
+        <img class="logo" src="../assets/logo.png" alt="project logo" />
       </el-menu-item>
       <el-menu-item index="0" @click="$router.push('/home')">首页</el-menu-item>
       <el-menu-item index="1" @click="$router.push('/albumtype')">相册</el-menu-item>
       <div class="flex-grow" />
-      <el-menu-item index="2" @click="$router.push('/picturesmanage')">照片管理</el-menu-item>
-      <el-menu-item index="3" @click="$router.push('/videomanage')">视频管理</el-menu-item>
-      <el-sub-menu index="4">
+      <el-menu-item index="2" @click="$router.push('/picturemanage')">相册管理</el-menu-item>
+      <el-menu-item index="3" @click="$router.push('/picturesmanage')">照片管理</el-menu-item>
+      <el-menu-item index="4" @click="$router.push('/videomanage')">视频管理</el-menu-item>
+      <el-sub-menu index="5">
         <template #title >创建</template>
-        <el-menu-item index="4-1" @click="openDrawer('趣事录')">趣事录</el-menu-item>
-        <el-menu-item index="4-2" @click="openDrawer('旅游志')">旅游志</el-menu-item>
+        <el-menu-item index="5-1" @click="openDrawer('同学录')">同学录</el-menu-item>
+        <el-menu-item index="5-2" @click="openDrawer('趣事录')">趣事录</el-menu-item>
+        <el-menu-item index="5-3" @click="openDrawer('旅游志')">旅游志</el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="5">
+      <el-menu-item index="6">
         <el-icon>
           <Moon />
         </el-icon>
       </el-menu-item>
-      <el-sub-menu index="6" @click="getTaken">
+      <el-sub-menu index="7" @click="getTaken">
         <template #title>
           <el-avatar :src="avatar_url" :size="40" />
           {{ baidu_name }}
         </template>
-        <el-menu-item index="6-1">个人中心</el-menu-item>
-        <el-menu-item index="6-2" @click="exit">退出</el-menu-item>
+        <el-menu-item index="7-1">个人中心</el-menu-item>
+        <el-menu-item index="7-2" @click="exit">退出</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
@@ -38,7 +40,6 @@
 <script>
 import axios from 'axios';
 import avatar_url from '../assets/user.png';//引入默认头像
-import { routerKey } from 'vue-router';
 import CreateEvent from './CreateEvent.vue';
 //从common中引入公共方法
 import { GetCookie } from '../assets/common/utils.js';
@@ -95,7 +96,10 @@ export default {
       if (this.baidu_name === '请登录') {
         ElMessage.error("你还没有登录，授权登录后才可以使用完整功能");
       } else {
-        if(this.$router.currentRoute.value.path === '/album' && this.$router.currentRoute.value.query.id === '2'&&title === '趣事录'){ 
+        if(this.$router.currentRoute.value.path === '/album' && this.$router.currentRoute.value.query.id === '1'&&title === '同学录'){
+          this.drawerTitle = title;
+          this.drawer = true;
+        }else if(this.$router.currentRoute.value.path === '/album' && this.$router.currentRoute.value.query.id === '2'&&title === '趣事录'){ 
           this.drawerTitle = title;
           this.drawer = true;
         }else if(this.$router.currentRoute.value.path === '/album' && this.$router.currentRoute.value.query.id === '3'&&title === '旅游志'){
@@ -142,7 +146,8 @@ export default {
 }
 
 .logo {
-  width: 60px;
-  height: 60px;
+  width: auto;
+  height:60px;
+  padding: 0;
 }
 </style>

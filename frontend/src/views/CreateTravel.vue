@@ -1,5 +1,5 @@
 <template>
-  <EditT @formSubmit="handleFormSubmit" :fetchData="false" @formReset="handleFormReset" />
+  <EditT @formSubmit="handleFormSubmit" :fetchData="false"/>
 </template>
 <script>
 import EditT from '../components/EditT.vue';
@@ -37,9 +37,7 @@ export default {
       else {
         console.log("成功提交");
         axios.post('/travel',this.formData)
-        .then(response => {
-            // 处理成功响应
-            this.formData = {};//清空表单,但失败???
+        .then(() => {
             ElMessageBox.alert('添加成功', '提示', {
               confirmButtonText: '确定',
               type: 'success'
@@ -52,9 +50,6 @@ export default {
             console.log(error);
           });
       }
-    },
-    handleFormReset() {
-      this.formData = {};
     },
   },
 }

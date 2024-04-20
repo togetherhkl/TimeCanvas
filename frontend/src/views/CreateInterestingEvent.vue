@@ -1,5 +1,5 @@
 <template>
-  <EditI @formSubmit="handleFormSubmit" :fetchData="false" @formReset="handleFormReset" />
+  <EditI @formSubmit="handleFormSubmit" :fetchData="false" />
 </template>
 <script>
 import EditI from '../components/EditI.vue';
@@ -37,9 +37,8 @@ export default {
       else {
         console.log("成功提交");
         axios.post('/interestingevent', this.formData)
-          .then(response => {
+          .then(()=> {
             // 处理成功响应
-            this.formData = {};//清空表单,但失败???
             ElMessageBox.alert('添加成功', '提示', {
               confirmButtonText: '确定',
               type: 'success'
@@ -52,9 +51,6 @@ export default {
             console.log(error);
           });
       }
-    },
-    handleFormReset() {
-      this.formData = {};
     },
   },
 }
