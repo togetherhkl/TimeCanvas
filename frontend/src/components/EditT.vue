@@ -28,7 +28,7 @@
                 </div>
                 <div class="button">
                     <button type="submit" @click="submitForm">确认</button>
-                    <button type="reset" @click="resetForm">重置</button>
+                    <button type="reset" @click="resetForm">取消并返回</button>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@ export default {
     components: {
         GMDialog,
     },
-    emits: ['formSubmit', 'formReset'],
+    emits: ['formSubmit'],
     computed: {
         markdownToHtml() {
             return marked(this.formData.travel_description);
@@ -104,8 +104,7 @@ export default {
             this.$confirm('确认完成旅游描述吗？')
                 .then(_ => {
                     done();
-                })
-                .catch(_ => { });
+                }).catch(_ => { });
         },
         updateVditorText(newText) {
             this.formData.travel_description = newText;//更新毕业寄语
@@ -113,7 +112,6 @@ export default {
         handleAreaChange(value) {
             if (value[0] != null && value[1] != null && value[2] != null) {
                 const str = codeToText[value[0]] + '/' + codeToText[value[1]] + '/' + codeToText[value[2]];
-                console.log('str:', str);
                 this.formData.travel_province=str+'/';
             }
         },
@@ -121,14 +119,8 @@ export default {
             this.$emit('formSubmit', this.formData);
         },
         resetForm() {
-            // 重置表单数据
-            this.$emit('formReset', this.resetForm);
-            this.formData = {
-                travel_theme: '',
-                travel_date: '',
-                travel_description: '',
-                travel_participant: '',
-            };
+            const type = this.$router.currentRoute.value.query.type;
+            this.$router.push({ path: '/travels/informshow', query: { stage: type } });
         },
     },
     props: {
@@ -139,13 +131,16 @@ export default {
     },
     mounted() {
         if (this.fetchData) {
-            console.log('this.$route.query.type:', this.$route.query.type)
             axios.get('travel', { params: { travel_album_name: this.$route.query.type } })
                 .then(response => {
                     // 处理成功响应
                     const tempdata = response.data;
                     const matchedData = tempdata.find(item => item.id == this.id);
                     this.formData = matchedData;
+                    console.log(this.formData);
+                    let date =new Date(matchedData.travel_date);
+                    date.setHours(date.getHours() + 8);//时区问题
+                    this.formData.travel_date = date.toISOString().slice(0, 10);
                 }).catch(error => {
                     console.error('响应失败！', error);
                 });

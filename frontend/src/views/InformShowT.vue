@@ -44,7 +44,7 @@
             <el-col :span="20" class="right-content">
                 <InformationT :selectedTravel="selectedTravel"/>
                 <Picture :selectedTravel="selectedTravel" />
-                <Video />
+                <Video :selectedTravel="selectedTravel" />
             </el-col>
         </el-row>
     </div>

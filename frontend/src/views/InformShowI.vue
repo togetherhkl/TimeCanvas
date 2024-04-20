@@ -44,7 +44,7 @@
             <el-col :span="20" class="right-content">
                 <InformationI :selectedEvent="selectedEvent"/>
                 <Picture :selectedEvent="selectedEvent" />
-                <Video />
+                <Video :selectedEvent="selectedEvent" />
             </el-col>
         </el-row>
     </div>

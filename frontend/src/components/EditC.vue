@@ -10,15 +10,9 @@
                     </div>
                     <div class="nickname">
                         <label for="nickname">昵称:</label>
-                        <input type="text" id="nickname" v-model="formData.nickname" required>
+                        <input type="text" id="nickname" v-model="formData.nickname">
                     </div>
-                    <div class="avatar">
-                        <!-- <label for="classmates_avatar_name">头像</label>
-                            <input type="file" id="classmates_avatar_name" accept="image/*"
-                                @change="handleAvatarChange">
-                            <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar Preview"
-                                style="max-width: 200px; max-height: 200px;"> -->
-                    </div>
+                    <div class="avatar"></div>
                     <div class="birthday">
                         <label for="birthday">生日:</label>
                         <input type="date" id="birthday" v-model="formData.birthday" required>
@@ -26,35 +20,35 @@
                     <div class="constellation">
                         <label for="constellation">星座:</label>
                         <select style="width: 65%;" id="constellation" v-model="formData.constellation" required>
-                            <option value="白羊座">白羊座</option>
-                            <option value="金牛座">金牛座</option>
-                            <option value="双子座">双子座</option>
-                            <option value="巨蟹座">巨蟹座</option>
-                            <option value="狮子座">狮子座</option>
-                            <option value="处女座">处女座</option>
-                            <option value="天秤座">天秤座</option>
-                            <option value="天蝎座">天蝎座</option>
-                            <option value="射手座">射手座</option>
-                            <option value="摩羯座">摩羯座</option>
-                            <option value="水瓶座">水瓶座</option>
-                            <option value="双鱼座">双鱼座</option>
+                            <option value="白羊座">白羊座(3.21~4.19)</option>
+                            <option value="金牛座">金牛座(4.20~5.20)</option>
+                            <option value="双子座">双子座(5.21~6.21)</option>
+                            <option value="巨蟹座">巨蟹座(6.22~7.22)</option>
+                            <option value="狮子座">狮子座(7.23~8.22)</option>
+                            <option value="处女座">处女座(8.23~9.22)</option>
+                            <option value="天秤座">天秤座(9.23~10.23)</option>
+                            <option value="天蝎座">天蝎座(10.24~11.22)</option>
+                            <option value="射手座">射手座(11.23~12.21)</option>
+                            <option value="摩羯座">摩羯座(12.22~1.19)</option>
+                            <option value="水瓶座">水瓶座(1.20~2.18)</option>
+                            <option value="双鱼座">双鱼座(2.19~3.20)</option>
                         </select>
                     </div>
                     <div class="qq">
                         <label for="qq">QQ:</label>
-                        <input type="text" id="qq_number" v-model="formData.qq_number" required>
+                        <input type="text" id="qq_number" v-model="formData.qq_number" required @blur="checkQQNumber">
                     </div>
                     <div class="wx">
                         <label for="wx_number">微信:</label>
-                        <input type="text" id="wx_number" v-model="formData.wx_number" required>
+                        <input type="text" id="wx_number" v-model="formData.wx_number">
                     </div>
                     <div class="phone">
                         <label for="phone">手机号:</label>
-                        <input type="text" id="phone_number" v-model="formData.phone_number" required>
+                        <input type="text" id="phone_number" v-model="formData.phone_number" @blur="checkPhoneNumber">
                     </div>
                     <div class="email">
                         <label for="email">邮箱:</label>
-                        <input type="email" id="email" v-model="formData.email" required>
+                        <input type="email" id="email" v-model="formData.email">
                     </div>
 
                 </div>
@@ -71,17 +65,16 @@
                     </div>
                     <div class="mengxiang">
                         <label for="dream">梦想:</label>
-                        <textarea id="dream" v-model="formData.dream" required></textarea>
+                        <textarea id="dream" v-model="formData.dream"></textarea>
                     </div>
                     <div class="biyejiyu" @mouseup="showPopup">
                         <label for="graduation_message">毕业寄语:</label>
                         <div class="gmtext" v-html="markdownToHtml"></div>
-                        <!-- <textarea id="graduation_message" v-model="formData.graduation_message" required></textarea> -->
                     </div>
                 </div>
                 <div class="button">
                     <button type="submit" @click="submitForm">确认</button>
-                    <button type="reset" @click="resetForm">重置</button>
+                    <button type="reset" @click="resetForm">取消并返回</button>
                 </div>
             </form>
         </div>
@@ -99,6 +92,7 @@ import { regionData, codeToText } from 'element-china-area-data';
 import axios from 'axios';
 import GMDialog from './GMDialog.vue';
 import { marked, options } from 'marked';//markdown解析器
+import { da } from 'element-plus/es/locale/index.mjs';
 export default {
     data() {
         return {
@@ -120,7 +114,6 @@ export default {
                 dream: '',
                 graduation_message: '',
             },
-            avatarPreview: '',//头像预览
             name: '',//主题姓名
             type: '',//主题类型
             id: '',//主题id
@@ -132,7 +125,7 @@ export default {
         GMDialog,
         ElCascader,
     },
-    emits: ['formSubmit', 'formReset'],
+    emits: ['formSubmit'],
     computed: {
         markdownToHtml() {
             return marked(this.formData.graduation_message);
@@ -159,10 +152,6 @@ export default {
         },
     },
     methods: {
-        handleAvatarChange(event) {
-            this.formData.classmates_avatar_name = event.target.files[0];
-            this.avatarPreview = URL.createObjectURL(event.target.files[0]);
-        },
         handleAreaChange(value) {
             if (value[0] != null && value[1] != null && value[2] != null) {
                 const str = codeToText[value[0]] + '/' + codeToText[value[1]] + '/' + codeToText[value[2]];
@@ -171,58 +160,31 @@ export default {
             }
             console.log('value:', value, 'hometown:', this.formData.hometown);
         },
-        validatePhoneNumber() {
+        checkPhoneNumber() {
             if (this.formData.phone_number.length !== 11) {
+                console.log('电话号码必须是11位数');
                 ElMessageBox.alert('电话号码必须是11位数', '提示', {
                     confirmButtonText: '确定',
                     type: 'warning'
                 });
-                return false;
             }
-            return true;
         },
-        validateQQNumber() {
+        checkQQNumber() {
             const qqRegex = /^[1-9][0-9]{8,9}$/;
             if (!qqRegex.test(this.formData.qq_number)) {
+                console.log('QQ号必须是9到10位数字');
                 ElMessageBox.alert('QQ号必须是9到10位数字', '提示', {
                     confirmButtonText: '确定',
                     type: 'warning'
                 });
-                return false;
             }
-            return true;
         },
         submitForm() {
-            const isPhoneValid = this.validatePhoneNumber();
-            const isQQValid = this.validateQQNumber();
-            if (isPhoneValid && isQQValid) {
-                this.$emit('formSubmit', this.formData);
-            } else {
-                ElMessageBox.alert('请检查输入的电话号码或者QQ号', '提示', {
-                    confirmButtonText: '确定',
-                    type: 'warning'
-                });
-            }
+            this.$emit('formSubmit', this.formData);
         },
         resetForm() {
-            // 重置表单数据
-            this.$emit('formReset', this.resetForm);
-            this.formData = {
-                classmates_album_name: '',
-                classmates_avatar_name: '',
-                name: '',
-                nickname: '',
-                birthday: '',
-                hometown: '',
-                qq_number: '',
-                wx_number: '',
-                phone_number: '',
-                email: '',
-                constellation: '',
-                hobby: '',
-                dream: '',
-                graduation_message: ''
-            };
+            const type = this.$router.currentRoute.value.query.type;
+            this.$router.push({ path: '/classmates/informshow', query: { stage: type } });
         },
         //弹窗
         showPopup() {
@@ -232,8 +194,7 @@ export default {
             this.$confirm('确认完成毕业寄语吗？')
                 .then(_ => {
                     done();
-                })
-                .catch(_ => { });
+                }).catch(_ => { });
         },
         updateVditorText(newText) {
             this.formData.graduation_message = newText;//更新毕业寄语
@@ -249,14 +210,15 @@ export default {
         if (this.fetchData) {
             axios.get(`/classmate/${this.$route.query.type}`)
                 .then(response => {
-                    // 处理成功响应
                     const tempdata = response.data.classmates;
                     const matchedData = tempdata.find(item => item.id == this.id);
                     this.formData.classmates_album_name = matchedData.classmates_album_name;
                     this.formData.classmates_avatar_name = matchedData.classmates_avatar_name;
                     this.formData.name = matchedData.name;
                     this.formData.nickname = matchedData.nickname;
-                    this.formData.birthday = new Date(matchedData.birthday).toISOString().slice(0, 10);
+                    let date = new Date(matchedData.birthday);
+                    date.setHours(date.getHours() + 8);//时区问题
+                    this.formData.birthday = date.toISOString().slice(0, 10);//转换为yyyy-mm-dd格式
                     this.formData.hometown = matchedData.hometown;
                     this.formData.qq_number = matchedData.qq_number;
                     this.formData.wx_number = matchedData.wx_number;

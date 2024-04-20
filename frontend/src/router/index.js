@@ -21,6 +21,7 @@ import InformShowC from "../views/InformShowC.vue";
 import InformShowI from "../views/InformShowI.vue";
 import InformShowT from "../views/InformShowT.vue";
 import VideoManage from "../views/VideoManage.vue";
+import PictureManage from "../views/PictureManage.vue";
 
 import axios from 'axios'
 import { isProxy } from "vue";
@@ -38,17 +39,20 @@ const routes = [
                 path: "/home",
                 name: "Home",
                 component: Home,
+                meta:{title:"时光画廊"}
             },
             {
                 path: "/album",
                 name: "Album",
                 component: Album,
-                props:(router)=>({id:router.query.id})
+                props:(router)=>({id:router.query.id}),
+                meta:{title:"相册"}
             },
             {
                 path:"/albumtype",
                 name:"AlbumType",
                 component:AlbumType,
+                meta:{title:"相册类型"}
             },
             {
                 path: "/test",
@@ -59,6 +63,13 @@ const routes = [
                 path:"/videomanage",
                 name:"VideoManage",
                 component:VideoManage,
+                meta:{title:'视频管理'}
+            },
+            {
+                path:"/picturemanage",
+                name:"PictureManage",
+                component:PictureManage,
+                meta:{title:'相册管理'}
             },
             {
                 path: "/classmates",
@@ -67,16 +78,19 @@ const routes = [
                         path:"informshow",
                         name:"InformShowC",
                         component:InformShowC,
+                        meta:{title:"同学录"}
                     },
                     {
                         path:"createclassmate",
                         name:"CreateClassmate",
                         component:CreateClassmate,
+                        meta:{title:"添加同学"}
                     },
                     {
                         path:"updateclassmate",
                         name:"UpdateClassmate",
                         component:UpdateClassmate,
+                        meta:{title:"编辑同学"}
                     },
                 ],
             },
@@ -87,16 +101,19 @@ const routes = [
                         path:"informshow",
                         name:"InformShowI",
                         component:InformShowI,
+                        meta:{title:"趣事录"}
                     },
                     {
                         path:"createinterestingevent",
                         name:"CreateInterestingEvent",
                         component:CreateInterestingEvent,
+                        meta:{title:"添加趣事"}
                     },
                     {
                         path:"updateinterestingevent",
                         name:"UpdateInterestingEvent",
                         component:UpdateEvent,
+                        meta:{title:"编辑趣事"}
                     },
                 ],
             },
@@ -107,16 +124,19 @@ const routes = [
                         path:"informshow",
                         name:"InformShowT",
                         component:InformShowT,
+                        meta:{title:"旅游志"}
                     },
                     {
                         path:"createtravel",
                         name:"CreateTravel",
                         component:CreateTravel,
+                        meta:{title:"添加旅游"}
                     },
                     {
                         path:"updatetravel",
                         name:"UpdateTravel",
                         component:UpdateTravel,
+                        meta:{title:"编辑旅游"}
                     }
                 ],
             },
@@ -133,4 +153,9 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: routes,
 });
+router.afterEach((to,from,next)=>{
+    if(to.meta&&to.meta.title){
+        document.title = to.meta.title
+    }
+})
 export default router;

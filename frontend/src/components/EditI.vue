@@ -22,7 +22,7 @@
                 </div>
                 <div class="button">
                     <button type="submit" @click="submitForm">确认</button>
-                    <button type="reset" @click="resetForm">重置</button>
+                    <button type="reset" @click="resetForm">取消并返回</button>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
 
 <script>
 import axios from 'axios';
-import { ElMessageBox,ElCascader } from 'element-plus';
+import { ElMessageBox, ElCascader } from 'element-plus';
 import { marked, options } from 'marked';//markdown解析器
 import GMDialog from './GMDialog.vue';
 export default {
@@ -61,7 +61,7 @@ export default {
         GMDialog,
         ElCascader,
     },
-    emits: ['formSubmit', 'formReset'],
+    emits: ['formSubmit'],
     computed: {
         markdownToHtml() {
             return marked(this.formData.event_description);
@@ -95,8 +95,7 @@ export default {
             this.$confirm('确认完成事件描述吗？')
                 .then(_ => {
                     done();
-                })
-                .catch(_ => { });
+                }).catch(_ => { });
         },
         updateVditorText(newText) {
             this.formData.event_description = newText;//更新毕业寄语
@@ -105,14 +104,8 @@ export default {
             this.$emit('formSubmit', this.formData);
         },
         resetForm() {
-            // 重置表单数据
-            this.$emit('formReset', this.resetForm);
-            this.formData = {
-                event_name: '',
-                event_date: '',
-                event_description: '',
-                event_participant: '',
-            };
+            const type = this.$router.currentRoute.value.query.type;
+            this.$router.push({ path: '/interestingevents/informshow', query: { stage: type } });
         },
     },
     props: {
@@ -129,7 +122,9 @@ export default {
                     const tempdata = response.data;
                     const matchedData = tempdata.find(item => item.id == this.id);
                     this.formData = matchedData;
-                    console.log('响应成功！', response);
+                    let date = new Date(matchedData.event_date);
+                    date.setHours(date.getHours() + 8);//时区问题
+                    this.formData.event_date = date.toISOString().slice(0, 10);
                 }).catch(error => {
                     console.error('响应失败！', error);
                 });
@@ -151,10 +146,6 @@ export default {
     width: 70%;
     margin: 0 auto;
     padding: 20px;
-    /* display: grid;
-    grid-template-rows: repeat(4, 1fr);
-    gap: 20px;
-    align-items: center; */
     background-image: linear-gradient(to right bottom, #fdf5e6, #ffe7d8, #ffd8d6, #fccbdf, #e4c4ee, #d5bff3, #c0bbf8, #a6b8fc, #abaffc, #b3a5fa, #bd99f5, #c88dee);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -165,6 +156,7 @@ export default {
     margin-bottom: 10px;
     text-align: center;
 }
+
 .form .event_name,
 .form .event_date,
 .form .event_participant,
@@ -196,12 +188,15 @@ export default {
 .add-card input {
     width: 200px;
 }
-.add-card textarea, .edtext{
+
+.add-card textarea,
+.edtext {
     width: 100%;
     height: auto;
     min-height: 100px;
     font-size: 16px;
 }
+
 .add-card textarea {
     height: 100px;
 }
