@@ -47,7 +47,7 @@
                 <Information :selectedClassmate="selectedClassmate" /> <!-- 传递选中的同学 -->
                 <GraduationMessage :selectedClassmate="selectedClassmate" />
                 <Picture :selectedClassmate="selectedClassmate" />
-                <Video />
+                <Video :selectedClassmate="selectedClassmate" />
             </el-col>
         </el-row>
     </div>
@@ -75,7 +75,6 @@ import Video from '../components/Carousel/Video.vue';
 import DataVisual from '../components/DataVisual.vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { el } from 'element-plus/es/locale/index.mjs';
 export default {
     data() {
         return {
@@ -132,7 +131,6 @@ export default {
                 path: '/classmates/updateclassmate',
                 query: { id: item.id, name: item.name, type: item.classmates_album_name }
             });
-            console.log('update:', item);
         }
     },
     setup() {
@@ -154,6 +152,7 @@ export default {
                     const firstname=selectedClassmate.value.name;
                     selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === firstname);
                     selectedClassmate.value.classmates_album_path="同学录/"+lastRoute;
+                    console.log('展示区selectedClassmate:', selectedClassmate.value);
                 }else{
                     ElMessageBox.alert('没有匹配到同学的信息！,请到‘管理-添加信息’处添加同学信息', '提示', {
                         confirmButtonText: '确定',
@@ -203,14 +202,12 @@ export default {
 
 <style scoped>
 .classmateContainer {
-    height: 100vh;
+    height: calc(100vh - 80px);
 }
 
 .scroll-container {
     height: calc(100vh - 40px);
-    /* 计算容器高度为屏幕高度减去标题的高度 */
     overflow-y: auto;
-    /* 垂直滚动条 */
 }
 
 .el-menu-item {
@@ -229,16 +226,18 @@ export default {
     /* 使图标到最右侧 */
     float: right;
     margin-left: 20px;
+    margin-right: 0;
 }
 
 .right-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: auto;
+    width: auto;
     padding: 20px;
     background-image: linear-gradient(to right bottom, #fdf5e6, #ffe7d8, #ffd8d6, #fccbdf, #e4c4ee, #d5bff3, #c0bbf8, #a6b8fc, #abaffc, #b3a5fa, #bd99f5, #c88dee);
     overflow-y: auto;
-    /* 垂直滚动条 */
     max-height: 100vh;
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;

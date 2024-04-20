@@ -13,7 +13,6 @@
             <div class="box">{{ event_participant }}</div>
             <div class="label">事件描述</div>
             <div class="box" v-html="markdownToHtml"></div>
-            <!-- <div class="box">{{ event_description }}</div> -->
         </div>
     </div>
 </template>

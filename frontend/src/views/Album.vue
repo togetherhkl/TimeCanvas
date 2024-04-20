@@ -7,17 +7,13 @@
       <el-col :span="24">
         <ul class="card-list">
           <li class="card" v-for="tmp in album">
-            <!-- <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
-              @click="$router.push({ path: `/${albumtype.albumtype_name}/informshow`, query: { stage: tmp.album_name } })"
-              :crossorigin="null" /> -->
-
               <el-image style="width: 100%; height: 100%" :src=tmp.album_cover fit="cover"
-              @click="openAlbum(albumtype.albumtype_name,tmp.album_name)"
+              @click="openInNewTab(albumtype.albumtype_name,tmp.album_name)"
               :crossorigin="null" />
-
             <a class="card-description" @click="openInNewTab(albumtype.albumtype_name,tmp.album_name)">
               <h2>{{ tmp.album_name }}</h2>
             </a>
+            <!-- <button>删除</button> -->
           </li>
         </ul>
       </el-col>
@@ -47,38 +43,14 @@ export default {
       ElMessage.error('请先登录');
     }
     else {
-      //检测浏览器本地会话中是否有image_url
-      // if(localStorage.getItem('image_url') != null){
-      //   /* 删除本地会话 */
-      //   localStorage.removeItem('image_url');
-      //   this.image_url = JSON.parse(sessionStorage.getItem('image_url'));
-      //   for (let i = 0; i < this.image_url.length; i++) {
-      //     this.album.push({albumtype_cover:this.image_url[i]});
-      //   }
-      //   //this.albuminfo = this.image_url;
-      //   console.log('if里的albu',this.album);
-      //   this.loading = false;
-      // }else{
       //从后端获取相册信息
       axios.get('/albuminfo').then(
         response => {
           if (response.status == 200) {
             let temp=[];//定义一个列表
             temp = response.data;
-            console.log('album里返回的数据temp', temp);
-            // console.log(this.albuminfo);
-            // console.log(this.albuminfo[0]);
-            // console.log(this.albuminfo[0].albumtype_cover);
-            // for (let i = 0; i < this.albuminfo.length; i++) {
-            //   this.image_url.push(this.albuminfo[i].albumtype_cover);
-            // }
-            // console.log(this.image_url);
-            /* 将image_url放在浏览器本地会话中 */
-            // localStorage.setItem('image_url', JSON.stringify(this.image_url));
             this.albumtype = response.data[this.id - 1];//获取相册类型
-
             this.album = temp[this.id - 1].album_list;
-            console.log('album里的album', this.album);
             this.loading = false;
           }
         }
@@ -99,19 +71,7 @@ export default {
         const url = this.$router.resolve({ path: `/classmates/informshow`, query: { stage: album_name} }).href;
         window.open(url, '_blank');
       }
-      // const url = this.$router.resolve({ path: `/${albumtype_name}/informshow`, query: { stage: album_name} }).href;
-      // window.open(url, '_blank');
     },
-    //打开相册
-    openAlbum(albumtype_name,album_name){
-      if(albumtype_name == '趣事录'){
-        this.$router.push({ path: '/interestingevents/informshow', query: { stage:album_name } });
-      }else if(albumtype_name=='旅游志'){
-        this.$router.push({ path: '/travels/informshow', query: { stage:album_name } });
-      }else if(albumtype_name=='同学录'){
-        this.$router.push({ path: '/classmates/informshow', query: { stage:album_name } });
-      }
-    }
   },
 }
 
@@ -120,7 +80,8 @@ export default {
 <style scoped>
 .main {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 90px);
+  overflow-y: auto;
 }
 .title {
   text-align: center;
