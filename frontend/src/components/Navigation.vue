@@ -8,24 +8,25 @@
       <el-menu-item index="0" @click="$router.push('/home')">首页</el-menu-item>
       <el-menu-item index="1" @click="$router.push('/albumtype')">相册</el-menu-item>
       <div class="flex-grow" />
-      <el-menu-item index="2" @click="$router.push('/videomanage')">视频管理</el-menu-item>
-      <el-sub-menu index="3">
+      <el-menu-item index="2" @click="$router.push('/picturesmanage')">照片管理</el-menu-item>
+      <el-menu-item index="3" @click="$router.push('/videomanage')">视频管理</el-menu-item>
+      <el-sub-menu index="4">
         <template #title >创建</template>
-        <el-menu-item index="3-1" @click="openDrawer('趣事录')">趣事录</el-menu-item>
-        <el-menu-item index="3-2" @click="openDrawer('旅游志')">旅游志</el-menu-item>
+        <el-menu-item index="4-1" @click="openDrawer('趣事录')">趣事录</el-menu-item>
+        <el-menu-item index="4-2" @click="openDrawer('旅游志')">旅游志</el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="4">
+      <el-menu-item index="5">
         <el-icon>
           <Moon />
         </el-icon>
       </el-menu-item>
-      <el-sub-menu index="5" @click="getTaken">
+      <el-sub-menu index="6" @click="getTaken">
         <template #title>
           <el-avatar :src="avatar_url" :size="40" />
           {{ baidu_name }}
         </template>
-        <el-menu-item index="5-1">个人中心</el-menu-item>
-        <el-menu-item index="5-2" @click="exit">退出</el-menu-item>
+        <el-menu-item index="6-1">个人中心</el-menu-item>
+        <el-menu-item index="6-2" @click="exit">退出</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>

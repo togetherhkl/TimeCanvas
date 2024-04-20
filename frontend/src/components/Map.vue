@@ -10,8 +10,20 @@ import * as echarts from 'echarts';
 import china from '../assets/map/china.json';
 echarts.registerMap('china', china);
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus'
+import axios from 'axios';
 export default {
-    setup() {
+    props: {
+        apiEndpoint: {
+            type: String,
+            required: true
+        },
+        album:{
+            type:String,
+            required:true
+        }
+    },
+    setup(props) {
         const path=ref(useRouter().currentRoute.value.path);
         const parts=path.value.split('/');
         let stage=parts[parts.length-2];//获取路由倒数第二个
@@ -19,7 +31,7 @@ export default {
         const chartData = ref(null);//图表数据
         onMounted(() => {
             fetchChartData().then(data => {
-                console.log("stage:",stage);
+                // console.log("stage:",stage);
                 if(stage=='classmates'){
                     stage='同学录';
                 }else{
@@ -59,19 +71,23 @@ export default {
         });
         function fetchChartData() {
             return new Promise(resolve => {
-                setTimeout(() => {
-                    const data = {
-                        mapData: [
-                            { name: '北京市', value: 50 },
-                            { name: '上海市', value: 30 },
-                            { name: '广州省', value: 40 },
-                            { name: '四川省', value: 35 },
-                            { name: '西藏自治区', value: 45 },
-                            { name: '云南省', value: 55 }
-                        ]
-                    };
-                    resolve(data);//返回数据
-                }, 1000);
+                axios.get(props.apiEndpoint,{params:{stage:props.album}}).then(response => {
+                    // resolve(response.data);
+                    console.log(response.data);
+                    const names=response.data.categories
+                    const values=response.data.series
+                    let mapData=[];
+                    for(let i=0;i<names.length;i++){
+                        mapData.push({name:names[i],value:values[i]});
+                    }
+                    let data={
+                        mapData:mapData
+                    }
+                    console.log("map:",data);
+                    resolve(data);
+                }).catch(error => {
+                    ElMessage.error('请求出错了: ' + error.message + ", " + (error.response ? error.response.data : ""))
+                });
             });
         }
         return {

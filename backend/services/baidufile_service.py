@@ -12,6 +12,8 @@ import time
 import urllib.parse
 from urllib.parse import quote, urlencode
 from fastapi.responses import StreamingResponse,FileResponse
+from fastapi import UploadFile,HTTPException
+from utils import utils as util
 import http.client
 import mimetypes
 
@@ -20,7 +22,7 @@ def create_project_folder(access_token: str, folder_name: str):
     url = ("https://pan.baidu.com/rest/2.0/xpan/file?method=create&access_token=" + access_token)
     payload = {
         "path": folder_name,
-        "isdir": 1
+        "isdir": 1,
     }
     response = requests.request("POST", url, data=payload)
     return response.json()
@@ -131,4 +133,75 @@ def get_video_m3u8(access_token: str, path: str, vip_type: int):
             # return data       
         else:
             print("出错")
-        
+
+#上传图片文件
+def upload_image(access_token: str, file_path: str, path: str):
+    '''
+    百度网盘单步上传接口
+    access_token: 百度网盘的access_token
+    file_path: 本地文件路径
+    path: 上传路径    
+    '''
+    # 请求URL
+    url = 'https://d.pcs.baidu.com/rest/2.0/pcs/file'
+
+    # 请求参数
+    params = {
+        'method': 'upload',
+        'access_token': access_token,
+        'path': path,
+        'ondup': 'newcopy'
+    }
+
+    # 发送请求上传文件
+    with open(file_path, 'rb') as file:
+        response = requests.post(url, params=params, files={'file': file})
+    if response.ok:
+        return True
+    else:
+        return False
+    
+#获取指定目录下的图片信息
+def get_images_list(access_token: str, path: str):
+    '''
+    获取指定目录下的图片信息
+    access_token: 百度网盘的access_token
+    path: 目录路径
+    '''
+    url=(
+        "http://pan.baidu.com/rest/2.0/xpan/file?"
+        "parent_path=/"+quote(path)+
+        "&access_token=" + access_token + 
+        "&web=0&method=imagelist&order=name"
+    )
+    payload = {}
+    files = {}
+    headers = {"User-Agent": "pan.baidu.com"}
+    response = requests.request("GET", url, headers=headers, data=payload, files=files).json()
+    images_info = response["info"]
+    images_list = []
+    for image in images_info:
+        temp={}
+        temp['fs_id'] = image["fs_id"]
+        temp['url3'] = image["thumbs"]["url3"]
+        temp['path'] = image["path"]
+        temp['server_filename'] = image["server_filename"]
+        temp['size'] = util.format_size(image["size"]) #格式化文件大小
+        images_list.append(temp)
+    return images_list
+
+#删除指定文件
+def delete_file(access_token: str, filelist: list[str]):
+    '''
+    删除指定文件
+    access_token: 百度网盘的access_token
+    filelist: 文件路径
+    '''
+    url = ("https://pan.baidu.com/rest/2.0/xpan/file?method=filemanager&access_token="+access_token+"&opera=delete")
+    payload = {
+        "filelist": filelist,
+        "async": 2
+    }
+    response = requests.request("POST", url, data=payload)
+    return response.json()
+

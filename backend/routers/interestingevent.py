@@ -41,14 +41,13 @@ async def create_interesting_event(
     #判断百度网盘是否对应的文件夹，如果没有就创建
     userinfo = user_crud.get_user(db, baidu_uk)
     access_token = aes.decrypt(userinfo.access_token)
-    if baidufile_service.is_folder_exist(access_token, "TimeGallery/趣事录/"+interesting_event.event_album_name)==True:
+    if baidufile_service.is_folder_exist(access_token, "/apps/TimeGallery/趣事录/"+interesting_event.event_album_name)==True:
         pass
     else:
-        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/趣事录/"+interesting_event.event_album_name)
         baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/趣事录/"+interesting_event.event_album_name
-                                                +"/pictures")
+                                               +"/"+interesting_event.event_name +"/pictures")
         baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/趣事录/"+interesting_event.event_album_name
-                                                +"/videos")
+                                               +"/"+interesting_event.event_name  +"/videos")
     #创建有趣事件
     return interestingevent_crud.interesting_event_create(db, interesting_event, baidu_uk)
 

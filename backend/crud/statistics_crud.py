@@ -26,17 +26,18 @@ def get_classmate_location(db: Session, baidu_uk: str,stage:str):
     locations = []
     series = []
     #聚合查询
-    data = (db.query(Classmates.hometown,func.count(Classmates.hometown).label('count'))
+    data = (db.query(Classmates.hometown,func.count(Classmates.hometown).label('count'),
+                     func.substring_index(Classmates.hometown, '/', 1).label('province'))
             .filter(Classmates.baidu_uk == baidu_uk,Classmates.classmates_album_name==stage)
-            .group_by(Classmates.hometown)
+            .group_by('province')
             .order_by(desc('count'))#按照count降序排列
             .limit(5)#只取前5个
             .all())
     tmp = 0
     for item in data:
-        locations.append(item[0])
-        series.append(item[1])
-        tmp += item[1]
+        locations.append(item.province)
+        series.append(item.count)
+        tmp += item.count
     locations.append('其他')
     series.append(classmates_count - tmp)
     return {'categories':locations,'series':series}
@@ -87,5 +88,29 @@ def get_classmate_hobby_wordcloud(db: Session, baidu_uk: str,stage:str):
                 hobby_dict[h] = 1
     data = [{'name':k,'value':v} for k,v in hobby_dict.items()]
     return {'wordcloud':data}
-
+#星座雷达图数据
+def get_classmate_constellation_radar(db: Session, baidu_uk: str,stage:str):
+    '''
+    返回的数据格式为：
+    {
+        indicator: [{ name: '白羊座', max: 100 },]
+        value: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    }
+    '''
+    constellation_stage = ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座']
+    value = [0,0,0,0,0,0,0,0,0,0,0,0]
+    constellation = (db.query(Classmates.constellation,func.count(Classmates.constellation).label('count'))
+                     .filter(Classmates.baidu_uk == baidu_uk,Classmates.classmates_album_name==stage)
+                     .group_by(Classmates.constellation)
+                     .all())
+    for item in constellation_stage:
+        i=0
+        for c in constellation:
+            if item == c[0]:
+                value[i] = c[1]
+                break
+            i += 1
+    indicator = [{'name':k,'max':30} for k in constellation_stage]
+    return {'indicator':indicator,'value':value}
+    
     

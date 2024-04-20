@@ -18,6 +18,17 @@
       </div>
     </div>
   </div>
+  <el-dialog overflow :close-on-click-modal="false" :modal="false" v-model="dialogOverflowVisible"
+    title="AI文字提炼与总结" width="600" draggable>
+    <div v-loading="loading" class="aishow">
+      <div v-html="aireutohtml"></div>
+    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogOverflowVisible = false">关闭</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -25,6 +36,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import axios from 'axios';
 import { defineComponent, ref, PropType, watch } from 'vue';
 import { marked, options } from 'marked';//markdown解析器
+import { set } from 'video.js/dist/types/tech/middleware';
 export default defineComponent({
   props: {
     selectedClassmate: {
@@ -35,14 +47,21 @@ export default defineComponent({
   computed: {
     markdownToHtml() {
       return marked(this.graduation_message);
+    },
+    aireutohtml() {
+      return marked(this.airesult);
     }
   },
   setup(props) {
     const graduation_message = ref('');
+    const airesult = ref('');
+    const dialogOverflowVisible = ref(false)
+    const loading = ref(false);
     // 弹出消息框函数
     const openMessageBox = () => {
       // 在这里添加打开消息框的逻辑
-      let temp = '';
+      dialogOverflowVisible.value = true;
+      loading.value = true;
       axios.get('/xunfei/semantic/textanl', {
         params: {
           text: JSON.stringify(graduation_message.value),
@@ -50,12 +69,8 @@ export default defineComponent({
       }).then(
         response => {
           if (response.status == 200) {
-            temp = response.data;
-            console.log('temp', temp);
-            ElMessage.success('AI总结成功！');
-            ElMessageBox.alert(temp, 'AI总结', {
-              confirmButtonText: 'OK',
-            });
+            airesult.value  = response.data;
+            loading.value = false;
           }else {
             ElMessage.error('AI总结失败！');
           }
@@ -72,6 +87,9 @@ export default defineComponent({
     });
     return {
       graduation_message,
+      airesult,
+      dialogOverflowVisible,
+      loading,
       openMessageBox
     };
   }
@@ -111,17 +129,30 @@ export default defineComponent({
   backdrop-filter: blur(8px);
   box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
 }
-.gm-text{
+
+.gm-text {
   width: 100%;
   min-height: 100px;
   height: auto;
   font-size: 16px;
 }
+
 .bigdata {
   /* 将按钮居右下 */
   position: absolute;
   bottom: 0;
   right: 0;
   margin-right: 20px;
+}
+
+.aishow {
+  widows: 300px;
+  height: 300px;
+  overflow: auto;
+  font-size: 18px; /* 调整字体大小 */
+  color: #333; /* 调整字体颜色 */
+  font-family: 'Arial', sans-serif; /* 调整字体家族 */
+  line-height: 1.5; /* 调整行高 */
+  text-align: justify; /* 对齐文本 */
 }
 </style>

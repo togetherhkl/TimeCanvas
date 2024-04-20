@@ -7,14 +7,18 @@
 # FilePath: \TimeCanvas\backend\routers\baidufile.py
 
 # '''
-from fastapi import APIRouter,Depends
+from fastapi import APIRouter,Depends,File,UploadFile,Form,HTTPException
 from dependencies import auth_depend, db_depend
 from sqlalchemy.orm import Session
 from services import baidufile_service, auth_service
 from models import orm_models
-from fastapi.responses import StreamingResponse, FileResponse, Response
+from schemas import orm_schema
+from urllib.parse import quote
+from fastapi.responses import StreamingResponse, FileResponse, Response,JSONResponse
 from utils import aes
-import io
+from typing import List
+import requests
+import io,os,hashlib
 router = APIRouter()
 #获取特定文件下的图片访问链接
 @router.get("/baidufile/image",tags=["baidufile"])
@@ -54,3 +58,55 @@ async def get_m3u8(
                     media_type="application/x-mpegURL",
                     # headers={"Content-Disposition": "attachment; filename=file.m3u8"}
                     )
+#上传图片
+@router.post("/baidufile/uploadimage",tags=["baidufile"])
+async def upload_image(
+    files: list[UploadFile],
+    db: Session = Depends(db_depend.get_db),
+    baidu_uk: str = Depends(auth_depend.verify_jwt_token),
+    folder_name:str=Form(...),
+):
+    access_token = db.query(orm_models.User).filter(orm_models.User.baidu_uk == baidu_uk).first().access_token
+    access_token = aes.decrypt(access_token)
+    #先把文件存入本地
+    for file in files:
+        with open(f"media/temp/{file.filename}", "wb") as buffer:
+            buffer.write(file.file.read())
+    #上传文件
+    for file in files:
+        path = f"/apps/TimeGallery/{folder_name}/{file.filename}"
+        response = baidufile_service.upload_image(access_token, f"media/temp/{file.filename}",path)
+        if (response):
+            os.remove(f"media/temp/{file.filename}")
+        else:
+            HTTPException(status_code=400, detail="上传失败")
+            return JSONResponse(content={"msg":f"{file.filename}上传失败"},status_code=400)
+    return {"msg":"上传成功"}
+#获取某个文件夹下的所有图片
+@router.get("/baidufile/imageslist",tags=["baidufile"],response_model=list[orm_schema.BaiduImageList])
+async def get_images_list(
+    folder_name:str,
+    db: Session = Depends(db_depend.get_db),
+    baidu_uk: str = Depends(auth_depend.verify_jwt_token),
+):
+    access_token = db.query(orm_models.User).filter(orm_models.User.baidu_uk == baidu_uk).first().access_token
+    access_token = aes.decrypt(access_token)
+    path = f"/apps/TimeGallery/{folder_name}"
+    return baidufile_service.get_images_list(access_token, path)
+#删除指定文件
+@router.delete("/baidufile/deletefile",tags=["baidufile"])
+async def delete_file(
+    filelist:List[str],
+    db: Session = Depends(db_depend.get_db),
+    baidu_uk: str = Depends(auth_depend.verify_jwt_token),
+):
+    #对filelist中的内容进行urlencode
+    # for i in range(len(filelist)):
+    #     filelist[i] = quote(filelist[i])
+    access_token = db.query(orm_models.User).filter(orm_models.User.baidu_uk == baidu_uk).first().access_token
+    access_token = aes.decrypt(access_token)
+    return baidufile_service.delete_file(access_token, filelist)
+
+
+
+

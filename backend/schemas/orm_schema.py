@@ -110,3 +110,11 @@ class VideoCreate(BaseModel):
     video_album:int
     class Config:
         orm_mode = True
+
+#百度网盘，获取图片数据的返回类型
+class BaiduImageList(BaseModel):
+    fs_id: int
+    url3: str
+    path: str
+    server_filename: str
+    size: str

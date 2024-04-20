@@ -21,6 +21,7 @@ import InformShowC from "../views/InformShowC.vue";
 import InformShowI from "../views/InformShowI.vue";
 import InformShowT from "../views/InformShowT.vue";
 import VideoManage from "../views/VideoManage.vue";
+import PicturesManage from "../views/PicturesManage.vue";
 
 import axios from 'axios'
 import { isProxy } from "vue";
@@ -53,12 +54,27 @@ const routes = [
             {
                 path: "/test",
                 name: "Test",
-                component: M3u8,
+                component: PicturesManage,
             },
             {
                 path:"/videomanage",
                 name:"VideoManage",
                 component:VideoManage,
+            },
+            {
+                path:"/picturesmanage",
+                name:"PicturesManage",
+                component:PicturesManage,
+            },
+            {
+                path:"/m3u8",
+                name:"m3u8",
+                component:m3u8,
+            },
+            {
+                path:"/m3",
+                name:"m3",
+                component:m3,
             },
             {
                 path: "/classmates",

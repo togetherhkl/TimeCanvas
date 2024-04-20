@@ -42,7 +42,7 @@
                 <h4>上传文件</h4>
             </template>
             <template #default>
-                <el-upload drag action="/video" :multiple="true" :auto-upload="false" :on-change="onChangeFile">
+                <el-upload drag action="/video" accept="video/*" :multiple="true" :auto-upload="false" :on-change="onChangeFile">
                     <el-icon class="el-icon--upload">
                         <upload-filled />
                     </el-icon>

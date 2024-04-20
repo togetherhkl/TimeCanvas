@@ -2,7 +2,7 @@
     <div class="layout">
         <h1 class="centered-and-bold">{{ stage }}数据可视化</h1>
         <div id="chart" class="chartdiv"></div>
-        <Chinamap class="chartdiv" />
+        <Chinamap class="chartdiv" :apiEndpoint="apiEndpoint" :album="stage" />
         <div id="constellation" class="chartdiv"></div>
         <!-- <div id="ageChart" class="chartdiv"></div> -->
         <div id="wordCloud" class="chartdiv"></div>
@@ -24,11 +24,11 @@ export default {
     setup() {
         const router = useRouter();
         const chartData = ref(null);
+        const apiEndpoint = '/classmate_statiscts/location_bar';
         const stage = ref(router.currentRoute.value.query.stage);
         onMounted(() => {
-
             fetchChartData().then(data => {
-                console.log('stage:', stage);
+                // console.log('stage:', stage);
                 const myChart = echarts.init(document.getElementById('chart'));
                 myChart.setOption({
                     title: {
@@ -50,99 +50,101 @@ export default {
                     ]
                 });
                 // 画年龄分布柱状图
-                axios.get('/classmate_statiscts/age_bar', { params: { stage: router.currentRoute.value.query.stage } })
+                // axios.get('/classmate_statiscts/age_bar', { params: { stage: router.currentRoute.value.query.stage } })
+                //     .then(response => {
+                //         const ageChart = echarts.init(document.getElementById('ageChart'));
+                //         ageChart.setOption({
+                //             title: {
+                //                 text: `同学录${stage1}年龄分布条形图`
+                //             },
+                //             tooltip: {},
+                //             xAxis: {
+                //                 type: 'category',
+                //                 data: response.data.categories
+                //             },
+                //             yAxis: {
+                //                 type: 'value'
+                //             },
+                //             series: [
+                //                 {
+                //                     name: '人数',
+                //                     type: 'bar',
+                //                     data: response.data.series
+                //                 }
+                //             ]
+                //         });
+
+                //     })
+                //     .catch(error => {
+                //         ElMessage.error('获取年龄数据失败');
+                //     })
+                // 画星座分布雷达图
+                axios.get('/classmate_statiscts/constellation_radar', { params: { stage: router.currentRoute.value.query.stage } })
                     .then(response => {
-                        const ageChart = echarts.init(document.getElementById('ageChart'));
-                        ageChart.setOption({
+                        const constellation = echarts.init(document.getElementById('constellation'));
+                        constellation.setOption({
+                            backgroundColor: '#020933', // 设置背景颜色为深蓝色，模拟星空
                             title: {
-                                text: '同学录年龄分布条形图'
+                                text: '同学星座人数分布雷达图',
+                                textStyle: {
+                                    color: '#fff' // 设置标题颜色为白色
+                                }
                             },
                             tooltip: {},
-                            xAxis: {
-                                type: 'category',
-                                data: response.data.categories
-                            },
-                            yAxis: {
-                                type: 'value'
+                            radar: {
+                                name: {
+                                    textStyle: {
+                                        color: '#fff' // 设置雷达图各个指示器名称的颜色为白色
+                                    },
+                                },
+                                // indicator: [
+                                //     { name: '白羊座', max: 100 },
+                                //     { name: '金牛座', max: 100 },
+                                //     { name: '双子座', max: 100 },
+                                //     { name: '巨蟹座', max: 100 },
+                                //     { name: '狮子座', max: 100 },
+                                //     { name: '处女座', max: 100 },
+                                //     { name: '天秤座', max: 100 },
+                                //     { name: '天蝎座', max: 100 },
+                                //     { name: '射手座', max: 100 },
+                                //     { name: '摩羯座', max: 100 },
+                                //     { name: '水瓶座', max: 100 },
+                                //     { name: '双鱼座', max: 100 }
+                                // ],
+                                indicator: response.data.indicator,
+                                splitArea: { show: false, },
+                                axisLine: {
+                                    lineStyle: {
+                                        color: 'rgba(128, 128, 128, 0.5)' // 设置雷达图轴线的颜色，使其更加透明
+                                    }
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: 'rgba(128, 128, 128, 0.5)' // 设置雷达图分割线的颜色，使其更加透明
+                                    }
+                                }
                             },
                             series: [
                                 {
-                                    name: '人数',
-                                    type: 'bar',
-                                    data: response.data.series
+                                    name: '星座人数',
+                                    type: 'radar',
+                                    lineStyle: {
+                                        color: '#FF6A6A' // 设置雷达图线条的颜色为亮红色
+                                    },
+                                    data: [
+                                        {//星座分布数据，第一个白羊座，第二个金牛座，以此类推
+                                            // value: [80, 90, 70, 60, 80, 90, 70, 60, 80, 90, 70, 60],
+                                            value: response.data.value,
+                                        }
+                                    ]
                                 }
                             ]
                         });
 
                     })
                     .catch(error => {
-                        ElMessage.error('获取数据失败');
-                    })
-                // 画星座分布雷达图
-                // axios.get('/classmate_statiscts/constellation_radar', { params: { stage: router.currentRoute.value.query.stage } })
-                //     .then(response => {
-                const constellation = echarts.init(document.getElementById('constellation'));
-                constellation.setOption({
-                    backgroundColor: '#020933', // 设置背景颜色为深蓝色，模拟星空
-                    title: {
-                        text: '同学录12星座人数分布雷达图',
-                        textStyle: {
-                            color: '#fff' // 设置标题颜色为白色
-                        }
-                    },
-                    tooltip: {},
-                    radar: {
-                        name: {
-                            textStyle: {
-                                color: '#fff' // 设置雷达图各个指示器名称的颜色为白色
-                            },
-                        },
-                        indicator: [
-                            { name: '白羊座', max: 100 },
-                            { name: '金牛座', max: 100 },
-                            { name: '双子座', max: 100 },
-                            { name: '巨蟹座', max: 100 },
-                            { name: '狮子座', max: 100 },
-                            { name: '处女座', max: 100 },
-                            { name: '天秤座', max: 100 },
-                            { name: '天蝎座', max: 100 },
-                            { name: '射手座', max: 100 },
-                            { name: '摩羯座', max: 100 },
-                            { name: '水瓶座', max: 100 },
-                            { name: '双鱼座', max: 100 }
-                        ],
-                        splitArea: {show: false,},
-                        axisLine: {
-                            lineStyle: {
-                                color: 'rgba(128, 128, 128, 0.5)' // 设置雷达图轴线的颜色，使其更加透明
-                            }
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: 'rgba(128, 128, 128, 0.5)' // 设置雷达图分割线的颜色，使其更加透明
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            name: '星座人数',
-                            type: 'radar',
-                            lineStyle: {
-                                color: '#FF6A6A' // 设置雷达图线条的颜色为亮红色
-                            },
-                            data: [
-                                {//星座分布数据，第一个白羊座，第二个金牛座，以此类推
-                                    value: [80, 90, 70, 60, 80, 90, 70, 60, 80, 90, 70, 60],
-                                }
-                            ]
-                        }
-                    ]
-                });
-
-                // })
-                // .catch(error => {
-                //     ElMessage.error('获取数据失败');
-                // });
+                        ElMessage.error('获取星座数据失败');
+                    });
 
                 // 画兴趣爱好词云图
                 axios.get('/classmate_statiscts/interest_wordcloud', { params: { stage: router.currentRoute.value.query.stage } })
@@ -150,7 +152,7 @@ export default {
                         const wordCloud = echarts.init(document.getElementById('wordCloud'));
                         wordCloud.setOption({
                             title: {
-                                text: '兴趣爱好词云图'
+                                text: '同学兴趣爱好词云图'
                             },
                             series: [
                                 {
@@ -186,7 +188,7 @@ export default {
                         });
                     })
                     .catch(error => {
-                        ElMessage.error('获取数据失败');
+                        ElMessage.error('获取爱好数据失败');
                     });
             });
         });
@@ -221,7 +223,8 @@ export default {
 
         return {
             chartData,
-            stage
+            stage,
+            apiEndpoint
         };
     }
 }

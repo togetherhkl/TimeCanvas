@@ -46,7 +46,7 @@ async def create_classmate(
     userinfo = user_crud.get_user(db, baidu_uk)
     access_token = aes.decrypt(userinfo.access_token)
     #判断百度网盘是否有项目的总文件夹，如果没有就创建
-    if baidufile_service.is_folder_exist(access_token, "TimeGallery/同学录/"+classmates.name)==True:
+    if baidufile_service.is_folder_exist(access_token, "/apps/TimeGallery/同学录/"+classmates.name)==True:
         pass
     else:
         baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/同学录/"

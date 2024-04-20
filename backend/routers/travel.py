@@ -44,9 +44,10 @@ async def create_travel(
     if baidufile_service.is_folder_exist(access_token, "TimeGallery/旅游/"+travel.travel_album_name)==True:
         pass
     else:
-        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name)
-        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name+"/pictures")
-        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name+"/videos")
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name
+                                                +"/"+travel.travel_theme+"/pictures")
+        baidufile_service.create_project_folder(access_token, "/apps/TimeGallery/旅游/"+travel.travel_album_name
+                                                +"/"+travel.travel_theme+"/videos")
 
     #创建旅游信息
     return travel_crud.travel_create(db, travel, baidu_uk)
