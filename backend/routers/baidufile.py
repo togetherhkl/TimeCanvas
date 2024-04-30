@@ -101,11 +101,18 @@ async def delete_file(
     baidu_uk: str = Depends(auth_depend.verify_jwt_token),
 ):
     #对filelist中的内容进行urlencode
-    # for i in range(len(filelist)):
-    #     filelist[i] = quote(filelist[i])
+    deletefiles="["
+    for i in range(len(filelist)):
+        # print(filelist[i])
+        filelist[i] = filelist[i]
+        if i == len(filelist)-1:
+            deletefiles +='"'+filelist[i]+'"'
+        else:
+            deletefiles +='"'+filelist[i]+'",'
+    deletefiles = deletefiles+"]"
     access_token = db.query(orm_models.User).filter(orm_models.User.baidu_uk == baidu_uk).first().access_token
     access_token = aes.decrypt(access_token)
-    return baidufile_service.delete_file(access_token, filelist)
+    return baidufile_service.delete_file(access_token, deletefiles)
 
 
 

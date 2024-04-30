@@ -191,7 +191,7 @@ def get_images_list(access_token: str, path: str):
     return images_list
 
 #删除指定文件
-def delete_file(access_token: str, filelist: list[str]):
+def delete_file(access_token: str, filelist: str):
     '''
     删除指定文件
     access_token: 百度网盘的access_token
@@ -200,8 +200,8 @@ def delete_file(access_token: str, filelist: list[str]):
     url = ("https://pan.baidu.com/rest/2.0/xpan/file?method=filemanager&access_token="+access_token+"&opera=delete")
     payload = {
         "filelist": filelist,
-        "async": 2
+        "async": 1
     }
-    response = requests.request("POST", url, data=payload)
+    response = requests.post(url, data=payload)
     return response.json()
 

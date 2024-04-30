@@ -15,7 +15,7 @@
                         :crossorigin="null" />
                     <div style="padding: 5px; border: 1px solid #ccc;">
                         <span>{{ item.server_filename }}({{ item.size }})</span>
-                        <el-popconfirm title="确定要删除吗?" @confirm="deleteItem(item.path)">
+                        <el-popconfirm title="确定要删除吗?" @confirm="deleteItem(item.path,index)">
                             <template #reference>
                                 <el-button type="danger" :icon="Delete" plain round></el-button>
                             </template>
@@ -131,9 +131,10 @@ export default defineComponent({
         const onChangeFile = (file, files) => {
             uploadFile.value = files
         }
-        const deleteItem = async (path) => {
+        const deleteItem = async (path,index) => {
             // console.log(path)
             let filepath = []
+            path = path.replace(/'/g, '"')//把单引号替换成双引号
             filepath.push(path)
             // console.log(filepath)
             const loadingInstance = ElLoading.service({ fullscreen: true })
@@ -147,6 +148,7 @@ export default defineComponent({
                         return;
                     }
                     else {
+                        state.imagesinfo.splice(index, 1)
                         ElMessage({
                             message: '删除成功',
                             type: 'success',
@@ -176,13 +178,11 @@ export default defineComponent({
         const cascaderChange = (value) => {
             if (value.length == 1) {
                 uploadmessage.value = "更改相册类型封面"
-                ElMessage.warning("由于百度网盘删除服务暂停，导致封面有多张，封面取该网盘目录下的第一张图片")
                 imagemultiple.value = false;
                 state.imagesinfo = [];
             }
             if (value.length == 2) {
                 uploadmessage.value = "更改相册封面"
-                ElMessage.warning("由于百度网盘删除服务暂停，导致封面有多张，封面取该网盘目录下的第一张图片")
                 imagemultiple.value = false;
                 state.imagesinfo = [];
             }
@@ -225,12 +225,11 @@ export default defineComponent({
             onChangeFile,
             deleteItem,
             uploadButoon,
-
             cascaderChange,
+
             imagesfilepath,
             cascaderArr,
             imagemultiple,
-
             drawer,
             uploadmessage,
             HomeFilled,
