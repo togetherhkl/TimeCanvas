@@ -48,7 +48,7 @@ export default {
               confirmButtonText: '确定',
               type: 'success'
             }).then(() => {
-              ElMessageBox.alert('请前往百度网盘上传图片与视频', '提示', {
+              ElMessageBox.alert('请前往百度网盘上传同学头像', '提示', {
                 confirmButtonText: '确定', type: 'info'
               });
               this.$router.push({ path: '/classmates/informshow', query: { stage: type } });

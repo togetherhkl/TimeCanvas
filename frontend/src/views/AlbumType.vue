@@ -35,7 +35,6 @@ export default {
         response => {
           if (response.status == 200) {
             this.albuminfo = response.data;
-            console.log("akbumtype里的albuminfo", this.albuminfo);
             this.loading = false;//关闭加载动画
           }
         },

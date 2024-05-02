@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 const handleOpen = (key, keyPath) => {
     console.log(key, keyPath)
 }
@@ -66,10 +66,6 @@ import Video from '../components/Carousel/Video.vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 export default {
-    data() {
-        return {
-        }
-    },
     components: {
         InformationI,
         Picture,
@@ -100,10 +96,13 @@ export default {
             axios.delete('/interestingevent/',{params:{id:item.id}}).then(
                 response=>{
                     if(response.status==200){
-                        console.log(`删除 ${item.name}成功`);
+                        ElMessageBox.alert(`删除 ${item.name}成功`, '提示', {
+                            confirmButtonText: '确定',
+                            type: 'success'
+                        });
                         this.$router.go(0);//刷新页面
                     }else{
-                        console.log('删除失败');
+                        ElMessage.error('删除失败');
                     }
                 }
             ).catch(error=>{
@@ -161,6 +160,7 @@ export default {
                 });
                 nameList.value = searchResults; // 假设这里是更新左侧列表的变量名
             } catch (error) {
+                ElMessage.error('搜索失败');
                 console.error('搜索失败：', error);
             }
         };

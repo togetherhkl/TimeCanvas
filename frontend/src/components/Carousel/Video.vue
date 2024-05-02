@@ -144,7 +144,7 @@ export default {
     background-color: #d3dce6;
 }
 
-::v-deep .el-carousel__container {
+:deep(.el-carousel__container) {
     min-height: 450px;
 }
 </style>

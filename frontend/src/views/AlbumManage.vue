@@ -1,5 +1,5 @@
 <template>
-    <el-table :data="filterTableData" style="width: 100%" stripe="true">
+    <el-table :data="filterTableData" style="width: 100%" :stripe="true">
         <el-table-column label="相册类型" prop="album_name" min-width="100">
             <template #default="scope">
                 <span v-if="!scope.row.editing">{{ scope.row.album_name }}</span>
@@ -12,11 +12,11 @@
                 <el-input v-else v-model="scope.row.temp_description"/>
             </template>
         </el-table-column>
-        <el-table-column align="right">
+        <el-table-column label="相关操作" align="right">
             <template #default="scope">
-                <el-button type="info" @click="handleEdit(scope.row)">编辑</el-button>
-                <el-button type="primary" @click="handleSave(scope.row)">更新</el-button>
-                <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
+                <el-button type="info" @click="handleEdit(scope.row)"><el-icon><Edit /></el-icon>编辑</el-button>
+                <el-button type="primary" @click="handleSave(scope.row)"><el-icon><Select /></el-icon>保存</el-button>
+                <el-button type="danger" @click="handleDelete(scope.row)"><el-icon><Delete /></el-icon>删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -68,12 +68,10 @@ export default defineComponent({
 
         const handleEdit = (row: filterTableData) => {
             if (!row.editing) {
-                // Backup original data
                 row.originalData = { ...row };
-                row.temp_name = row.album_name; // Save temporary value for album name
-                row.temp_description = row.album_description; // Save temporary value for album description
-            } else {
-                // Restore original data
+                row.temp_name = row.album_name; //保存相册名的临时值
+                row.temp_description = row.album_description; // 保存相册描述的临时值
+            } else {//取消编辑
                 row.album_name = row.originalData.album_name;
                 row.album_description = row.originalData.album_description;
             }
@@ -87,12 +85,11 @@ export default defineComponent({
                     album_description: row.temp_description
                 },{params: {id: row.id}});
                 ElMessage.success('保存成功');
-                row.editing = false; // Cancel edit mode after successful save
-                row.album_name = row.temp_name; // Update album name
-                row.album_description = row.temp_description; // Update album description
+                row.editing = false; //编辑状态变为false
+                row.album_name = row.temp_name; // 保存相册名
+                row.album_description = row.temp_description; // 保存相册描述
             } catch (error) {
-                console.error('保存失败:', error);
-                // Restore original data in case of save failure
+                ElMessage.error('保存失败');
                 row.album_name = row.originalData.album_name;
                 row.album_description = row.originalData.album_description;
             }
@@ -114,8 +111,8 @@ export default defineComponent({
                     await axios.get('/interestingevent',{params:{event_album_name:row.album_name}}).then((res)=>{
                         console.log('事件：',res.data);
                         for(let i=0;i<res.data.length;i++){
-                            console.log('列表：',res.data[i].id)
-                            // axios.delete('/interestingevent/',{params:{id:res.data.interesting_events[i].id}});
+                            // console.log('列表：',res.data[i].id)
+                            axios.delete('/interestingevent',{params:{id:res.data.interesting_events[i].id}});
                         }
                     });
                 }else{

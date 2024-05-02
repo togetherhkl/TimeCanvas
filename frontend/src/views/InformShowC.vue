@@ -58,7 +58,7 @@
 
 <script>
 import * as echarts from 'echarts';
-import { ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 const handleOpen = (key, keyPath) => {
     console.log(key, keyPath)
 }
@@ -110,11 +110,14 @@ export default {
                 axios.delete('/classmate/', { params: { id: item.id } }).then(
                     response => {
                         if (response.status == 200) {
-                            console.log(`删除 ${item.name}成功`);
+                            ElMessageBox.alert(`删除 ${item.name}成功`, '提示', {
+                                confirmButtonText: '确定',
+                                type: 'success'
+                            });
                             // 删除成功后，重新获取同学列表
                             this.$router.go(0);//刷新页面
                         } else {
-                            console.log('删除失败');
+                            ElMessage.error('删除失败');
                         }
                     }
                 ).catch(error => {
@@ -152,7 +155,6 @@ export default {
                     const firstname=selectedClassmate.value.name;
                     selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === firstname);
                     selectedClassmate.value.classmates_album_path="同学录/"+lastRoute;
-                    console.log('展示区selectedClassmate:', selectedClassmate.value);
                 }else{
                     ElMessageBox.alert('没有匹配到同学的信息！,请到‘管理-添加信息’处添加同学信息', '提示', {
                         confirmButtonText: '确定',

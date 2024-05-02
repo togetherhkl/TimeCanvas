@@ -66,13 +66,9 @@ export default defineComponent({
         const drawer = ref(false)
         const uploadFile = ref(null)
         const imagemultiple = ref(true)
-
         const uploadmessage = ref("上传照片")
         const imagesfilepath = ref("")
         const cascaderArr = ref(null);
-
-
-
         const state = reactive({
             options: [],
             fileList: [],
