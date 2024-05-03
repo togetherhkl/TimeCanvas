@@ -155,18 +155,18 @@ export default defineComponent({
         }
         const deleteItem = async (id) => {
             console.log(id)
-            // const loadingInstance = ElLoading.service({ fullscreen: true })
-            // try {
-            //     await axios.delete("/delete?path=" + curPath.value + name);
-            //     ElMessage({
-            //         message: '删除成功',
-            //         type: 'success',
-            //     });
-            //     router.go(0);
-            // } catch (err) {
-            //     ElMessage.error('请求出错了: ' + err.message + ", " + (err.response ? err.response.data : ""))
-            // }
-            // loadingInstance.close();
+            const loadingInstance = ElLoading.service({ fullscreen: true })
+            try {
+                await axios.delete("/delete?path=" + curPath.value + name);
+                ElMessage({
+                    message: '删除成功',
+                    type: 'success',
+                });
+                router.go(0);
+            } catch (err) {
+                ElMessage.error('请求出错了: ' + err.message + ", " + (err.response ? err.response.data : ""))
+            }
+            loadingInstance.close();
         };
         //视频上传按钮
         const uploadButoon = () => {

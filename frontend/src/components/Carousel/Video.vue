@@ -36,6 +36,7 @@ export default {
         const interval = ref(5000);
         watch(() => props.selectedClassmate, (newVal) => {
             if (newVal) {
+                console.log('视频中的newVal',newVal);
                 const video_specifc_event = newVal.id;
                 let video_album_type = '';
                 let video_album = '';
@@ -54,7 +55,7 @@ export default {
                         ElNotification({
                             title: '提示',
                             dangerouslyUseHTMLString: true,
-                            message: '<strong><i>没有匹配到同学的视频信息！请到视频管理处添加</i></strong>',
+                            message: '<strong><i>没有匹配到同学的视频信息！请到“视频管理”下添加</i></strong>',
                         });
                     }
                 }).catch(error => { console.error('响应失败', error) });
@@ -82,7 +83,7 @@ export default {
                         ElNotification({
                             title: '提示',
                             dangerouslyUseHTMLString: true,
-                            message: '<strong><i>没有匹配到活动的视频信息！请到视频管理处添加</i></strong>',
+                            message: '<strong><i>没有匹配到活动的视频信息！请到“视频管理”下添加</i></strong>',
                         });
                     }
                 }).catch(error => { console.error('响应失败', error) });
@@ -111,7 +112,7 @@ export default {
                         ElNotification({
                             title: '提示',
                             dangerouslyUseHTMLString: true,
-                            message: '<strong><i>没有匹配到旅游的视频信息！请到视频管理处添加</i></strong>',
+                            message: '<strong><i>没有匹配到旅游的视频信息！请到“视频管理”下添加</i></strong>',
                         });
                     }
                 }).catch(error => { console.error('响应失败', error) });

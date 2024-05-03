@@ -57,8 +57,7 @@
 </template>
 
 <script>
-import * as echarts from 'echarts';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElLoading } from 'element-plus';
 const handleOpen = (key, keyPath) => {
     console.log(key, keyPath)
 }
@@ -101,32 +100,56 @@ export default {
         },
         // 删除同学
         confirmDelete(item) {
-            ElMessageBox.confirm(`确定删除 ${item.name} 吗？`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                // Handle deletion logic here
-                axios.delete('/classmate/', { params: { id: item.id } }).then(
-                    response => {
-                        if (response.status == 200) {
-                            ElMessageBox.alert(`删除 ${item.name}成功`, '提示', {
-                                confirmButtonText: '确定',
-                                type: 'success'
-                            });
-                            // 删除成功后，重新获取同学列表
-                            this.$router.go(0);//刷新页面
-                        } else {
-                            ElMessage.error('删除失败');
+            try {
+                ElMessageBox.confirm(`确定删除 ${item.name} 吗？`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(async () => {
+                    const loadingInstance = ElLoading.service({ fullscreen: true });
+                    //删除视频
+                    const tempclassmate = this.selectedClassmate;
+                    const video_specifc_event = tempclassmate.id;
+                    let video_album_type = ''; let video_album = '';
+                    let promises = [];//存放删除视频的promise
+                    const vpath = tempclassmate.classmates_album_path;
+                    const [album_type, album] = vpath.split('/');
+                    axios.get('/albumtype').then(response => {
+                        video_album_type = response.data.find(item => item.albumtype_name === album_type).id;
+                        return axios.get('/album', { params: { album_type_id: video_album_type } });
+                    }).then(response => {
+                        video_album = response.data.find(item => item.album_name === album).id;
+                        return axios.get('/video', { params: { video_album_type: video_album_type, video_album: video_album, video_specifc_event: video_specifc_event } });
+                    }).then(response => {
+                        const videoIds = response.data.map(item => item.id);
+                        console.log('videoIds:', videoIds);
+                        for (let i = 0; i < videoIds.length; i++) {
+                            console.log('video_id:', videoIds[i]);
+                            promises.push(axios.delete('/video', { params: { video_id: videoIds[i] } }));
                         }
+                    }).catch(error => { console.error('响应失败', error) });
+                    //删除图片
+                    const lastRoute = this.$router.currentRoute.value.query.stage;//获取路由stage的值
+                    let path = "/apps/TimeGallery/同学录/" + lastRoute + "/" + item.name;
+                    let filepath = [];path = path.replace(/'/g, '"') // 把单引号替换成双引号
+                    filepath.push(path)
+                    promises = [axios.delete('/classmate/', { params: { id: item.id } }),
+                    axios.delete("/baidufile/deletefile", { data: filepath }),];
+                    const response = await Promise.all(promises);
+                    if (response.every(res => res.status === 200)) {
+                        loadingInstance.close();
+                        ElMessageBox.alert(`删除 ${item.name}成功`, '提示', {
+                            confirmButtonText: '确定', type: 'success'
+                        }).then(() => { this.$router.go(0); });//刷新页面
+                    } else {
+                        loadingInstance.close();
+                        ElMessage.error(`删除 ${item.name}失败`);
+                        return;//结束函数
                     }
-                ).catch(error => {
-                    console.error('删除失败:', error);
-                });
-            }).catch(() => {
-                // Cancelled deletion
-                console.log('取消删除');
-            });
+                }).catch(() => { });
+            } catch (error) {
+                console.error('删除失败:', error);
+            }
         },
         // 编辑同学
         update(item) {
@@ -152,10 +175,10 @@ export default {
                 nameList.value = response.data.classmates.map(classmate => ({ name: classmate.name, id: classmate.id, classmates_album_name: classmate.classmates_album_name }));//得到姓名列表
                 if (nameList.value.length > 0) {
                     selectedClassmate.value = classmatesData.value[0];// 默认选中第一个同学
-                    const firstname=selectedClassmate.value.name;
+                    const firstname = selectedClassmate.value.name;
                     selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === firstname);
-                    selectedClassmate.value.classmates_album_path="同学录/"+lastRoute;
-                }else{
+                    selectedClassmate.value.classmates_album_path = "同学录/" + lastRoute;
+                } else {
                     ElMessageBox.alert('没有匹配到同学的信息！,请到‘管理-添加信息’处添加同学信息', '提示', {
                         confirmButtonText: '确定',
                         type: 'warning'
@@ -180,12 +203,12 @@ export default {
             }
         };
         const selectStudent = (item) => {
-            const stage=router.currentRoute.value.query.stage;
-            if(nameList.value.length>0){
-                selectStudent.value =classmatesData.value[0];
+            const stage = router.currentRoute.value.query.stage;
+            if (nameList.value.length > 0) {
+                selectStudent.value = classmatesData.value[0];
                 selectedClassmate.value = classmatesData.value.find(classmate => classmate.name === item.name);
-                selectedClassmate.value.classmates_album_path="同学录/"+stage;    
-            } 
+                selectedClassmate.value.classmates_album_path = "同学录/" + stage;
+            }
         };
         return {
             selectedClassmate,

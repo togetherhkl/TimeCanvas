@@ -4,7 +4,7 @@
 <script>
 import EditC from '../components/EditC.vue';
 import axios from 'axios';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, ElLoading } from 'element-plus';
 export default {
   data() {
     return {
@@ -41,20 +41,19 @@ export default {
           type: 'warning'
         });
       else {
-        /* 与后端相连，成功提交后，提醒用户前往百度网盘上传视频，后用户确认后跳转路由 */
-        axios.post('/classmate/', this.formData)
-          .then(() => {
+        const loadingInstance = ElLoading.service({ fullscreen: true })
+        axios.post('/classmate/', this.formData).then(() => {
+            loadingInstance.close();
             ElMessageBox.alert('添加成功', '提示', {
               confirmButtonText: '确定',
               type: 'success'
             }).then(() => {
               ElMessageBox.alert('请前往百度网盘上传同学头像', '提示', {
                 confirmButtonText: '确定', type: 'info'
-              });
-              this.$router.push({ path: '/classmates/informshow', query: { stage: type } });
-            });
-          })
-          .catch(error => {
+              }).then(() => {this.$router.push({ path: '/classmates/informshow', query: { stage: type } });})
+            })
+          }).catch(error => {
+            loadingInstance.close();
             console.error('添加失败:', error);
           });
       }

@@ -48,7 +48,7 @@
                     </div>
                     <div class="email">
                         <label for="email">邮箱:</label>
-                        <input type="email" id="email" v-model="formData.email">
+                        <input type="email" id="email" v-model="formData.email" @blur="checkEmail">
                     </div>
 
                 </div>
@@ -92,7 +92,6 @@ import { regionData, codeToText } from 'element-china-area-data';
 import axios from 'axios';
 import GMDialog from './GMDialog.vue';
 import { marked, options } from 'marked';//markdown解析器
-import { da } from 'element-plus/es/locale/index.mjs';
 export default {
     data() {
         return {
@@ -174,6 +173,16 @@ export default {
             if (!qqRegex.test(this.formData.qq_number)) {
                 console.log('QQ号必须是9到10位数字');
                 ElMessageBox.alert('QQ号必须是9到10位数字', '提示', {
+                    confirmButtonText: '确定',
+                    type: 'warning'
+                });
+            }
+        },
+        checkEmail() {
+            const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;//邮箱正则表达式
+            if (!emailRegex.test(this.formData.email)) {
+                console.log('邮箱格式不正确');
+                ElMessageBox.alert('邮箱格式不正确', '提示', {
                     confirmButtonText: '确定',
                     type: 'warning'
                 });
