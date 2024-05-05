@@ -1,27 +1,26 @@
 <template>
   <div class="header">
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
-      @select="handleSelect">
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false">
       <el-menu-item>
         <img class="logo" src="../assets/logo.png" alt="project logo" />
       </el-menu-item>
-      <el-menu-item index="0" @click="$router.push('/home')">首页</el-menu-item>
-      <el-menu-item index="1" @click="$router.push('/albumtype')">相册</el-menu-item>
+      <el-menu-item index="/home" @click="$router.push('/home')">首页</el-menu-item>
+      <el-menu-item index="/albumtype" @click="$router.push('/albumtype')">相册</el-menu-item>
       <div class="flex-grow" />
-      <el-menu-item index="2" @click="$router.push('/picturemanage')">相册管理</el-menu-item>
-      <el-menu-item index="3" @click="$router.push('/picturesmanage')">照片管理</el-menu-item>
-      <el-menu-item index="4" @click="$router.push('/videomanage')">视频管理</el-menu-item>
+      <el-menu-item index="/albummanage" @click="$router.push('/albummanage')">相册管理</el-menu-item>
+      <el-menu-item index="/picturesmanage" @click="$router.push('/picturesmanage')">照片管理</el-menu-item>
+      <el-menu-item index="/videomanage" @click="$router.push('/videomanage')">视频管理</el-menu-item>
       <el-sub-menu index="5">
         <template #title >创建</template>
         <el-menu-item index="5-1" @click="openDrawer('同学录')">同学录</el-menu-item>
         <el-menu-item index="5-2" @click="openDrawer('趣事录')">趣事录</el-menu-item>
         <el-menu-item index="5-3" @click="openDrawer('旅游志')">旅游志</el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="6">
+      <!-- <el-menu-item index="6">
         <el-icon>
           <Moon />
         </el-icon>
-      </el-menu-item>
+      </el-menu-item> -->
       <el-sub-menu index="7" @click="getTaken">
         <template #title>
           <el-avatar :src="avatar_url" :size="40" />
@@ -66,9 +65,6 @@ export default {
     increment() {
       this.count++
     },
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath)
-    },
     getTaken() {
       if (localStorage.getItem('timecanvas_token') == null || GetCookie("timecanvas_token") == null) {
         axios.get("/auth").then(
@@ -82,7 +78,7 @@ export default {
       }
     },
     exit() {
-      //退出登录，清楚cookie和localStorage中的token
+      //退出登录，清除cookie和localStorage中的token
       console.log("退出登录")
       localStorage.removeItem('timecanvas_token');
       document.cookie = "timecanvas_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -113,6 +109,12 @@ export default {
   },
   mounted() {
     //从cookie中获取token
+    let path=location.href.split('#')[1];
+    this.activeIndex = path.split('?')[0];
+    let validValues=['/','/home','/albumtype','/albummanage','/picturesmanage','/videomanage'];
+    if(!validValues.includes(this.activeIndex)){
+      this.activeIndex='/albumtype';
+    }
     const timecanvas_token = GetCookie("timecanvas_token")
     const token = window.localStorage.getItem('timecanvas_token')
     if (timecanvas_token == null && token == null) {

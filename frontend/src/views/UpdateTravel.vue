@@ -5,7 +5,7 @@
 <script>
 import EditT from '../components/EditT.vue';
 import axios from 'axios';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, ElLoading } from 'element-plus';
 export default {
     data() {
         return {
@@ -29,20 +29,16 @@ export default {
                     type: 'warning'
                 });
             else {
-                axios.put('/travel/', this.formData, { params: { id: id } })
-                    .then(() => {
-                        ElMessageBox.alert('修改成功', '提示', {
-                            confirmButtonText: '确定',
-                            type: 'success'
-                        }).then(() => {
-                            const type = this.$router.currentRoute.value.query.type;
-                            this.$router.push({ path: '/travels/informshow', query: { stage: type } });
-                        })
+                const loading = ElLoading.service({ fullscreen: true });
+                axios.put('/travel/', this.formData, { params: { id: id } }).then(() => {
+                    loading.close();
+                    ElMessageBox.alert('修改成功', '提示', {
+                        confirmButtonText: '确定',
+                        type: 'success'
+                    }).then(() => {
+                        this.$router.push({ path: '/travels/informshow', query: { stage: type } });
                     })
-                    .catch(error => {
-                        // 处理错误响应
-                        console.error(error);
-                    });
+                }).catch(error => { loading.close(); console.error(error); });//处理错误响应
             }
         },
     },

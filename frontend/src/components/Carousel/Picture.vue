@@ -39,7 +39,7 @@ export default {
                             ElNotification({
                                 title: '提示',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong><i>没有匹配到同学的照片信息!请到到百度网盘对应相册的pictures目录下添加</i></strong>',
+                                message: '<strong><i>没有匹配到同学的照片信息!请到到“照片管理”下添加</i></strong>',
                             });
                         }
                     }).catch(error => { console.error('响应失败！', error); });
@@ -57,7 +57,7 @@ export default {
                             ElNotification({
                                 title: '提示',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong><i>没有匹配到活动的照片信息!请到到百度网盘对应相册的pictures目录下添加</i></strong>',
+                                message: '<strong><i>没有匹配到活动的照片信息!请到到“照片管理”下添加</i></strong>',
                             });
                         }
                     }).catch(error => { console.error('响应失败！', error); });
@@ -75,7 +75,7 @@ export default {
                             ElNotification({
                                 title: '提示',
                                 dangerouslyUseHTMLString: true,
-                                message: '<strong><i>没有匹配到旅游的照片信息!请到到百度网盘对应相册的pictures目录下添加</i></strong>',
+                                message: '<strong><i>没有匹配到旅游的照片信息!请到到“照片管理”下添加</i></strong>',
                             });
                         }
                     }).catch(error => { console.error('响应失败！', error); });
@@ -106,11 +106,8 @@ export default {
     background-color: #d3dce6;
 }
 
-::v-deep .el-carousel__container {
-    min-height: 400px;
-}
-::v-deep .el-carousel .el-carousel--horizontal .el-carousel--card{
-    background-color: aqua;
+:deep(.el-carousel__container) {
+    min-height: 350px;
 }
 
 </style>

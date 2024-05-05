@@ -5,7 +5,7 @@ I
 <script>
 import EditI from '../components/EditI.vue';
 import axios from 'axios';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, ElLoading } from 'element-plus';
 export default {
     data() {
         return {
@@ -30,17 +30,16 @@ export default {
                     type: 'warning'
                 });
             else {
-                axios.put('/interestingevent/', this.formData, { params: { id: id } })
-                    .then(() => {
-                        ElMessageBox.alert('修改成功', '提示', {
-                            confirmButtonText: '确定',
-                            type: 'success'
-                        }).then(() => {
-                            const type = this.$router.currentRoute.value.query.type;
-                            this.$router.push({ path: '/interestingevents/informshow', query: { stage: type } });
-                        })
+                const loading = ElLoading.service({ fullscreen: true });
+                axios.put('/interestingevent/', this.formData, { params: { id: id } }).then(() => {
+                    loading.close();
+                    ElMessageBox.alert('修改成功', '提示', {
+                        confirmButtonText: '确定',
+                        type: 'success'
+                    }).then(() => {
+                        this.$router.push({ path: '/interestingevents/informshow', query: { stage: type } });
                     })
-                    .catch(error => { console.error(error); });
+                }).catch(error => { loading.close(); console.error(error); });
             }
         },
     },

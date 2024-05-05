@@ -21,7 +21,7 @@ import InformShowC from "../views/InformShowC.vue";
 import InformShowI from "../views/InformShowI.vue";
 import InformShowT from "../views/InformShowT.vue";
 import VideoManage from "../views/VideoManage.vue";
-import PictureManage from "../views/PictureManage.vue";
+import AlbumManage from "../views/AlbumManage.vue";
 import PicturesManage from "../views/PicturesManage.vue";
 
 import axios from 'axios'
@@ -67,9 +67,9 @@ const routes = [
                 meta:{title:'视频管理'}
             },
             {
-                path:"/picturemanage",
-                name:"PictureManage",
-                component:PictureManage,
+                path:"/AlbumManage",
+                name:"AlbumManage",
+                component:AlbumManage,
                 meta:{title:'相册管理'}
             },
             {
