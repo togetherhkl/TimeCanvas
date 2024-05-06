@@ -1,0 +1,9 @@
+fastapi==0.111.0
+pydantic==2.7.1
+python-dotenv==1.0.1
+python_jose==3.3.0
+Requests==2.31.0
+SQLAlchemy==2.0.24
+starlette==0.37.2
+uvicorn==0.29.0
+websocket_client==1.7.0
