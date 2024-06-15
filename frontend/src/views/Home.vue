@@ -129,9 +129,6 @@ export default {
       pages: [0, 1, 2, 3],
     };
   },
-  components: {
-    Navigation,
-  },
   mounted() {
     window.addEventListener('scroll', this.checkSlide);
   },

@@ -1,0 +1,37 @@
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  app-sql-data:
+    external: true
+services:
+  frontend:
+    image: app-frontend
+    ports:
+      - "127.0.0.1:5173:5173"
+    networks:
+      - app-network
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /frontend
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - app-sql-data:/var/lib/mysql
+    networks:
+      app-network:
+        aliases:
+          - mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  backend:
+    image: app-backend
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks:
+      - app-network
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /backend

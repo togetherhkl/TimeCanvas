@@ -26,7 +26,7 @@ app.include_router(video.router)#将video.py中的路由添加到app中
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "World This is the backend of the project!"}
 
 
 
