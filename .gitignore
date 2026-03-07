@@ -27,3 +27,4 @@ node_modules
 #忽略backend下的.env文件, media文件夹
 backend/.env
 backend/media
+backend/outputs

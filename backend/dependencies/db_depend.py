@@ -11,7 +11,15 @@
 from core.settings import SessionLocal, engine
 from models import orm_models
 
-orm_models.Base.metadata.create_all(bind=engine)
+# orm_models.Base.metadata.create_all(bind=engine)
+
+
+try:
+    orm_models.Base.metadata.create_all(bind=engine)
+    print("✅ Database connected")
+except Exception as e:
+    print("⚠️ Database not available, running without DB")
+    print(e)
 
 async def get_db():
     try:
