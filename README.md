@@ -209,13 +209,107 @@ TimeCanvas（时光画廊）是一个基于AI技术的智能相册管理系统�
 <img width="415" alt="image" src="https://github.com/togetherhkl/TimeCanvas/assets/92192378/9c4360db-4773-4ffc-959e-f963aab053fe">
 
 
-## 环境要求
+## 项目安装
 
-### 系统要求
-- Ubuntu 22.04.5 LTS (推荐使用Dev Container)
-- Python 3.8+
-- CUDA支持的GPU (用于AI模型推理)
+### 环境要求
+- Python 3.10
+- Node.js (LTS版本)
+- MySQL 8.0+
+- Conda
 
+### 1. 克隆项目
+```bash
+git clone <your-timecanvas-repo-url>
+cd TimeCanvas
+```
+
+### 2. 后端配置
+
+#### 2.1 创建Conda环境
+```bash
+# 创建Python 3.10环境
+conda create -n timecanvas python=3.10
+conda activate timecanvas
+```
+
+#### 2.2 安装依赖
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+#### 2.3 数据库配置
+```bash
+# 启动MySQL服务
+sudo systemctl start mysql
+
+# 登录MySQL并创建数据库
+mysql -u root -p
+CREATE DATABASE timecanvas;
+
+# 导入数据库文件
+mysql -u root -p timecanvas < timecanvas.sql
+```
+
+#### 2.4 环境变量配置
+```bash
+# 创建.env文件
+touch .env
+```
+
+在 `.env` 文件中添加以下配置：
+```env
+DATABASE_URL=mysql+pymysql://root:your_password@localhost/timecanvas
+JWT_SECRET_KEY=your_jwt_secret_key_here
+BAIDU_APP_KEY=your_baidu_app_key
+BAIDU_SECRET_KEY=your_baidu_secret_key
+
+#百度网盘相关密钥
+CLIENT_ID="your_baidu_client_id"
+CLIENT_SECRET="your_baidu_client_secret"
+REDIRECT_URI="http://localhost:8000/callback"
+#jwt相关密钥
+SECRET_KEY = "your_jwt_secret"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_DAYS = 7
+#数据库相关连接
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:your_password@localhost/timecanvas"
+#前端首页地址
+FRONTEND_URL = "http://localhost:5173/"
+#讯飞服务的相关接参数
+APPID = "your_xunfei_appid"
+APISecret = "your_xunfei_apisecret"
+APIKey = "your_xunfei_apikey"
+DOMAIN = "generalv3.5"
+Spark_url = "wss://spark-api.xf-yun.com/v3.5/chat"
+```
+
+#### 2.5 启动后端服务
+```bash
+# 激活环境
+conda activate timecanvas
+
+# 启动FastAPI服务
+cd backend
+python main.py
+```
+
+后端API文档访问: `"$BROWSER" http://localhost:8000/docs`
+
+### 3. 前端配置
+
+#### 3.1 安装依赖
+```bash
+cd frontend
+npm install
+```
+
+#### 3.2 启动前端服务
+```bash
+npm run dev
+# 或
+npm start
+```
 
 ## 项目亮点
 

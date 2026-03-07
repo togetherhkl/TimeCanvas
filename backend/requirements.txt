@@ -10,3 +10,18 @@ PyMySQL==1.1.0
 fastapi==0.111.0
 alembic==1.13.1
 cryptography==41.0.7
+whisperx @ git+https://github.com/m-bain/whisperx.git@f10dbf6ab1717e84db7733df9c0b21658ee68f9b
+TTS==0.22.0
+torch==2.5.1+cu124
+torch-audiomentations==0.12.0
+torch_pitch_shift==1.2.5
+torchaudio==2.5.1+cu124
+torchcodec==0.10.0
+torchmetrics==1.8.2
+torchvision==0.20.1+cu124
+transformers==4.51.0
+accelerate==1.6.0
+av==16.1.0
+moviepy==1.0.3
+ollama==0.4.7
+diffusers==0.32.2
